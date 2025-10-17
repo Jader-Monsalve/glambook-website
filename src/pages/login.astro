@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+const title = "Contacto - GlamBook";
+---
+
+<Layout title={title}>
+  <section class="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
+    <div class="container mx-auto px-4">
+      <!-- Título -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-4 font-poppins">
+          Contáctanos
+        </h1>
+        <p class="text-gray-600 text-lg font-poppins">
+          Estamos aquí para ayudarte. Reserva tu cita o pregúntanos lo que necesites
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        
+        <!-- Información de contacto -->
+        <div class="space-y-8">
+          <h2 class="text-2xl font-bold text-gray-800 font-poppins">Información de Contacto</h2>
+          
+          <!-- Dirección -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              📍
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Dirección</h3>
+              <p class="text-gray-600 font-poppins">Calle Principal #123<br>Ciudad, País</p>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              📞
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Teléfono</h3>
+              <p class="text-gray-600 font-poppins">+1 (555) 123-4567</p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              ✉️
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Email</h3>
+              <p class="text-gray-600 font-poppins">info@glambook.com</p>
+            </div>
+          </div>
+
+          <!-- Horarios -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              🕒
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Horarios</h3>
+              <p class="text-gray-600 font-poppins">
+                Lunes - Viernes: 9:00 AM - 7:00 PM<br>
+                Sábados: 9:00 AM - 5:00 PM<br>
+                Domingos: Cerrado
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario de contacto -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 font-poppins">Envíanos un Mensaje</h2>
+          
+          <form class="space-y-6">
+            <!-- Nombre -->
+            <div>
+              <label for="nombre" class="block text-gray-700 font-medium mb-2 font-poppins">Nombre</label>
+              <input 
+                type="text" 
+                id="nombre" 
+                name="nombre" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                placeholder="Tu nombre completo"
+              >
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-gray-700 font-medium mb-2 font-poppins">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                placeholder="tu@email.com"
+              >
+            </div>
+
+            <!-- Servicio -->
+            <div>
+              <label for="servicio" class="block text-gray-700 font-medium mb-2 font-poppins">Servicio de Interés</label>
+              <select 
+                id="servicio" 
+                name="servicio" 
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+              >
+                <option value="">Selecciona un servicio</option>
+                <option value="unas-naturales">Uñas Naturales</option>
+                <option value="unas-acrilicas">Uñas Acrílicas</option>
+                <option value="maquillaje">Maquillaje</option>
+                <option value="peinados">Peinados</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <!-- Mensaje -->
+            <div>
+              <label for="mensaje" class="block text-gray-700 font-medium mb-2 font-poppins">Mensaje</label>
+              <textarea 
+                id="mensaje" 
+                name="mensaje" 
+                rows="4"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                placeholder="Cuéntanos sobre tu cita ideal..."
+              ></textarea>
+            </div>
+
+            <!-- Botón -->
+            <button 
+              type="submit"
+              class="w-full bg-pink-500 text-white py-3 px-6 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-poppins font-medium"
+            >
+              Enviar Mensaje
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</Layout>
