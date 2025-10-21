@@ -703,12 +703,15 @@ async function loadDashboardData() {
     try {
       const citasResponse = await fetch('/api/citas');
       if (citasResponse.ok) {
-        const citasData = await citasResponse.json();
-        document.getElementById('total-citas').textContent = citasData.length;
-        document.getElementById('citas-pendientes').textContent = 
-          citasData.filter(c => c.estado === 'pendiente').length;
-        document.getElementById('citas-completadas').textContent = 
-          citasData.filter(c => c.estado === 'completada').length;
+        const citasResult = await citasResponse.json();
+        if (citasResult.success && citasResult.data) {
+          const citasData = citasResult.data;
+          document.getElementById('total-citas').textContent = citasData.length;
+          document.getElementById('citas-pendientes').textContent = 
+            citasData.filter(c => c.estado === 'pendiente').length;
+          document.getElementById('citas-completadas').textContent = 
+            citasData.filter(c => c.estado === 'completada').length;
+        }
       }
     } catch (error) {
       console.error('Error loading citas stats:', error);
@@ -1131,9 +1134,15 @@ async function loadCitasData() {
   try {
     const response = await fetch('/api/citas');
     if (response.ok) {
-      citasData = await response.json();
-      updateCitasStats();
-      renderCitas();
+      const result = await response.json();
+      if (result.success && result.data) {
+        citasData = result.data;
+        updateCitasStats();
+        renderCitas();
+      } else {
+        console.error('Error en respuesta de citas:', result);
+        showNotification('Error al procesar las citas', 'error');
+      }
     } else {
       console.error('Error loading citas:', response.status);
       showNotification('Error al cargar las citas', 'error');
@@ -1286,7 +1295,7 @@ async function cambiarEstadoCita(citaId, nuevoEstado) {
       body: JSON.stringify({
         action: 'cambiar-estado',
         id: citaId,
-        estado: nuevoEstado
+        nuevoEstado: nuevoEstado
       })
     });
     
