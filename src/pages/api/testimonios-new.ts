@@ -23,7 +23,7 @@ const corsHeaders = {
 export const GET: APIRoute = async ({ url }) => {
   try {
     const action = url.searchParams.get('action') || 'aprobados';
-    console.log(`📥 GET /api/testimonios - Action: ${action}`);
+    console.log(`📥 GET /api/testimonios-new - Action: ${action}`);
 
     switch (action) {
       case 'aprobados':
@@ -72,7 +72,7 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
   } catch (error) {
-    console.error('❌ Error en GET /api/testimonios:', error);
+    console.error('❌ Error en GET /api/testimonios-new:', error);
     return new Response(JSON.stringify({
       success: false,
       message: 'Error interno del servidor',
@@ -87,7 +87,7 @@ export const GET: APIRoute = async ({ url }) => {
 export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
-    console.log(`📥 POST /api/testimonios - Data:`, data);
+    console.log(`📥 POST /api/testimonios-new - Data:`, data);
 
     const { action, testimonio, id } = data;
 
@@ -163,7 +163,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
   } catch (error) {
-    console.error('❌ Error en POST /api/testimonios:', error);
+    console.error('❌ Error en POST /api/testimonios-new:', error);
     return new Response(JSON.stringify({
       success: false,
       message: 'Error interno del servidor'

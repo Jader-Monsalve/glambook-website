@@ -1,0 +1,1407 @@
+import type { APIRoute } from 'astro';import type { APIRoute } from 'astro';import type { APIRoute } from 'astro';import type { APIRoute } from 'astro';import type { APIRoute } from 'astro';
+
+import type { Testimonio } from '../../data/testimonios';
+
+import {import type { Testimonio } from '../../data/testimonios';
+
+  getAprobados,
+
+  getPendientes,import {import type { Testimonio } from '../../data/testimonios';
+
+  addPendiente,
+
+  aprobarTestimonio,  getAprobados,
+
+  rechazarTestimonio,
+
+  eliminarAprobado,  getPendientes,import {import type { Testimonio } from '../../data/testimonios';import type { Testimonio } from '../../data/testimonios';
+
+  getEstadisticas
+
+} from '../../utils/testimonios-persistence';  addPendiente,
+
+
+
+export const prerender = false;  aprobarTestimonio,  getAprobados,
+
+
+
+const corsHeaders = {  rechazarTestimonio,
+
+  'Content-Type': 'application/json',
+
+  'Access-Control-Allow-Origin': '*',  eliminarAprobado,  getPendientes,import {import {
+
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',  getEstadisticas
+
+  'Cache-Control': 'no-cache, no-store, must-revalidate'
+
+};} from '../../utils/testimonios-persistence';  addPendiente,
+
+
+
+export const OPTIONS: APIRoute = async () => {
+
+  return new Response(null, {
+
+    status: 200,export const prerender = false;  aprobarTestimonio,  getAprobados,  getAprobados,
+
+    headers: corsHeaders
+
+  });
+
+};
+
+const corsHeaders = {  rechazarTestimonio,
+
+export const GET: APIRoute = async ({ url }) => {
+
+  try {  'Content-Type': 'application/json',
+
+    const action = url.searchParams.get('action') || 'aprobados';
+
+    console.log(`📥 GET /api/testimonios - Action: ${action}`);  'Access-Control-Allow-Origin': '*',  eliminarAprobado,  getPendientes,  getPendientes,
+
+
+
+    switch (action) {  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+
+      case 'aprobados':
+
+        const aprobados = await getAprobados();  'Access-Control-Allow-Headers': 'Content-Type, Authorization',  getEstadisticas
+
+        return new Response(JSON.stringify({
+
+          success: true,  'Cache-Control': 'no-cache, no-store, must-revalidate'
+
+          data: aprobados,
+
+          message: 'Testimonios aprobados obtenidos correctamente'};} from '../../utils/testimonios-persistence';  addPendiente,  addPendiente,
+
+        }), {
+
+          status: 200,
+
+          headers: corsHeaders
+
+        });export const OPTIONS: APIRoute = async () => {
+
+
+
+      case 'pendientes':  return new Response(null, {
+
+        const pendientes = await getPendientes();
+
+        return new Response(JSON.stringify({    status: 200,export const prerender = false;  aprobarTestimonio,  aprobarTestimonio,
+
+          success: true,
+
+          data: pendientes,    headers: corsHeaders
+
+          message: 'Testimonios pendientes obtenidos correctamente'
+
+        }), {  });
+
+          status: 200,
+
+          headers: corsHeaders};
+
+        });
+
+const corsHeaders = {  rechazarTestimonio,  rechazarTestimonio,
+
+      case 'todos':
+
+        const todosAprobados = await getAprobados();export const GET: APIRoute = async ({ url }) => {
+
+        const todosPendientes = await getPendientes();
+
+        const todos = [...todosAprobados, ...todosPendientes];  try {  'Content-Type': 'application/json',
+
+        return new Response(JSON.stringify({
+
+          success: true,    const action = url.searchParams.get('action') || 'aprobados';
+
+          data: todos,
+
+          message: 'Todos los testimonios obtenidos correctamente'    console.log(`📥 GET /api/testimonios - Action: ${action}`);  'Access-Control-Allow-Origin': '*',  eliminarAprobado,  eliminarAprobado,
+
+        }), {
+
+          status: 200,
+
+          headers: corsHeaders
+
+        });    switch (action) {  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+
+
+
+      case 'estadisticas':      case 'aprobados':
+
+        const stats = await getEstadisticas();
+
+        return new Response(JSON.stringify({        const aprobados = await getAprobados();  'Access-Control-Allow-Headers': 'Content-Type, Authorization',  getEstadisticas  getEstadisticas
+
+          success: true,
+
+          data: stats,        return new Response(JSON.stringify({
+
+          message: 'Estadísticas obtenidas correctamente'
+
+        }), {          success: true,  'Cache-Control': 'no-cache, no-store, must-revalidate'
+
+          status: 200,
+
+          headers: corsHeaders          data: aprobados,
+
+        });
+
+          message: 'Testimonios aprobados obtenidos correctamente'};} from '../../utils/testimonios-persistence';} from '../../utils/testimonios-persistence';
+
+      default:
+
+        const defaultAprobados = await getAprobados();        }), {
+
+        return new Response(JSON.stringify({
+
+          success: true,          status: 200,
+
+          data: defaultAprobados,
+
+          message: 'Testimonios obtenidos correctamente (por defecto: aprobados)'          headers: corsHeaders
+
+        }), {
+
+          status: 200,        });export const OPTIONS: APIRoute = async () => {
+
+          headers: corsHeaders
+
+        });
+
+    }
+
+      case 'pendientes':  return new Response(null, {
+
+  } catch (error) {
+
+    console.error('❌ Error en GET /api/testimonios:', error);        const pendientes = await getPendientes();
+
+    return new Response(JSON.stringify({
+
+      success: false,        return new Response(JSON.stringify({    status: 200,// Configurar como server-rendered para que funcionen las APIs// Configurar como server-rendered para que funcionen las APIs
+
+      message: 'Error interno del servidor',
+
+      error: error instanceof Error ? error.message : 'Error desconocido'          success: true,
+
+    }), {
+
+      status: 500,          data: pendientes,    headers: corsHeaders
+
+      headers: corsHeaders
+
+    });          message: 'Testimonios pendientes obtenidos correctamente'
+
+  }
+
+};        }), {  });export const prerender = false;export const prerender = false;
+
+
+
+export const POST: APIRoute = async ({ request }) => {          status: 200,
+
+  try {
+
+    const data = await request.json();          headers: corsHeaders};
+
+    console.log(`📥 POST /api/testimonios - Data:`, data);
+
+        });
+
+    const { action, testimonio, id } = data;
+
+
+
+    switch (action) {
+
+      case 'agregar-pendiente':      case 'todos':
+
+        if (!testimonio?.nombre || !testimonio?.email || !testimonio?.comentario || !testimonio?.calificacion) {
+
+          return new Response(JSON.stringify({        const todosAprobados = await getAprobados();export const GET: APIRoute = async ({ url }) => {
+
+            success: false,
+
+            message: 'Faltan campos obligatorios: nombre, email, comentario y calificación'        const todosPendientes = await getPendientes();
+
+          }), {
+
+            status: 400,        const todos = [...todosAprobados, ...todosPendientes];  try {// Headers CORS// Headers CORS para todas las respuestas
+
+            headers: corsHeaders
+
+          });        return new Response(JSON.stringify({
+
+        }
+
+          success: true,    const action = url.searchParams.get('action') || 'aprobados';
+
+        const calificacion = parseInt(testimonio.calificacion);
+
+        if (calificacion < 1 || calificacion > 5) {          data: todos,
+
+          return new Response(JSON.stringify({
+
+            success: false,          message: 'Todos los testimonios obtenidos correctamente'    console.log(`📥 GET /api/testimonios - Action: ${action}`);const corsHeaders = {const corsHeaders = {
+
+            message: 'La calificación debe estar entre 1 y 5'
+
+          }), {        }), {
+
+            status: 400,
+
+            headers: corsHeaders          status: 200,
+
+          });
+
+        }          headers: corsHeaders
+
+
+
+        const testimonioLimpio = {        });    switch (action) {  'Content-Type': 'application/json',  'Access-Control-Allow-Origin': '*',
+
+          nombre: testimonio.nombre.trim(),
+
+          email: testimonio.email.trim().toLowerCase(),
+
+          comentario: testimonio.comentario.trim(),
+
+          calificacion: calificacion,      case 'estadisticas':      case 'aprobados':
+
+          servicio: testimonio.servicio?.trim() || undefined
+
+        };        const stats = await getEstadisticas();
+
+
+
+        const nuevoTestimonio = await addPendiente(testimonioLimpio);        return new Response(JSON.stringify({        const aprobados = await getAprobados();  'Access-Control-Allow-Origin': '*',  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+
+
+
+        console.log(`✅ Testimonio agregado a pendientes: ${nuevoTestimonio.nombre} - ${nuevoTestimonio.servicio || 'Sin servicio'}`);          success: true,
+
+
+
+        return new Response(JSON.stringify({          data: stats,        return new Response(JSON.stringify({
+
+          success: true,
+
+          data: nuevoTestimonio,          message: 'Estadísticas obtenidas correctamente'
+
+          message: 'Testimonio enviado correctamente. Será revisado antes de su publicación.'
+
+        }), {        }), {          success: true,  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+
+          status: 201,
+
+          headers: corsHeaders          status: 200,
+
+        });
+
+          headers: corsHeaders          data: aprobados,
+
+      case 'aprobar':
+
+        if (!id) {        });
+
+          return new Response(JSON.stringify({
+
+            success: false,          message: 'Testimonios aprobados obtenidos correctamente'  'Access-Control-Allow-Headers': 'Content-Type, Authorization',  'Content-Type': 'application/json'
+
+            message: 'ID del testimonio es requerido'
+
+          }), {      default:
+
+            status: 400,
+
+            headers: corsHeaders        const defaultAprobados = await getAprobados();        }), {
+
+          });
+
+        }        return new Response(JSON.stringify({
+
+
+
+        const aprobado = await aprobarTestimonio(parseInt(id));          success: true,          status: 200,  'Cache-Control': 'no-cache, no-store, must-revalidate'};
+
+        if (!aprobado) {
+
+          return new Response(JSON.stringify({          data: defaultAprobados,
+
+            success: false,
+
+            message: 'Testimonio no encontrado'          message: 'Testimonios obtenidos correctamente (por defecto: aprobados)'          headers: corsHeaders
+
+          }), {
+
+            status: 404,        }), {
+
+            headers: corsHeaders
+
+          });          status: 200,        });};
+
+        }
+
+          headers: corsHeaders
+
+        console.log(`✅ Testimonio aprobado: ID ${id}`);
+
+        });
+
+        return new Response(JSON.stringify({
+
+          success: true,    }
+
+          message: 'Testimonio aprobado correctamente'
+
+        }), {      case 'pendientes':export const OPTIONS: APIRoute = async () => {
+
+          status: 200,
+
+          headers: corsHeaders  } catch (error) {
+
+        });
+
+    console.error('❌ Error en GET /api/testimonios:', error);        const pendientes = await getPendientes();
+
+      case 'rechazar':
+
+        if (!id) {    return new Response(JSON.stringify({
+
+          return new Response(JSON.stringify({
+
+            success: false,      success: false,        return new Response(JSON.stringify({export const OPTIONS: APIRoute = async () => {  return new Response(null, {
+
+            message: 'ID del testimonio es requerido'
+
+          }), {      message: 'Error interno del servidor',
+
+            status: 400,
+
+            headers: corsHeaders      error: error instanceof Error ? error.message : 'Error desconocido'          success: true,
+
+          });
+
+        }    }), {
+
+
+
+        const rechazado = await rechazarTestimonio(parseInt(id));      status: 500,          data: pendientes,  return new Response(null, {    status: 200,
+
+        if (!rechazado) {
+
+          return new Response(JSON.stringify({      headers: corsHeaders
+
+            success: false,
+
+            message: 'Testimonio no encontrado'    });          message: 'Testimonios pendientes obtenidos correctamente'
+
+          }), {
+
+            status: 404,  }
+
+            headers: corsHeaders
+
+          });};        }), {    status: 200,    headers: corsHeaders
+
+        }
+
+
+
+        console.log(`✅ Testimonio rechazado: ID ${id}`);
+
+export const POST: APIRoute = async ({ request }) => {          status: 200,
+
+        return new Response(JSON.stringify({
+
+          success: true,  try {
+
+          message: 'Testimonio rechazado correctamente'
+
+        }), {    const data = await request.json();          headers: corsHeaders    headers: corsHeaders  });
+
+          status: 200,
+
+          headers: corsHeaders    console.log(`📥 POST /api/testimonios - Data:`, data);
+
+        });
+
+        });
+
+      case 'eliminar':
+
+        if (!id) {    const { action, testimonio, id } = data;
+
+          return new Response(JSON.stringify({
+
+            success: false,  });};
+
+            message: 'ID del testimonio es requerido'
+
+          }), {    switch (action) {
+
+            status: 400,
+
+            headers: corsHeaders      case 'agregar-pendiente':      case 'todos':
+
+          });
+
+        }        if (!testimonio?.nombre || !testimonio?.email || !testimonio?.comentario || !testimonio?.calificacion) {
+
+
+
+        const eliminado = await eliminarAprobado(parseInt(id));          return new Response(JSON.stringify({        const todosAprobados = await getAprobados();};
+
+        if (!eliminado) {
+
+          return new Response(JSON.stringify({            success: false,
+
+            success: false,
+
+            message: 'Testimonio no encontrado'            message: 'Faltan campos obligatorios: nombre, email, comentario y calificación'        const todosPendientes = await getPendientes();
+
+          }), {
+
+            status: 404,          }), {
+
+            headers: corsHeaders
+
+          });            status: 400,        const todos = [...todosAprobados, ...todosPendientes];export const GET: APIRoute = async ({ url }) => {
+
+        }
+
+            headers: corsHeaders
+
+        console.log(`✅ Testimonio eliminado: ID ${id}`);
+
+          });        return new Response(JSON.stringify({
+
+        return new Response(JSON.stringify({
+
+          success: true,        }
+
+          message: 'Testimonio eliminado correctamente'
+
+        }), {          success: true,export const GET: APIRoute = async ({ url }) => {  try {
+
+          status: 200,
+
+          headers: corsHeaders        const calificacion = parseInt(testimonio.calificacion);
+
+        });
+
+        if (calificacion < 1 || calificacion > 5) {          data: todos,
+
+      default:
+
+        return new Response(JSON.stringify({          return new Response(JSON.stringify({
+
+          success: false,
+
+          message: 'Acción no válida. Acciones disponibles: agregar-pendiente, aprobar, rechazar, eliminar'            success: false,          message: 'Todos los testimonios obtenidos correctamente'  try {    const searchParams = new URL(url).searchParams;
+
+        }), {
+
+          status: 400,            message: 'La calificación debe estar entre 1 y 5'
+
+          headers: corsHeaders
+
+        });          }), {        }), {
+
+    }
+
+            status: 400,
+
+  } catch (error) {
+
+    console.error('❌ Error en POST /api/testimonios:', error);            headers: corsHeaders          status: 200,    const action = url.searchParams.get('action') || 'aprobados';    const action = searchParams.get('action');
+
+    return new Response(JSON.stringify({
+
+      success: false,          });
+
+      message: 'Error interno del servidor',
+
+      error: error instanceof Error ? error.message : 'Error desconocido'        }          headers: corsHeaders
+
+    }), {
+
+      status: 500,
+
+      headers: corsHeaders
+
+    });        const testimonioLimpio = {        });    console.log(`📥 GET /api/testimonios - Action: ${action}`);
+
+  }
+
+};          nombre: testimonio.nombre.trim(),
+
+          email: testimonio.email.trim().toLowerCase(),
+
+          comentario: testimonio.comentario.trim(),
+
+          calificacion: calificacion,      case 'estadisticas':    console.log(`📥 GET /api/testimonios - Action: ${action}`);
+
+          servicio: testimonio.servicio?.trim() || undefined
+
+        };        const stats = await getEstadisticas();
+
+
+
+        const nuevoTestimonio = await addPendiente(testimonioLimpio);        return new Response(JSON.stringify({    switch (action) {
+
+
+
+        console.log(`✅ Testimonio agregado a pendientes: ${nuevoTestimonio.nombre} - ${nuevoTestimonio.servicio || 'Sin servicio'}`);          success: true,
+
+
+
+        return new Response(JSON.stringify({          data: stats,      case 'aprobados':    switch (action) {
+
+          success: true,
+
+          data: nuevoTestimonio,          message: 'Estadísticas obtenidas correctamente'
+
+          message: 'Testimonio enviado correctamente. Será revisado antes de su publicación.'
+
+        }), {        }), {        const aprobados = await getAprobados();      case 'aprobados':
+
+          status: 201,
+
+          headers: corsHeaders          status: 200,
+
+        });
+
+          headers: corsHeaders        return new Response(JSON.stringify({        return new Response(JSON.stringify({
+
+      case 'aprobar':
+
+        if (!id) {        });
+
+          return new Response(JSON.stringify({
+
+            success: false,          success: true,          success: true,
+
+            message: 'ID del testimonio es requerido'
+
+          }), {      default:
+
+            status: 400,
+
+            headers: corsHeaders        const defaultAprobados = await getAprobados();          data: aprobados,          data: testimoniosAprobados,
+
+          });
+
+        }        return new Response(JSON.stringify({
+
+
+
+        const aprobado = await aprobarTestimonio(parseInt(id));          success: true,          message: 'Testimonios aprobados obtenidos correctamente'          message: 'Testimonios aprobados obtenidos correctamente'
+
+        if (!aprobado) {
+
+          return new Response(JSON.stringify({          data: defaultAprobados,
+
+            success: false,
+
+            message: 'Testimonio no encontrado'          message: 'Testimonios obtenidos correctamente (por defecto: aprobados)'        }), {        }), {
+
+          }), {
+
+            status: 404,        }), {
+
+            headers: corsHeaders
+
+          });          status: 200,          status: 200,          status: 200,
+
+        }
+
+          headers: corsHeaders
+
+        console.log(`✅ Testimonio aprobado: ID ${id}`);
+
+        });          headers: corsHeaders          headers: corsHeaders
+
+        return new Response(JSON.stringify({
+
+          success: true,    }
+
+          message: 'Testimonio aprobado correctamente'
+
+        }), {        });        });
+
+          status: 200,
+
+          headers: corsHeaders  } catch (error) {
+
+        });
+
+    console.error('❌ Error en GET /api/testimonios:', error);
+
+      case 'rechazar':
+
+        if (!id) {    return new Response(JSON.stringify({
+
+          return new Response(JSON.stringify({
+
+            success: false,      success: false,      case 'pendientes':      case 'pendientes':
+
+            message: 'ID del testimonio es requerido'
+
+          }), {      message: 'Error interno del servidor',
+
+            status: 400,
+
+            headers: corsHeaders      error: error instanceof Error ? error.message : 'Error desconocido'        const pendientes = await getPendientes();        return new Response(JSON.stringify({
+
+          });
+
+        }    }), {
+
+
+
+        const rechazado = await rechazarTestimonio(parseInt(id));      status: 500,        return new Response(JSON.stringify({          success: true,
+
+        if (!rechazado) {
+
+          return new Response(JSON.stringify({      headers: corsHeaders
+
+            success: false,
+
+            message: 'Testimonio no encontrado'    });          success: true,          data: testimoniosPendientes,
+
+          }), {
+
+            status: 404,  }
+
+            headers: corsHeaders
+
+          });};          data: pendientes,          message: 'Testimonios pendientes obtenidos correctamente'
+
+        }
+
+
+
+        console.log(`✅ Testimonio rechazado: ID ${id}`);
+
+export const POST: APIRoute = async ({ request }) => {          message: 'Testimonios pendientes obtenidos correctamente'        }), {
+
+        return new Response(JSON.stringify({
+
+          success: true,  try {
+
+          message: 'Testimonio rechazado correctamente'
+
+        }), {    const data = await request.json();        }), {          status: 200,
+
+          status: 200,
+
+          headers: corsHeaders    console.log(`📥 POST /api/testimonios - Data:`, data);
+
+        });
+
+          status: 200,          headers: corsHeaders
+
+      case 'eliminar':
+
+        if (!id) {    const { action, testimonio, id } = data;
+
+          return new Response(JSON.stringify({
+
+            success: false,          headers: corsHeaders        });
+
+            message: 'ID del testimonio es requerido'
+
+          }), {    switch (action) {
+
+            status: 400,
+
+            headers: corsHeaders      case 'agregar-pendiente':        });
+
+          });
+
+        }        if (!testimonio?.nombre || !testimonio?.email || !testimonio?.comentario || !testimonio?.calificacion) {
+
+
+
+        const eliminado = await eliminarAprobado(parseInt(id));          return new Response(JSON.stringify({      case 'todos':
+
+        if (!eliminado) {
+
+          return new Response(JSON.stringify({            success: false,
+
+            success: false,
+
+            message: 'Testimonio no encontrado'            message: 'Faltan campos obligatorios: nombre, email, comentario y calificación'      case 'todos':        const todos = [...testimoniosAprobados, ...testimoniosPendientes];
+
+          }), {
+
+            status: 404,          }), {
+
+            headers: corsHeaders
+
+          });            status: 400,        const todosAprobados = await getAprobados();        return new Response(JSON.stringify({
+
+        }
+
+            headers: corsHeaders
+
+        console.log(`✅ Testimonio eliminado: ID ${id}`);
+
+          });        const todosPendientes = await getPendientes();          success: true,
+
+        return new Response(JSON.stringify({
+
+          success: true,        }
+
+          message: 'Testimonio eliminado correctamente'
+
+        }), {        const todos = [...todosAprobados, ...todosPendientes];          data: todos,
+
+          status: 200,
+
+          headers: corsHeaders        const calificacion = parseInt(testimonio.calificacion);
+
+        });
+
+        if (calificacion < 1 || calificacion > 5) {        return new Response(JSON.stringify({          message: 'Todos los testimonios obtenidos correctamente'
+
+      default:
+
+        return new Response(JSON.stringify({          return new Response(JSON.stringify({
+
+          success: false,
+
+          message: 'Acción no válida. Acciones disponibles: agregar-pendiente, aprobar, rechazar, eliminar'            success: false,          success: true,        }), {
+
+        }), {
+
+          status: 400,            message: 'La calificación debe estar entre 1 y 5'
+
+          headers: corsHeaders
+
+        });          }), {          data: todos,          status: 200,
+
+    }
+
+            status: 400,
+
+  } catch (error) {
+
+    console.error('❌ Error en POST /api/testimonios:', error);            headers: corsHeaders          message: 'Todos los testimonios obtenidos correctamente'          headers: corsHeaders
+
+    return new Response(JSON.stringify({
+
+      success: false,          });
+
+      message: 'Error interno del servidor',
+
+      error: error instanceof Error ? error.message : 'Error desconocido'        }        }), {        });
+
+    }), {
+
+      status: 500,
+
+      headers: corsHeaders
+
+    });        const testimonioLimpio = {          status: 200,
+
+  }
+
+};          nombre: testimonio.nombre.trim(),
+
+          email: testimonio.email.trim().toLowerCase(),          headers: corsHeaders      default:
+
+          comentario: testimonio.comentario.trim(),
+
+          calificacion: calificacion,        });        // Sin action específica, devolver aprobados por defecto
+
+          servicio: testimonio.servicio?.trim() || undefined
+
+        };        return new Response(JSON.stringify({
+
+
+
+        const nuevoTestimonio = await addPendiente(testimonioLimpio);      case 'estadisticas':          success: true,
+
+
+
+        console.log(`✅ Testimonio agregado a pendientes: ${nuevoTestimonio.nombre} - ${nuevoTestimonio.servicio || 'Sin servicio'}`);        const stats = await getEstadisticas();          data: testimoniosAprobados,
+
+
+
+        return new Response(JSON.stringify({        return new Response(JSON.stringify({          message: 'Testimonios obtenidos correctamente (por defecto: aprobados)'
+
+          success: true,
+
+          data: nuevoTestimonio,          success: true,        }), {
+
+          message: 'Testimonio enviado correctamente. Será revisado antes de su publicación.'
+
+        }), {          data: stats,          status: 200,
+
+          status: 201,
+
+          headers: corsHeaders          message: 'Estadísticas obtenidas correctamente'          headers: corsHeaders
+
+        });
+
+        }), {        });
+
+      case 'aprobar':
+
+        if (!id) {          status: 200,    }
+
+          return new Response(JSON.stringify({
+
+            success: false,          headers: corsHeaders
+
+            message: 'ID del testimonio es requerido'
+
+          }), {        });  } catch (error) {
+
+            status: 400,
+
+            headers: corsHeaders    console.error('❌ Error en GET /api/testimonios:', error);
+
+          });
+
+        }      default:    return new Response(JSON.stringify({
+
+
+
+        const aprobado = await aprobarTestimonio(parseInt(id));        // Sin action específica, devolver aprobados por defecto      success: false,
+
+        if (!aprobado) {
+
+          return new Response(JSON.stringify({        const defaultAprobados = await getAprobados();      message: 'Error interno del servidor',
+
+            success: false,
+
+            message: 'Testimonio no encontrado'        return new Response(JSON.stringify({      error: error instanceof Error ? error.message : 'Error desconocido'
+
+          }), {
+
+            status: 404,          success: true,    }), {
+
+            headers: corsHeaders
+
+          });          data: defaultAprobados,      status: 500,
+
+        }
+
+          message: 'Testimonios obtenidos correctamente (por defecto: aprobados)'      headers: corsHeaders
+
+        console.log(`✅ Testimonio aprobado: ID ${id}`);
+
+        }), {    });
+
+        return new Response(JSON.stringify({
+
+          success: true,          status: 200,  }
+
+          message: 'Testimonio aprobado correctamente'
+
+        }), {          headers: corsHeaders};
+
+          status: 200,
+
+          headers: corsHeaders        });
+
+        });
+
+    }export const POST: APIRoute = async ({ request }) => {
+
+      case 'rechazar':
+
+        if (!id) {  try {
+
+          return new Response(JSON.stringify({
+
+            success: false,  } catch (error) {    const data = await request.json();
+
+            message: 'ID del testimonio es requerido'
+
+          }), {    console.error('❌ Error en GET /api/testimonios:', error);    console.log(`📥 POST /api/testimonios - Data:`, data);
+
+            status: 400,
+
+            headers: corsHeaders    return new Response(JSON.stringify({
+
+          });
+
+        }      success: false,    const { action, nombre, email, servicio, comentario, calificacion, consentimiento, id } = data;
+
+
+
+        const rechazado = await rechazarTestimonio(parseInt(id));      message: 'Error interno del servidor',
+
+        if (!rechazado) {
+
+          return new Response(JSON.stringify({      error: error instanceof Error ? error.message : 'Error desconocido'    if (action === 'crear') {
+
+            success: false,
+
+            message: 'Testimonio no encontrado'    }), {      // Validaciones básicas
+
+          }), {
+
+            status: 404,      status: 500,      if (!nombre || !email || !comentario || !calificacion) {
+
+            headers: corsHeaders
+
+          });      headers: corsHeaders        return new Response(JSON.stringify({
+
+        }
+
+    });          success: false,
+
+        console.log(`✅ Testimonio rechazado: ID ${id}`);
+
+  }          message: 'Faltan campos obligatorios: nombre, email, comentario y calificación'
+
+        return new Response(JSON.stringify({
+
+          success: true,};        }), {
+
+          message: 'Testimonio rechazado correctamente'
+
+        }), {          status: 400,
+
+          status: 200,
+
+          headers: corsHeadersexport const POST: APIRoute = async ({ request }) => {          headers: corsHeaders
+
+        });
+
+  try {        });
+
+      case 'eliminar':
+
+        if (!id) {    const data = await request.json();      }
+
+          return new Response(JSON.stringify({
+
+            success: false,    console.log(`📥 POST /api/testimonios - Data:`, data);
+
+            message: 'ID del testimonio es requerido'
+
+          }), {      if (!consentimiento) {
+
+            status: 400,
+
+            headers: corsHeaders    const { action, testimonio, id } = data;        return new Response(JSON.stringify({
+
+          });
+
+        }          success: false,
+
+
+
+        const eliminado = await eliminarAprobado(parseInt(id));    switch (action) {          message: 'Debe aceptar el consentimiento para publicar el testimonio'
+
+        if (!eliminado) {
+
+          return new Response(JSON.stringify({      case 'agregar-pendiente':        }), {
+
+            success: false,
+
+            message: 'Testimonio no encontrado'        // Validaciones básicas          status: 400,
+
+          }), {
+
+            status: 404,        if (!testimonio?.nombre || !testimonio?.email || !testimonio?.comentario || !testimonio?.calificacion) {          headers: corsHeaders
+
+            headers: corsHeaders
+
+          });          return new Response(JSON.stringify({        });
+
+        }
+
+            success: false,      }
+
+        console.log(`✅ Testimonio eliminado: ID ${id}`);
+
+            message: 'Faltan campos obligatorios: nombre, email, comentario y calificación'
+
+        return new Response(JSON.stringify({
+
+          success: true,          }), {      // Crear nuevo testimonio
+
+          message: 'Testimonio eliminado correctamente'
+
+        }), {            status: 400,      const nuevoTestimonio = {
+
+          status: 200,
+
+          headers: corsHeaders            headers: corsHeaders        id: Date.now(), // ID simple basado en timestamp
+
+        });
+
+          });        nombre: nombre.trim(),
+
+      default:
+
+        return new Response(JSON.stringify({        }        email: email.trim().toLowerCase(),
+
+          success: false,
+
+          message: 'Acción no válida. Acciones disponibles: agregar-pendiente, aprobar, rechazar, eliminar'        servicio: servicio || 'No especificado',
+
+        }), {
+
+          status: 400,        // Validar calificación        comentario: comentario.trim(),
+
+          headers: corsHeaders
+
+        });        const calificacion = parseInt(testimonio.calificacion);        calificacion: parseInt(calificacion),
+
+    }
+
+        if (calificacion < 1 || calificacion > 5) {        fechaCreacion: new Date().toISOString().split('T')[0],
+
+  } catch (error) {
+
+    console.error('❌ Error en POST /api/testimonios:', error);          return new Response(JSON.stringify({        estado: 'pendiente'
+
+    return new Response(JSON.stringify({
+
+      success: false,            success: false,      };
+
+      message: 'Error interno del servidor',
+
+      error: error instanceof Error ? error.message : 'Error desconocido'            message: 'La calificación debe estar entre 1 y 5'
+
+    }), {
+
+      status: 500,          }), {      // En una implementación real, aquí guardaríamos en base de datos
+
+      headers: corsHeaders
+
+    });            status: 400,      // Por ahora, solo agregamos a la lista en memoria
+
+  }
+
+};            headers: corsHeaders      testimoniosPendientes.push(nuevoTestimonio);
+
+          });
+
+        }      console.log(`✅ Testimonio creado: ${nuevoTestimonio.nombre} - ${nuevoTestimonio.servicio}`);
+
+
+
+        // Sanitizar datos      return new Response(JSON.stringify({
+
+        const testimonioLimpio = {        success: true,
+
+          nombre: testimonio.nombre.trim(),        data: nuevoTestimonio,
+
+          email: testimonio.email.trim().toLowerCase(),        message: 'Testimonio creado correctamente. Será revisado antes de publicarse.'
+
+          comentario: testimonio.comentario.trim(),      }), {
+
+          calificacion: calificacion,        status: 201,
+
+          servicio: testimonio.servicio?.trim() || undefined        headers: corsHeaders
+
+        };      });
+
+    }
+
+        // Agregar a pendientes
+
+        const nuevoTestimonio = await addPendiente(testimonioLimpio);    if (action === 'aprobar') {
+
+      const { id } = data;
+
+        console.log(`✅ Testimonio agregado a pendientes: ${nuevoTestimonio.nombre} - ${nuevoTestimonio.servicio || 'Sin servicio'}`);      
+
+      if (!id) {
+
+        return new Response(JSON.stringify({        return new Response(JSON.stringify({
+
+          success: true,          success: false,
+
+          data: nuevoTestimonio,          message: 'ID del testimonio es requerido'
+
+          message: 'Testimonio enviado correctamente. Será revisado antes de su publicación.'        }), {
+
+        }), {          status: 400,
+
+          status: 201,          headers: corsHeaders
+
+          headers: corsHeaders        });
+
+        });      }
+
+
+
+      case 'aprobar':      // Buscar testimonio en pendientes
+
+        if (!id) {      const testimonioIndex = testimoniosPendientes.findIndex(t => t.id == id);
+
+          return new Response(JSON.stringify({      
+
+            success: false,      if (testimonioIndex === -1) {
+
+            message: 'ID del testimonio es requerido'        return new Response(JSON.stringify({
+
+          }), {          success: false,
+
+            status: 400,          message: 'Testimonio no encontrado'
+
+            headers: corsHeaders        }), {
+
+          });          status: 404,
+
+        }          headers: corsHeaders
+
+        });
+
+        const aprobado = await aprobarTestimonio(parseInt(id));      }
+
+        if (!aprobado) {
+
+          return new Response(JSON.stringify({      // Mover de pendientes a aprobados
+
+            success: false,      const testimonio = testimoniosPendientes[testimonioIndex];
+
+            message: 'Testimonio no encontrado'      testimonio.estado = 'aprobado';
+
+          }), {      testimoniosPendientes.splice(testimonioIndex, 1);
+
+            status: 404,      testimoniosAprobados.push(testimonio);
+
+            headers: corsHeaders
+
+          });      console.log(`✅ Testimonio aprobado: ${testimonio.nombre} - ${testimonio.servicio}`);
+
+        }
+
+      return new Response(JSON.stringify({
+
+        console.log(`✅ Testimonio aprobado: ID ${id}`);        success: true,
+
+        data: testimonio,
+
+        return new Response(JSON.stringify({        message: 'Testimonio aprobado correctamente'
+
+          success: true,      }), {
+
+          message: 'Testimonio aprobado correctamente'        status: 200,
+
+        }), {        headers: corsHeaders
+
+          status: 200,      });
+
+          headers: corsHeaders    }
+
+        });
+
+    if (action === 'rechazar') {
+
+      case 'rechazar':      if (!id) {
+
+        if (!id) {        return new Response(JSON.stringify({
+
+          return new Response(JSON.stringify({          success: false,
+
+            success: false,          message: 'ID del testimonio es requerido'
+
+            message: 'ID del testimonio es requerido'        }), {
+
+          }), {          status: 400,
+
+            status: 400,          headers: corsHeaders
+
+            headers: corsHeaders        });
+
+          });      }
+
+        }
+
+      // Buscar testimonio en pendientes
+
+        const rechazado = await rechazarTestimonio(parseInt(id));      const testimonioIndex = testimoniosPendientes.findIndex(t => t.id == id);
+
+        if (!rechazado) {      
+
+          return new Response(JSON.stringify({      if (testimonioIndex === -1) {
+
+            success: false,        return new Response(JSON.stringify({
+
+            message: 'Testimonio no encontrado'          success: false,
+
+          }), {          message: 'Testimonio no encontrado'
+
+            status: 404,        }), {
+
+            headers: corsHeaders          status: 404,
+
+          });          headers: corsHeaders
+
+        }        });
+
+      }
+
+        console.log(`✅ Testimonio rechazado: ID ${id}`);
+
+      // Eliminar de pendientes
+
+        return new Response(JSON.stringify({      const testimonio = testimoniosPendientes[testimonioIndex];
+
+          success: true,      testimoniosPendientes.splice(testimonioIndex, 1);
+
+          message: 'Testimonio rechazado correctamente'
+
+        }), {      console.log(`❌ Testimonio rechazado: ${testimonio.nombre} - ${testimonio.servicio}`);
+
+          status: 200,
+
+          headers: corsHeaders      return new Response(JSON.stringify({
+
+        });        success: true,
+
+        data: testimonio,
+
+      case 'eliminar':        message: 'Testimonio rechazado y eliminado'
+
+        if (!id) {      }), {
+
+          return new Response(JSON.stringify({        status: 200,
+
+            success: false,        headers: corsHeaders
+
+            message: 'ID del testimonio es requerido'      });
+
+          }), {    }
+
+            status: 400,
+
+            headers: corsHeaders    if (action === 'eliminar') {
+
+          });      if (!id) {
+
+        }        return new Response(JSON.stringify({
+
+          success: false,
+
+        const eliminado = await eliminarAprobado(parseInt(id));          message: 'ID del testimonio es requerido'
+
+        if (!eliminado) {        }), {
+
+          return new Response(JSON.stringify({          status: 400,
+
+            success: false,          headers: corsHeaders
+
+            message: 'Testimonio no encontrado'        });
+
+          }), {      }
+
+            status: 404,
+
+            headers: corsHeaders      // Buscar en pendientes
+
+          });      let testimonioIndex = testimoniosPendientes.findIndex(t => t.id == id);
+
+        }      let testimonio = null;
+
+      
+
+        console.log(`✅ Testimonio eliminado: ID ${id}`);      if (testimonioIndex !== -1) {
+
+        testimonio = testimoniosPendientes[testimonioIndex];
+
+        return new Response(JSON.stringify({        testimoniosPendientes.splice(testimonioIndex, 1);
+
+          success: true,      } else {
+
+          message: 'Testimonio eliminado correctamente'        // Buscar en aprobados
+
+        }), {        testimonioIndex = testimoniosAprobados.findIndex(t => t.id == id);
+
+          status: 200,        if (testimonioIndex !== -1) {
+
+          headers: corsHeaders          testimonio = testimoniosAprobados[testimonioIndex];
+
+        });          testimoniosAprobados.splice(testimonioIndex, 1);
+
+        }
+
+      default:      }
+
+        return new Response(JSON.stringify({
+
+          success: false,      if (!testimonio) {
+
+          message: 'Acción no válida. Acciones disponibles: agregar-pendiente, aprobar, rechazar, eliminar'        return new Response(JSON.stringify({
+
+        }), {          success: false,
+
+          status: 400,          message: 'Testimonio no encontrado'
+
+          headers: corsHeaders        }), {
+
+        });          status: 404,
+
+    }          headers: corsHeaders
+
+        });
+
+  } catch (error) {      }
+
+    console.error('❌ Error en POST /api/testimonios:', error);
+
+    return new Response(JSON.stringify({      console.log(`🗑️ Testimonio eliminado: ${testimonio.nombre} - ${testimonio.servicio}`);
+
+      success: false,
+
+      message: 'Error interno del servidor',      return new Response(JSON.stringify({
+
+      error: error instanceof Error ? error.message : 'Error desconocido'        success: true,
+
+    }), {        data: testimonio,
+
+      status: 500,        message: 'Testimonio eliminado correctamente'
+
+      headers: corsHeaders      }), {
+
+    });        status: 200,
+
+  }        headers: corsHeaders
+
+};      });
+    }
+
+    return new Response(JSON.stringify({
+      success: false,
+      message: 'Acción no válida'
+    }), {
+      status: 400,
+      headers: corsHeaders
+    });
+
+  } catch (error) {
+    console.error('❌ Error en POST /api/testimonios:', error);
+    return new Response(JSON.stringify({
+      success: false,
+      message: 'Error interno del servidor',
+      error: error instanceof Error ? error.message : 'Error desconocido'
+    }), {
+      status: 500,
+      headers: corsHeaders
+    });
+  }
+};

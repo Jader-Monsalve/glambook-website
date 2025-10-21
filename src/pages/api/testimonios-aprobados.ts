@@ -1,12 +1,12 @@
 import type { APIRoute } from 'astro';
-import { getTestimoniosAprobados } from '../../data/testimonios';
+import { getAprobados } from '../../utils/testimonios-persistence';
 
 // Configurar como server-rendered
 export const prerender = false;
 
 export const GET: APIRoute = async () => {
   try {
-    const testimonios = getTestimoniosAprobados();
+    const testimonios = await getAprobados();
     
     return new Response(JSON.stringify(testimonios), {
       status: 200,
