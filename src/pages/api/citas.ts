@@ -125,13 +125,63 @@ export const GET: APIRoute = async ({ url }) => {
         }
 
         const fechaObj = new Date(fecha);
+
+        // Verificar disponibilidad del día
+        try {
+          const disponibilidadResponse = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://glambook-admin.up.railway.app' : 'http://localhost:4321'}/api/disponibilidad?action=verificar-disponibilidad&fecha=${fecha}`);
+          
+          if (disponibilidadResponse.ok) {
+            const disponibilidadResult = await disponibilidadResponse.json();
+            
+            if (disponibilidadResult.success && !disponibilidadResult.data.disponible) {
+              return new Response(JSON.stringify({
+                success: true,
+                data: {
+                  fecha,
+                  dia: fechaObj.toLocaleDateString('es-ES', { weekday: 'long' }),
+                  horariosDisponibles: [],
+                  horariosOcupados: [],
+                  motivo: disponibilidadResult.data.motivo,
+                  bloqueado: true
+                },
+                message: `Día no disponible: ${disponibilidadResult.data.motivo}`
+              }), {
+                status: 200,
+                headers: corsHeaders
+              });
+            }
+          }
+        } catch (error) {
+          console.warn('⚠️ No se pudo verificar disponibilidad:', error);
+          // Continuar con la lógica normal si el servicio no está disponible
+        }
         const diaSemana = fechaObj.toLocaleDateString('es-ES', { weekday: 'long' });
         const diaKey = diaSemana.toLowerCase();
         
         // Obtener horarios del día
-        const horariosDelDia = horariosDisponibles[diaKey] || [];
+        let horariosDelDia = horariosDisponibles[diaKey] || [];
         
-        // Filtrar horarios ocupados
+        // Verificar bloqueos de horarios específicos
+        try {
+          const disponibilidadResponse = await fetch(`${process.env.NODE_ENV === 'production' ? 'https://glambook-admin.up.railway.app' : 'http://localhost:4321'}/api/disponibilidad?action=verificar-disponibilidad&fecha=${fecha}`);
+          
+          if (disponibilidadResponse.ok) {
+            const disponibilidadResult = await disponibilidadResponse.json();
+            
+            if (disponibilidadResult.success && disponibilidadResult.data.bloqueosParciales?.length > 0) {
+              // Filtrar horarios bloqueados parcialmente
+              disponibilidadResult.data.bloqueosParciales.forEach((bloqueo: any) => {
+                horariosDelDia = horariosDelDia.filter((hora: string) => {
+                  return !(hora >= bloqueo.horaInicio && hora <= bloqueo.horaFin);
+                });
+              });
+            }
+          }
+        } catch (error) {
+          console.warn('⚠️ No se pudo verificar bloqueos parciales:', error);
+        }
+        
+        // Filtrar horarios ocupados por citas
         const citasDelDia = citasData.filter(cita => cita.fecha === fecha);
         const horariosOcupados = citasDelDia.map(cita => cita.hora);
         const horariosLibres = horariosDelDia.filter((hora: string) => !horariosOcupados.includes(hora));
@@ -142,7 +192,8 @@ export const GET: APIRoute = async ({ url }) => {
             fecha,
             dia: diaSemana,
             horariosDisponibles: horariosLibres,
-            horariosOcupados: horariosOcupados
+            horariosOcupados: horariosOcupados,
+            bloqueado: false
           },
           message: 'Horarios obtenidos correctamente'
         }), {

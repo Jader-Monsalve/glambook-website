@@ -557,6 +557,185 @@ const title = "Panel de Administración - GlamBook";
           </div>
         </div>
       </div>
+
+      <!-- Disponibilidad Tab -->
+      <div id="disponibilidad-tab" class="tab-content" style="display: none;">
+        <div class="max-w-7xl mx-auto p-6">
+          <!-- Header -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Disponibilidad</h2>
+              <p class="text-sm text-gray-600 font-poppins">Administra los días y horarios no disponibles</p>
+            </div>
+            <div class="flex gap-2">
+              <button id="refresh-disponibilidad" class="admin-button-secondary text-sm">
+                <span class="mr-2">🔄</span>
+                Actualizar
+              </button>
+              <button id="crear-bloqueo-btn" class="admin-button-primary text-sm">
+                <span class="mr-2">➕</span>
+                Nuevo Bloqueo
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg">
+                  <span class="text-blue-600 text-lg">📅</span>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-600 font-poppins">Total Bloqueos</p>
+                  <p class="text-xl font-bold text-blue-800 font-poppins" id="total-bloqueos-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-red-100 rounded-lg">
+                  <span class="text-red-600 text-lg">🚫</span>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-red-600 font-poppins">Días Completos</p>
+                  <p class="text-xl font-bold text-red-800 font-poppins" id="dias-completos-detail">0</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-orange-100 rounded-lg">
+                  <span class="text-orange-600 text-lg">⏰</span>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-orange-600 font-poppins">Horarios Específicos</p>
+                  <p class="text-xl font-bold text-orange-800 font-poppins" id="horarios-especificos-detail">0</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg">
+                  <span class="text-purple-600 text-lg">📊</span>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-purple-600 font-poppins">Rangos de Fechas</p>
+                  <p class="text-xl font-bold text-purple-800 font-poppins" id="rangos-fechas-detail">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="mb-6">
+            <div class="flex flex-wrap gap-2">
+              <button class="filter-disponibilidad-btn active bg-pink-500 text-white px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="todos">
+                Todos
+              </button>
+              <button class="filter-disponibilidad-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="dia_completo">
+                Días Completos
+              </button>
+              <button class="filter-disponibilidad-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="horario_especifico">
+                Horarios Específicos
+              </button>
+              <button class="filter-disponibilidad-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="rango_fechas">
+                Rangos de Fechas
+              </button>
+              <button class="filter-disponibilidad-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="activos">
+                Solo Activos
+              </button>
+            </div>
+          </div>
+
+          <!-- Bloqueos List -->
+          <div id="bloqueos-list" class="space-y-4">
+            <div class="flex items-center justify-center py-8">
+              <div class="loading-spinner w-8 h-8"></div>
+              <span class="ml-3 text-gray-500 font-poppins">Cargando bloqueos...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal para Crear/Editar Bloqueo -->
+      <div id="modal-bloqueo" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div class="p-6">
+            <!-- Header del modal -->
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins" id="modal-title">Crear Bloqueo</h3>
+              <button id="cerrar-modal-bloqueo" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <span class="text-xl">✕</span>
+              </button>
+            </div>
+
+            <!-- Formulario -->
+            <form id="form-bloqueo" class="space-y-4">
+              <!-- Tipo de Bloqueo -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Tipo de Bloqueo</label>
+                <select id="tipo-bloqueo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins">
+                  <option value="dia_completo">Día Completo</option>
+                  <option value="horario_especifico">Horario Específico</option>
+                  <option value="rango_fechas">Rango de Fechas</option>
+                </select>
+              </div>
+
+              <!-- Fecha (para día completo y horario específico) -->
+              <div id="campo-fecha">
+                <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Fecha</label>
+                <input type="date" id="fecha-bloqueo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins">
+              </div>
+
+              <!-- Rango de fechas (solo para rango) -->
+              <div id="campos-rango" class="hidden space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Fecha de Inicio</label>
+                  <input type="date" id="fecha-inicio-bloqueo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Fecha de Fin</label>
+                  <input type="date" id="fecha-fin-bloqueo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins">
+                </div>
+              </div>
+
+              <!-- Horarios (solo para horario específico) -->
+              <div id="campos-horarios" class="hidden space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Hora Inicio</label>
+                    <input type="time" id="hora-inicio-bloqueo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Hora Fin</label>
+                    <input type="time" id="hora-fin-bloqueo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Motivo -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Motivo</label>
+                <textarea id="motivo-bloqueo" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 font-poppins resize-none" placeholder="Describe el motivo del bloqueo..."></textarea>
+              </div>
+
+              <!-- Botones -->
+              <div class="flex gap-3 pt-4">
+                <button type="button" id="cancelar-bloqueo" class="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors font-poppins">
+                  Cancelar
+                </button>
+                <button type="submit" class="flex-1 px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors font-poppins">
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </Layout>
@@ -672,6 +851,8 @@ window.showTab = function showTab(tabName) {
     loadCitasData();
   } else if (tabName === 'usuarios') {
     loadUsuariosData();
+  } else if (tabName === 'disponibilidad') {
+    loadDisponibilidadData();
   } else if (tabName === 'configuracion') {
     loadConfiguracion();
   }
@@ -1855,6 +2036,376 @@ document.getElementById('export-usuarios').addEventListener('click', function() 
 setInterval(() => {
   if (document.getElementById('usuarios-tab').style.display !== 'none') {
     loadUsuariosData();
+  }
+}, 60000);
+
+// =========================
+// DISPONIBILIDAD MANAGEMENT
+// =========================
+
+let bloqueosData = [];
+let currentDisponibilidadFilter = 'todos';
+
+async function loadDisponibilidadData() {
+  try {
+    const response = await fetch('/api/disponibilidad');
+    const result = await response.json();
+    
+    if (result.success) {
+      bloqueosData = result.data;
+      renderDisponibilidad();
+      updateDisponibilidadStats();
+      console.log('✅ Bloqueos cargados:', bloqueosData.length);
+    } else {
+      console.error('❌ Error loading bloqueos:', result.message);
+      showNotification('Error al cargar los bloqueos', 'error');
+    }
+  } catch (error) {
+    console.error('❌ Error fetching bloqueos:', error);
+    showNotification('Error de conexión al cargar bloqueos', 'error');
+  }
+}
+
+function updateDisponibilidadStats() {
+  const totalBloqueos = bloqueosData.filter(b => b.activo).length;
+  const diasCompletos = bloqueosData.filter(b => b.activo && b.tipo === 'dia_completo').length;
+  const horariosEspecificos = bloqueosData.filter(b => b.activo && b.tipo === 'horario_especifico').length;
+  const rangosFechas = bloqueosData.filter(b => b.activo && b.tipo === 'rango_fechas').length;
+
+  const elements = [
+    { id: 'total-bloqueos-detail', value: totalBloqueos },
+    { id: 'dias-completos-detail', value: diasCompletos },
+    { id: 'horarios-especificos-detail', value: horariosEspecificos },
+    { id: 'rangos-fechas-detail', value: rangosFechas }
+  ];
+
+  elements.forEach(({ id, value }) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = value;
+    }
+  });
+}
+
+function renderDisponibilidad() {
+  const bloqueosList = document.getElementById('bloqueos-list');
+  if (!bloqueosList) return;
+
+  let filteredBloqueos = [...bloqueosData];
+
+  // Apply filters
+  if (currentDisponibilidadFilter === 'activos') {
+    filteredBloqueos = filteredBloqueos.filter(b => b.activo);
+  } else if (currentDisponibilidadFilter !== 'todos') {
+    filteredBloqueos = filteredBloqueos.filter(b => b.tipo === currentDisponibilidadFilter);
+  }
+
+  if (filteredBloqueos.length === 0) {
+    bloqueosList.innerHTML = `
+      <div class="text-center py-8">
+        <div class="text-gray-400 text-4xl mb-4">📅</div>
+        <p class="text-gray-600 font-poppins">No hay bloqueos para mostrar</p>
+        <button onclick="document.getElementById('crear-bloqueo-btn').click()" class="mt-4 admin-button-primary text-sm">
+          Crear primer bloqueo
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  const bloqueosHtml = filteredBloqueos.map(bloqueo => {
+    const tipoLabel = {
+      'dia_completo': 'Día Completo',
+      'horario_especifico': 'Horario Específico', 
+      'rango_fechas': 'Rango de Fechas'
+    }[bloqueo.tipo];
+
+    const tipoColor = {
+      'dia_completo': 'bg-red-100 text-red-800',
+      'horario_especifico': 'bg-orange-100 text-orange-800',
+      'rango_fechas': 'bg-purple-100 text-purple-800'
+    }[bloqueo.tipo];
+
+    let fechaInfo = '';
+    if (bloqueo.tipo === 'dia_completo') {
+      fechaInfo = formatDate(bloqueo.fecha);
+    } else if (bloqueo.tipo === 'horario_especifico') {
+      fechaInfo = `${formatDate(bloqueo.fecha)} • ${bloqueo.horaInicio} - ${bloqueo.horaFin}`;
+    } else if (bloqueo.tipo === 'rango_fechas') {
+      fechaInfo = `${formatDate(bloqueo.fechaInicio)} - ${formatDate(bloqueo.fechaFin)}`;
+    }
+
+    return `
+      <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex-1">
+            <div class="flex items-start gap-3">
+              <div class="flex-shrink-0">
+                <span class="text-2xl">${bloqueo.tipo === 'dia_completo' ? '🚫' : bloqueo.tipo === 'horario_especifico' ? '⏰' : '📊'}</span>
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="px-2 py-1 text-xs font-medium rounded-full ${tipoColor} font-poppins">
+                    ${tipoLabel}
+                  </span>
+                  <span class="px-2 py-1 text-xs font-medium rounded-full ${bloqueo.activo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'} font-poppins">
+                    ${bloqueo.activo ? 'Activo' : 'Inactivo'}
+                  </span>
+                </div>
+                
+                <h3 class="font-semibold text-gray-900 font-poppins mb-1">${bloqueo.motivo}</h3>
+                <p class="text-sm text-gray-600 font-poppins">${fechaInfo}</p>
+                <p class="text-xs text-gray-500 font-poppins mt-2">
+                  Creado: ${formatDate(bloqueo.createdAt)}
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button onclick="toggleBloqueoEstado('${bloqueo.id}')" 
+                    class="${bloqueo.activo ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-500 hover:bg-green-600'} text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              ${bloqueo.activo ? 'Desactivar' : 'Activar'}
+            </button>
+            
+            <button onclick="eliminarBloqueo('${bloqueo.id}')" 
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  bloqueosList.innerHTML = bloqueosHtml;
+}
+
+async function crearBloqueo() {
+  const tipo = document.getElementById('tipo-bloqueo').value;
+  const motivo = document.getElementById('motivo-bloqueo').value.trim();
+
+  if (!motivo) {
+    showNotification('El motivo es obligatorio', 'error');
+    return;
+  }
+
+  let bloqueoData = {
+    action: 'crear-bloqueo',
+    tipo,
+    motivo
+  };
+
+  // Add specific fields based on type
+  if (tipo === 'dia_completo') {
+    const fecha = document.getElementById('fecha-bloqueo').value;
+    if (!fecha) {
+      showNotification('La fecha es obligatoria', 'error');
+      return;
+    }
+    bloqueoData.fecha = fecha;
+  } else if (tipo === 'horario_especifico') {
+    const fecha = document.getElementById('fecha-bloqueo').value;
+    const horaInicio = document.getElementById('hora-inicio-bloqueo').value;
+    const horaFin = document.getElementById('hora-fin-bloqueo').value;
+    
+    if (!fecha || !horaInicio || !horaFin) {
+      showNotification('Fecha, hora inicio y hora fin son obligatorias', 'error');
+      return;
+    }
+    
+    if (horaInicio >= horaFin) {
+      showNotification('La hora de inicio debe ser menor que la hora de fin', 'error');
+      return;
+    }
+    
+    bloqueoData.fecha = fecha;
+    bloqueoData.horaInicio = horaInicio;
+    bloqueoData.horaFin = horaFin;
+  } else if (tipo === 'rango_fechas') {
+    const fechaInicio = document.getElementById('fecha-inicio-bloqueo').value;
+    const fechaFin = document.getElementById('fecha-fin-bloqueo').value;
+    
+    if (!fechaInicio || !fechaFin) {
+      showNotification('Fecha de inicio y fecha de fin son obligatorias', 'error');
+      return;
+    }
+    
+    if (fechaInicio > fechaFin) {
+      showNotification('La fecha de inicio debe ser menor o igual que la fecha de fin', 'error');
+      return;
+    }
+    
+    bloqueoData.fechaInicio = fechaInicio;
+    bloqueoData.fechaFin = fechaFin;
+  }
+
+  try {
+    const response = await fetch('/api/disponibilidad', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(bloqueoData)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification('Bloqueo creado exitosamente', 'success');
+      cerrarModalBloqueo();
+      loadDisponibilidadData();
+    } else {
+      showNotification(result.message || 'Error al crear el bloqueo', 'error');
+    }
+  } catch (error) {
+    console.error('Error creating bloqueo:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+async function toggleBloqueoEstado(bloqueoId) {
+  try {
+    const response = await fetch('/api/disponibilidad', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'toggle-bloqueo',
+        id: bloqueoId
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification(result.message, 'success');
+      loadDisponibilidadData();
+    } else {
+      showNotification(result.message || 'Error al cambiar estado del bloqueo', 'error');
+    }
+  } catch (error) {
+    console.error('Error toggling bloqueo status:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+async function eliminarBloqueo(bloqueoId) {
+  if (!confirm('¿Estás seguro de que deseas eliminar este bloqueo? Esta acción no se puede deshacer.')) {
+    return;
+  }
+
+  try {
+    const response = await fetch('/api/disponibilidad', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'eliminar-bloqueo',
+        id: bloqueoId
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      showNotification('Bloqueo eliminado exitosamente', 'success');
+      loadDisponibilidadData();
+    } else {
+      showNotification(result.message || 'Error al eliminar el bloqueo', 'error');
+    }
+  } catch (error) {
+    console.error('Error deleting bloqueo:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+function mostrarModalBloqueo() {
+  document.getElementById('modal-bloqueo').style.display = 'flex';
+  document.getElementById('modal-bloqueo').classList.remove('hidden');
+  
+  // Reset form
+  document.getElementById('form-bloqueo').reset();
+  
+  // Set default date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('fecha-bloqueo').value = today;
+  document.getElementById('fecha-inicio-bloqueo').value = today;
+  
+  // Update form based on initial type
+  updateFormFields();
+}
+
+function cerrarModalBloqueo() {
+  document.getElementById('modal-bloqueo').style.display = 'none';
+  document.getElementById('modal-bloqueo').classList.add('hidden');
+}
+
+function updateFormFields() {
+  const tipo = document.getElementById('tipo-bloqueo').value;
+  const campoFecha = document.getElementById('campo-fecha');
+  const camposRango = document.getElementById('campos-rango');
+  const camposHorarios = document.getElementById('campos-horarios');
+
+  // Reset all fields
+  campoFecha.classList.add('hidden');
+  camposRango.classList.add('hidden');
+  camposHorarios.classList.add('hidden');
+
+  // Show relevant fields
+  if (tipo === 'dia_completo') {
+    campoFecha.classList.remove('hidden');
+  } else if (tipo === 'horario_especifico') {
+    campoFecha.classList.remove('hidden');
+    camposHorarios.classList.remove('hidden');
+  } else if (tipo === 'rango_fechas') {
+    camposRango.classList.remove('hidden');
+  }
+}
+
+// Event listeners for disponibilidad
+document.getElementById('crear-bloqueo-btn')?.addEventListener('click', mostrarModalBloqueo);
+document.getElementById('cerrar-modal-bloqueo')?.addEventListener('click', cerrarModalBloqueo);
+document.getElementById('cancelar-bloqueo')?.addEventListener('click', cerrarModalBloqueo);
+document.getElementById('tipo-bloqueo')?.addEventListener('change', updateFormFields);
+document.getElementById('refresh-disponibilidad')?.addEventListener('click', loadDisponibilidadData);
+
+document.getElementById('form-bloqueo')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  crearBloqueo();
+});
+
+// Modal close on outside click
+document.getElementById('modal-bloqueo')?.addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    cerrarModalBloqueo();
+  }
+});
+
+// Disponibilidad filter functionality
+document.querySelectorAll('.filter-disponibilidad-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+    currentDisponibilidadFilter = filter;
+    
+    // Update active button
+    document.querySelectorAll('.filter-disponibilidad-btn').forEach(b => {
+      b.classList.remove('active', 'bg-pink-500', 'text-white');
+      b.classList.add('bg-gray-100', 'text-gray-700');
+    });
+    btn.classList.add('active', 'bg-pink-500', 'text-white');
+    btn.classList.remove('bg-gray-100', 'text-gray-700');
+    
+    renderDisponibilidad();
+  });
+});
+
+// Auto-refresh disponibilidad every 60 seconds
+setInterval(() => {
+  if (document.getElementById('disponibilidad-tab').style.display !== 'none') {
+    loadDisponibilidadData();
   }
 }, 60000);
 </script>
