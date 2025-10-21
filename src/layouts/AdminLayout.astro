@@ -1,11 +1,13 @@
 ---
 import '../styles/global.css'
+import AdminNavbar from '../components/admin/AdminNavbar.astro';
 
 interface Props {
-	title: string
+	title: string;
+	currentUser?: string;
 }
 
-const { title } = Astro.props;
+const { title, currentUser } = Astro.props;
 ---
 
 <!doctype html>
@@ -14,7 +16,7 @@ const { title } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 		<meta name="generator" content={Astro.generator} />
 		
 		<!-- Chart.js CDN -->
@@ -25,14 +27,125 @@ const { title } = Astro.props;
 		<meta name="description" content="Panel de Administración - GlamBook" />
 		<meta name="robots" content="noindex, nofollow" />
 		<meta name="theme-color" content="#ec4899" />
+		
+		<!-- Security headers -->
+		<meta http-equiv="X-Content-Type-Options" content="nosniff">
+		<meta http-equiv="X-Frame-Options" content="DENY">
+		<meta http-equiv="X-XSS-Protection" content="1; mode=block">
 	</head>
 
-	<body class="bg-gray-50">
-		<slot />
+	<body class="bg-gray-50 font-poppins min-h-screen">
+		<AdminNavbar currentUser={currentUser} />
+		
+		<main class="min-h-[calc(100vh-4rem)]">
+			<slot />
+		</main>
 	</body>
 </html>
 
-<style>
+<style is:global>
+	.font-poppins {
+		font-family: 'Poppins', sans-serif;
+	}
+	
+	/* Loading animations */
+	.loading-spinner {
+		@apply animate-spin rounded-full border-b-2 border-pink-500;
+	}
+	
+	/* Smooth transitions */
+	* {
+		transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+	}
+	
+	/* Custom scrollbar */
+	::-webkit-scrollbar {
+		width: 6px;
+	}
+	
+	::-webkit-scrollbar-track {
+		background: #f1f1f1;
+	}
+	
+	::-webkit-scrollbar-thumb {
+		background: #ec4899;
+		border-radius: 3px;
+	}
+	
+	::-webkit-scrollbar-thumb:hover {
+		background: #be185d;
+	}
+	
+	/* Focus styles */
+	button:focus,
+	input:focus,
+	textarea:focus,
+	select:focus {
+		outline: 2px solid #ec4899;
+		outline-offset: 2px;
+	}
+	
+	/* Admin specific styles */
+	.admin-card {
+		@apply bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300;
+	}
+	
+	.admin-button-primary {
+		@apply bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+	}
+	
+	.admin-button-secondary {
+		@apply bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+	}
+	
+	.admin-button-danger {
+		@apply bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed;
+	}
+	
+	.admin-input {
+		@apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500;
+	}
+	
+	.admin-label {
+		@apply block text-sm font-medium text-gray-700 mb-1;
+	}
+	
+	/* Status badges */
+	.status-badge {
+		@apply px-2 py-1 rounded-full text-xs font-medium;
+	}
+	
+	.status-pending {
+		@apply bg-yellow-100 text-yellow-800;
+	}
+	
+	.status-approved {
+		@apply bg-green-100 text-green-800;
+	}
+	
+	.status-rejected {
+		@apply bg-red-100 text-red-800;
+	}
+	
+	/* Animation utilities */
+	.fade-in {
+		animation: fadeIn 0.3s ease-in;
+	}
+	
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(10px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+	
+	.slide-in {
+		animation: slideIn 0.3s ease-out;
+	}
+	
+	@keyframes slideIn {
+		from { transform: translateX(-100%); }
+		to { transform: translateX(0); }
+	}
+	
 	html,
 	body {
 		margin: 0;

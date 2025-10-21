@@ -186,6 +186,50 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
+    if (action === 'aprobar') {
+      const { id } = data;
+      
+      if (!id) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'ID del testimonio es requerido'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      // Buscar testimonio en pendientes
+      const testimonioIndex = testimoniosPendientes.findIndex(t => t.id == id);
+      
+      if (testimonioIndex === -1) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Testimonio no encontrado'
+        }), {
+          status: 404,
+          headers: corsHeaders
+        });
+      }
+
+      // Mover de pendientes a aprobados
+      const testimonio = testimoniosPendientes[testimonioIndex];
+      testimonio.estado = 'aprobado';
+      testimoniosPendientes.splice(testimonioIndex, 1);
+      testimoniosAprobados.push(testimonio);
+
+      console.log(`✅ Testimonio aprobado: ${testimonio.nombre} - ${testimonio.servicio}`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: testimonio,
+        message: 'Testimonio aprobado correctamente'
+      }), {
+        status: 200,
+        headers: corsHeaders
+      });
+    }
+
     return new Response(JSON.stringify({
       success: false,
       message: 'Acción no válida'

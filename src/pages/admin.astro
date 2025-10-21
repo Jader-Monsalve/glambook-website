@@ -1,23 +1,599 @@
 ---
-import Layout from '../layouts/Layout.astro';
-const title = "Admin - GlamBook";
+import AdminLayout from '../layouts/AdminLayout.astro';
+export const prerender = false;
+
+const title = "Panel de Administración - GlamBook";
 ---
 
-<Layout title={title}>
-  <section class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
-      <h1 class="text-2xl font-bold text-gray-800 mb-4 font-poppins">
-        Panel de Administración
-      </h1>
-      <p class="text-gray-600 mb-6 font-poppins">
-        Esta sección está en mantenimiento. Por favor, vuelve más tarde.
-      </p>
-      <a 
-        href="/" 
-        class="bg-pink-500 hover:bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold font-poppins transition-colors duration-300"
-      >
-        Volver al inicio
-      </a>
+<AdminLayout title={title}>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-pink-500 mx-auto mb-4"></div>
+      <p class="text-gray-600 font-poppins">Cargando panel de administración...</p>
     </div>
-  </section>
+  </div>
+
+  <!-- Login Form -->
+  <div id="login-section" class="min-h-screen items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50 px-4" style="display: none;">
+    <div class="max-w-md w-full bg-white rounded-lg shadow-xl p-8">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 font-poppins">Admin Login</h1>
+        <p class="text-gray-600 mt-2 font-poppins">Accede al panel de administración</p>
+      </div>
+
+      <form id="login-form" class="space-y-6">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 font-poppins">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            required 
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 font-poppins"
+            placeholder="admin@glambook.com"
+          >
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 font-poppins">Contraseña</label>
+          <input 
+            type="password" 
+            id="password" 
+            required 
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500 font-poppins"
+            placeholder="••••••••"
+          >
+        </div>
+
+        <div id="error-message" class="hidden p-3 bg-red-50 border border-red-200 rounded-md">
+          <p class="text-red-600 text-sm font-poppins"></p>
+        </div>
+
+        <button 
+          type="submit" 
+          class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-md font-semibold font-poppins transition-colors duration-300 disabled:opacity-50"
+          id="login-btn"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-dashboard" class="min-h-screen" style="display: none;">
+    <!-- Content -->
+    <main class="p-6">
+      <!-- Dashboard Tab -->
+      <div id="dashboard-tab" class="tab-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="admin-card p-6">
+            <div class="flex items-center">
+              <div class="p-3 bg-blue-100 rounded-full">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm text-gray-600 font-poppins">Total Testimonios</p>
+                <p id="total-testimonios" class="text-2xl font-bold text-gray-800 font-poppins">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card p-6">
+            <div class="flex items-center">
+              <div class="p-3 bg-green-100 rounded-full">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm text-gray-600 font-poppins">Testimonios Aprobados</p>
+                <p id="testimonios-aprobados" class="text-2xl font-bold text-gray-800 font-poppins">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card p-6">
+            <div class="flex items-center">
+              <div class="p-3 bg-yellow-100 rounded-full">
+                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm text-gray-600 font-poppins">Pendientes</p>
+                <p id="testimonios-pendientes" class="text-2xl font-bold text-gray-800 font-poppins">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-card p-6">
+          <h2 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Actividad Reciente</h2>
+          <div id="actividad-reciente" class="space-y-3">
+            <p class="text-gray-500 font-poppins">Cargando actividad...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonios Tab -->
+      <div id="testimonios-tab" class="tab-content" style="display: none;">
+        <div class="admin-card p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Testimonios</h2>
+            <div class="flex space-x-3">
+              <button id="refresh-testimonios" class="admin-button-secondary">
+                Actualizar
+              </button>
+              <button id="export-testimonios" class="admin-button-primary">
+                Exportar
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <div class="flex space-x-4">
+              <button class="filter-btn active bg-pink-500 text-white px-4 py-2 rounded-md font-poppins" data-filter="todos">Todos</button>
+              <button class="filter-btn bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md font-poppins" data-filter="pendientes">Pendientes</button>
+              <button class="filter-btn bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md font-poppins" data-filter="aprobados">Aprobados</button>
+            </div>
+          </div>
+
+          <div id="testimonios-list" class="space-y-4">
+            <p class="text-gray-500 font-poppins">Cargando testimonios...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Citas Tab -->
+      <div id="citas-tab" class="tab-content" style="display: none;">
+        <div class="admin-card p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Citas</h2>
+            <button id="refresh-citas" class="admin-button-secondary">
+              Actualizar
+            </button>
+          </div>
+          <div id="citas-list">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h3 class="font-medium text-blue-800 font-poppins">Próximas Citas</h3>
+                <p class="text-2xl font-bold text-blue-600 font-poppins">0</p>
+              </div>
+              <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h3 class="font-medium text-green-800 font-poppins">Completadas</h3>
+                <p class="text-2xl font-bold text-green-600 font-poppins">0</p>
+              </div>
+              <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <h3 class="font-medium text-orange-800 font-poppins">Pendientes</h3>
+                <p class="text-2xl font-bold text-orange-600 font-poppins">0</p>
+              </div>
+            </div>
+            <div class="mt-6">
+              <p class="text-gray-500 font-poppins">Sistema de gestión de citas en desarrollo...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuración Tab -->
+      <div id="configuracion-tab" class="tab-content" style="display: none;">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Información del Sistema -->
+          <div class="admin-card p-6">
+            <h2 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Información del Sistema</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="admin-label">Estado del Sistema</label>
+                <div class="flex items-center space-x-2">
+                  <div id="system-status" class="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span class="text-sm text-gray-600 font-poppins">Sistema operativo</span>
+                </div>
+              </div>
+              <div>
+                <label class="admin-label">Versión</label>
+                <p class="text-sm text-gray-600 font-poppins">GlamBook Admin v2.0</p>
+              </div>
+              <div>
+                <label class="admin-label">Última actualización</label>
+                <p class="text-sm text-gray-600 font-poppins" id="last-update">-</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enlaces y Herramientas -->
+          <div class="admin-card p-6">
+            <h2 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Enlaces Útiles</h2>
+            <div class="space-y-3">
+              <a href="https://glambook-website-production.up.railway.app/" target="_blank" 
+                 class="flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-poppins transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                </svg>
+                <span>Ver Sitio Web</span>
+              </a>
+              <a href="https://glambook-website-production.up.railway.app/api/health" target="_blank" 
+                 class="flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-poppins transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>Estado de APIs</span>
+              </a>
+              <a href="https://railway.app/" target="_blank" 
+                 class="flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-poppins transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <span>Panel de Railway</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Estadísticas del Sistema -->
+          <div class="admin-card p-6 lg:col-span-2">
+            <h2 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Estadísticas del Sistema</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="text-center">
+                <p class="text-2xl font-bold text-pink-600 font-poppins" id="total-users">-</p>
+                <p class="text-sm text-gray-600 font-poppins">Usuarios Total</p>
+              </div>
+              <div class="text-center">
+                <p class="text-2xl font-bold text-blue-600 font-poppins" id="total-sessions">-</p>
+                <p class="text-sm text-gray-600 font-poppins">Sesiones Hoy</p>
+              </div>
+              <div class="text-center">
+                <p class="text-2xl font-bold text-green-600 font-poppins" id="total-conversions">-</p>
+                <p class="text-sm text-gray-600 font-poppins">Conversiones</p>
+              </div>
+              <div class="text-center">
+                <p class="text-2xl font-bold text-purple-600 font-poppins" id="system-uptime">99.9%</p>
+                <p class="text-sm text-gray-600 font-poppins">Uptime</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </Layout>
+
+<script>
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { adminConfig, getApiUrl, formatDate, handleApiError, saveToLocalStorage, getFromLocalStorage } from '../lib/admin-config.ts';
+
+// Initialize Firebase
+const app = initializeApp(adminConfig.firebase);
+const auth = getAuth(app);
+
+// DOM Elements
+const loadingScreen = document.getElementById('loading-screen');
+const loginSection = document.getElementById('login-section');
+const adminDashboard = document.getElementById('admin-dashboard');
+const loginForm = document.getElementById('login-form');
+const errorMessage = document.getElementById('error-message');
+const logoutBtn = document.getElementById('logout-menu-btn');
+const adminEmail = document.getElementById('admin-user-name');
+
+// Tab functionality from navbar and mobile
+const allNavLinks = document.querySelectorAll('.nav-link, .mobile-nav-link');
+const tabContents = document.querySelectorAll('.tab-content');
+
+// Check authentication state
+onAuthStateChanged(auth, (user) => {
+  loadingScreen.style.display = 'none';
+  if (user) {
+    showDashboard(user);
+  } else {
+    showLogin();
+  }
+});
+
+function showLogin() {
+  loginSection.style.display = 'flex';
+  adminDashboard.style.display = 'none';
+}
+
+function showDashboard(user) {
+  loginSection.style.display = 'none';
+  adminDashboard.style.display = 'block';
+  if (adminEmail) {
+    adminEmail.textContent = user.email;
+  }
+  loadDashboardData();
+  // Initialize with dashboard tab
+  showTab('dashboard');
+}
+
+// Login form handler
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const loginBtn = document.getElementById('login-btn');
+
+  try {
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Iniciando...';
+    
+    await signInWithEmailAndPassword(auth, email, password);
+    
+    errorMessage.classList.add('hidden');
+  } catch (error) {
+    console.error('Error de login:', error);
+    errorMessage.classList.remove('hidden');
+    errorMessage.querySelector('p').textContent = 'Email o contraseña incorrectos';
+  } finally {
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Iniciar Sesión';
+  }
+});
+
+// Logout handler
+logoutBtn.addEventListener('click', async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+  }
+});
+
+// Tab navigation
+allNavLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    const tabName = link.dataset.tab;
+    showTab(tabName);
+  });
+});
+
+function showTab(tabName) {
+  // Hide all tab contents
+  tabContents.forEach(content => content.style.display = 'none');
+  
+  // Show selected tab
+  const targetTab = document.getElementById(tabName + '-tab');
+  if (targetTab) {
+    targetTab.style.display = 'block';
+  }
+  
+  // Update navbar highlighting
+  if (window.updateActiveNav) {
+    window.updateActiveNav(tabName);
+  }
+  
+  // Load specific data
+  if (tabName === 'testimonios') {
+    loadTestimonios();
+  } else if (tabName === 'configuracion') {
+    loadConfiguracion();
+  }
+}
+
+// Load dashboard data
+async function loadDashboardData() {
+  try {
+    const response = await fetch(getApiUrl('/testimonios?action=todos'));
+    const data = await response.json();
+    
+    if (data.success) {
+      const total = data.data.length;
+      const aprobados = data.data.filter(t => t.estado === 'aprobado').length;
+      const pendientes = data.data.filter(t => t.estado === 'pendiente').length;
+      
+      document.getElementById('total-testimonios').textContent = total;
+      document.getElementById('testimonios-aprobados').textContent = aprobados;
+      document.getElementById('testimonios-pendientes').textContent = pendientes;
+      
+      // Update navbar badges
+      if (window.updateNavBadges) {
+        window.updateNavBadges(pendientes, 0);
+      }
+      
+      // Save stats to localStorage for offline access
+      saveToLocalStorage('dashboard_stats', {
+        total, aprobados, pendientes,
+        lastUpdate: new Date().toISOString()
+      });
+    }
+  } catch (error) {
+    console.error('Error cargando dashboard:', error);
+    
+    // Try to load from localStorage if API fails
+    const savedStats = getFromLocalStorage('dashboard_stats');
+    if (savedStats) {
+      document.getElementById('total-testimonios').textContent = savedStats.total;
+      document.getElementById('testimonios-aprobados').textContent = savedStats.aprobados;
+      document.getElementById('testimonios-pendientes').textContent = savedStats.pendientes;
+    }
+  }
+}
+
+// Load testimonios
+async function loadTestimonios() {
+  const testimoniosList = document.getElementById('testimonios-list');
+  testimoniosList.innerHTML = '<div class="flex items-center justify-center py-8"><div class="loading-spinner w-8 h-8"></div><span class="ml-3 text-gray-500 font-poppins">Cargando testimonios...</span></div>';
+  
+  try {
+    const response = await fetch(getApiUrl('/testimonios?action=todos'));
+    const data = await response.json();
+    
+    if (data.success && data.data.length > 0) {
+      testimoniosList.innerHTML = data.data.map(testimonio => `
+        <div class="admin-card p-4 fade-in ${testimonio.estado === 'pendiente' ? 'border-l-4 border-yellow-400' : 'border-l-4 border-green-400'}">
+          <div class="flex justify-between items-start mb-3">
+            <div class="flex-grow">
+              <h3 class="font-medium text-gray-800 font-poppins">${testimonio.nombre}</h3>
+              <p class="text-sm text-gray-600 font-poppins">${testimonio.servicio}</p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="status-badge ${testimonio.estado === 'aprobado' ? 'status-approved' : 'status-pending'}">
+                ${testimonio.estado}
+              </span>
+              ${testimonio.estado === 'pendiente' ? `
+                <button class="admin-button-primary text-xs py-1 px-2" onclick="aprobarTestimonio('${testimonio.id}')">
+                  Aprobar
+                </button>
+              ` : ''}
+            </div>
+          </div>
+          <blockquote class="text-gray-700 font-poppins mb-3 italic border-l-2 border-gray-200 pl-3">
+            "${testimonio.comentario}"
+          </blockquote>
+          <div class="flex justify-between items-center text-sm text-gray-500">
+            <div class="flex items-center space-x-4">
+              <span class="flex items-center space-x-1">
+                <span>⭐</span>
+                <span>${testimonio.calificacion}/5</span>
+              </span>
+              <span>${formatDate(testimonio.fechaCreacion)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      
+      // Save to localStorage
+      saveToLocalStorage('testimonios', data.data);
+    } else {
+      testimoniosList.innerHTML = '<div class="text-center py-8"><p class="text-gray-500 font-poppins">No hay testimonios disponibles.</p></div>';
+    }
+  } catch (error) {
+    console.error('Error cargando testimonios:', error);
+    testimoniosList.innerHTML = `<div class="text-center py-8"><p class="text-red-500 font-poppins">Error cargando testimonios: ${handleApiError(error)}</p></div>`;
+    
+    // Try to load from localStorage
+    const savedTestimonios = getFromLocalStorage('testimonios');
+    if (savedTestimonios && savedTestimonios.length > 0) {
+      testimoniosList.innerHTML = '<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4"><p class="text-yellow-800 font-poppins text-sm">⚠️ Mostrando datos guardados (sin conexión)</p></div>' + 
+        savedTestimonios.map(testimonio => `
+          <div class="admin-card p-4 opacity-75">
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex-grow">
+                <h3 class="font-medium text-gray-800 font-poppins">${testimonio.nombre}</h3>
+                <p class="text-sm text-gray-600 font-poppins">${testimonio.servicio}</p>
+              </div>
+              <span class="status-badge ${testimonio.estado === 'aprobado' ? 'status-approved' : 'status-pending'}">
+                ${testimonio.estado}
+              </span>
+            </div>
+            <blockquote class="text-gray-700 font-poppins mb-3 italic border-l-2 border-gray-200 pl-3">
+              "${testimonio.comentario}"
+            </blockquote>
+            <div class="flex justify-between items-center text-sm text-gray-500">
+              <div class="flex items-center space-x-4">
+                <span class="flex items-center space-x-1">
+                  <span>⭐</span>
+                  <span>${testimonio.calificacion}/5</span>
+                </span>
+                <span>${formatDate(testimonio.fechaCreacion)}</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+    }
+  }
+}
+
+// Filter functionality
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active', 'bg-pink-500', 'text-white');
+      b.classList.add('bg-gray-100');
+    });
+    btn.classList.add('active', 'bg-pink-500', 'text-white');
+    btn.classList.remove('bg-gray-100');
+    
+    // TODO: Implement filtering logic
+  });
+});
+
+// Refresh testimonios
+document.getElementById('refresh-testimonios').addEventListener('click', loadTestimonios);
+
+// Configuración tab
+function loadConfiguracion() {
+  document.getElementById('last-update').textContent = formatDate(new Date());
+  
+  // Update system stats
+  document.getElementById('total-users').textContent = '1';
+  document.getElementById('total-sessions').textContent = '5';
+  document.getElementById('total-conversions').textContent = '3';
+}
+
+// Function to approve testimonio
+window.aprobarTestimonio = async function(id) {
+  try {
+    const response = await fetch(getApiUrl('/testimonios'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'aprobar', id: id })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      // Show success notification
+      showNotification('Testimonio aprobado correctamente', 'success');
+      
+      // Reload data
+      loadTestimonios();
+      loadDashboardData();
+    } else {
+      showNotification(result.message || 'Error aprobando testimonio', 'error');
+    }
+  } catch (error) {
+    console.error('Error aprobando testimonio:', error);
+    showNotification(handleApiError(error), 'error');
+  }
+};
+
+// Notification system
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `fixed top-20 right-4 p-4 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-full ${
+    type === 'success' ? 'bg-green-500 text-white' :
+    type === 'error' ? 'bg-red-500 text-white' :
+    'bg-blue-500 text-white'
+  }`;
+  notification.innerHTML = `
+    <div class="flex items-center space-x-2">
+      <span>${message}</span>
+      <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Animate in
+  setTimeout(() => {
+    notification.classList.remove('translate-x-full');
+  }, 100);
+  
+  // Auto remove after 5 seconds
+  setTimeout(() => {
+    notification.classList.add('translate-x-full');
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.remove();
+      }
+    }, 300);
+  }, 5000);
+}
+</script>
+
+<style>
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .tab-btn.active {
+    border-bottom-color: #ec4899;
+    color: #ec4899;
+  }
+</style>
