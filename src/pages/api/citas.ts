@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import fs from 'fs';
 import path from 'path';
 import { enviarConfirmacionCita, enviarNotificacionAdmin } from '../../utils/emailService';
+import { defaultCitas, defaultHorarios } from '../../utils/defaultData';
 
 // Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
@@ -54,10 +55,10 @@ function leerCitas() {
       console.log(`✅ Citas leídas: ${citas.length}`);
       return citas;
     } else {
-      console.log(`⚠️ Archivo de citas no existe, creando uno nuevo: ${CITAS_FILE}`);
+      console.log(`⚠️ Archivo de citas no existe, usando datos por defecto: ${CITAS_FILE}`);
       ensureDirectoryExists(path.dirname(CITAS_FILE));
-      fs.writeFileSync(CITAS_FILE, JSON.stringify([], null, 2));
-      return [];
+      fs.writeFileSync(CITAS_FILE, JSON.stringify(defaultCitas, null, 2));
+      return defaultCitas;
     }
   } catch (error) {
     console.error('Error al leer citas:', error);
@@ -84,27 +85,23 @@ function guardarCitas(citas: any[]) {
 // Función para leer horarios
 function leerHorarios() {
   try {
+    console.log(`🔍 Intentando leer horarios: ${HORARIOS_FILE}`);
+    
     if (fs.existsSync(HORARIOS_FILE)) {
       const data = fs.readFileSync(HORARIOS_FILE, 'utf8');
-      return JSON.parse(data);
+      const horarios = JSON.parse(data);
+      console.log(`✅ Horarios leídos correctamente`);
+      return horarios;
+    } else {
+      console.log(`⚠️ Archivo de horarios no existe, usando datos por defecto: ${HORARIOS_FILE}`);
+      ensureDirectoryExists(path.dirname(HORARIOS_FILE));
+      const horariosDefault = {
+        horarios: defaultHorarios,
+        };
+      
+      fs.writeFileSync(HORARIOS_FILE, JSON.stringify(horariosDefault, null, 2));
+      return horariosDefault;
     }
-    return {
-      horarios: {
-        lunes: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
-        martes: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
-        miercoles: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
-        jueves: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
-        viernes: ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00"],
-        sabado: ["09:00", "10:00", "11:00", "12:00", "13:00"],
-        domingo: []
-      },
-      configuracion: {
-        diasAdelante: 30,
-        horaMinima: "09:00",
-        horaMaxima: "18:00",
-        duracionCita: 60
-      }
-    };
   } catch (error) {
     console.error('Error al leer horarios:', error);
     return null;

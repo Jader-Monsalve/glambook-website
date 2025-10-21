@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import fs from 'fs';
 import path from 'path';
+import { defaultTestimoniosPendientes } from '../../utils/defaultData';
 
 // Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
@@ -47,11 +48,11 @@ function leerTestimoniosPendientes() {
       console.log(`✅ Testimonios pendientes leídos: ${testimonios.length}`);
       return testimonios;
     } else {
-      console.log(`⚠️ Archivo no existe, creando uno nuevo: ${TESTIMONIOS_PENDIENTES_FILE}`);
-      // Crear el archivo si no existe
+      console.log(`⚠️ Archivo no existe, usando datos por defecto y creando archivo: ${TESTIMONIOS_PENDIENTES_FILE}`);
+      // Crear el archivo con datos por defecto
       ensureDirectoryExists(path.dirname(TESTIMONIOS_PENDIENTES_FILE));
-      fs.writeFileSync(TESTIMONIOS_PENDIENTES_FILE, JSON.stringify([], null, 2));
-      return [];
+      fs.writeFileSync(TESTIMONIOS_PENDIENTES_FILE, JSON.stringify(defaultTestimoniosPendientes, null, 2));
+      return defaultTestimoniosPendientes;
     }
   } catch (error) {
     console.error('❌ Error al leer testimonios pendientes:', error);
