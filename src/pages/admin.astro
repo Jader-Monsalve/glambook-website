@@ -66,45 +66,105 @@ const title = "Panel de Administración - GlamBook";
     <main class="p-6">
       <!-- Dashboard Tab -->
       <div id="dashboard-tab" class="tab-content">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div class="admin-card p-6">
+        <!-- Estadísticas Principales -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div class="admin-card p-4">
             <div class="flex items-center">
-              <div class="p-3 bg-blue-100 rounded-full">
-                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="p-2 bg-blue-100 rounded-lg">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
               </div>
-              <div class="ml-4">
-                <p class="text-sm text-gray-600 font-poppins">Total Testimonios</p>
-                <p id="total-testimonios" class="text-2xl font-bold text-gray-800 font-poppins">0</p>
+              <div class="ml-3">
+                <p class="text-sm text-gray-600 font-poppins">Testimonios</p>
+                <p id="total-testimonios" class="text-xl font-bold text-blue-800 font-poppins">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card p-4">
+            <div class="flex items-center">
+              <div class="p-2 bg-green-100 rounded-lg">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-gray-600 font-poppins">Citas</p>
+                <p id="total-citas" class="text-xl font-bold text-green-800 font-poppins">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card p-4">
+            <div class="flex items-center">
+              <div class="p-2 bg-purple-100 rounded-lg">
+                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-gray-600 font-poppins">Usuarios</p>
+                <p id="total-usuarios" class="text-xl font-bold text-purple-800 font-poppins">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card p-4">
+            <div class="flex items-center">
+              <div class="p-2 bg-pink-100 rounded-lg">
+                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-gray-600 font-poppins">Conversiones</p>
+                <p id="total-conversiones" class="text-xl font-bold text-pink-800 font-poppins">85%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estadísticas Detalladas -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div class="admin-card p-6">
+            <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Testimonios</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 font-poppins">Aprobados</span>
+                <span id="testimonios-aprobados" class="font-semibold text-green-600 font-poppins">0</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 font-poppins">Pendientes</span>
+                <span id="testimonios-pendientes" class="font-semibold text-yellow-600 font-poppins">0</span>
               </div>
             </div>
           </div>
 
           <div class="admin-card p-6">
-            <div class="flex items-center">
-              <div class="p-3 bg-green-100 rounded-full">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+            <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Citas</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 font-poppins">Pendientes</span>
+                <span id="citas-pendientes" class="font-semibold text-yellow-600 font-poppins">0</span>
               </div>
-              <div class="ml-4">
-                <p class="text-sm text-gray-600 font-poppins">Testimonios Aprobados</p>
-                <p id="testimonios-aprobados" class="text-2xl font-bold text-gray-800 font-poppins">0</p>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 font-poppins">Completadas</span>
+                <span id="citas-completadas" class="font-semibold text-green-600 font-poppins">0</span>
               </div>
             </div>
           </div>
 
           <div class="admin-card p-6">
-            <div class="flex items-center">
-              <div class="p-3 bg-yellow-100 rounded-full">
-                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+            <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">Usuarios</h3>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 font-poppins">Administradores</span>
+                <span id="usuarios-admins" class="font-semibold text-green-600 font-poppins">0</span>
               </div>
-              <div class="ml-4">
-                <p class="text-sm text-gray-600 font-poppins">Pendientes</p>
-                <p id="testimonios-pendientes" class="text-2xl font-bold text-gray-800 font-poppins">0</p>
+              <div class="flex justify-between items-center">
+                <span class="text-sm text-gray-600 font-poppins">Clientes</span>
+                <span id="usuarios-clientes" class="font-semibold text-blue-600 font-poppins">0</span>
               </div>
             </div>
           </div>
@@ -121,28 +181,93 @@ const title = "Panel de Administración - GlamBook";
       <!-- Testimonios Tab -->
       <div id="testimonios-tab" class="tab-content" style="display: none;">
         <div class="admin-card p-6">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Testimonios</h2>
-            <div class="flex space-x-3">
-              <button id="refresh-testimonios" class="admin-button-secondary">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Testimonios</h2>
+              <p class="text-sm text-gray-600 font-poppins">Administra los testimonios de los clientes</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button id="refresh-testimonios" class="admin-button-secondary text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
                 Actualizar
               </button>
-              <button id="export-testimonios" class="admin-button-primary">
+              <button id="export-testimonios" class="admin-button-primary text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                </svg>
                 Exportar
               </button>
             </div>
           </div>
 
-          <div class="mb-4">
-            <div class="flex space-x-4">
-              <button class="filter-btn active bg-pink-500 text-white px-4 py-2 rounded-md font-poppins" data-filter="todos">Todos</button>
-              <button class="filter-btn bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md font-poppins" data-filter="pendientes">Pendientes</button>
-              <button class="filter-btn bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md font-poppins" data-filter="aprobados">Aprobados</button>
+          <!-- Statistics Summary -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg">
+                  <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-600 font-poppins">Total</p>
+                  <p class="text-xl font-bold text-blue-800 font-poppins" id="total-testimonios-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-lg">
+                  <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-yellow-600 font-poppins">Pendientes</p>
+                  <p class="text-xl font-bold text-yellow-800 font-poppins" id="pendientes-testimonios-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg">
+                  <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-green-600 font-poppins">Aprobados</p>
+                  <p class="text-xl font-bold text-green-800 font-poppins" id="aprobados-testimonios-detail">0</p>
+                </div>
+              </div>
             </div>
           </div>
 
+          <!-- Filters -->
+          <div class="mb-6">
+            <div class="flex flex-wrap gap-2">
+              <button class="filter-btn active bg-pink-500 text-white px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="todos">
+                Todos
+              </button>
+              <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="pendientes">
+                Pendientes
+              </button>
+              <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="aprobados">
+                Aprobados
+              </button>
+            </div>
+          </div>
+
+          <!-- Testimonios List -->
           <div id="testimonios-list" class="space-y-4">
-            <p class="text-gray-500 font-poppins">Cargando testimonios...</p>
+            <div class="flex items-center justify-center py-8">
+              <div class="loading-spinner w-8 h-8"></div>
+              <span class="ml-3 text-gray-500 font-poppins">Cargando testimonios...</span>
+            </div>
           </div>
         </div>
       </div>
@@ -150,29 +275,112 @@ const title = "Panel de Administración - GlamBook";
       <!-- Citas Tab -->
       <div id="citas-tab" class="tab-content" style="display: none;">
         <div class="admin-card p-6">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Citas</h2>
-            <button id="refresh-citas" class="admin-button-secondary">
-              Actualizar
-            </button>
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Citas</h2>
+              <p class="text-sm text-gray-600 font-poppins">Administra las citas agendadas por los clientes</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button id="refresh-citas" class="admin-button-secondary text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Actualizar
+              </button>
+              <button id="export-citas" class="admin-button-primary text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                </svg>
+                Exportar
+              </button>
+            </div>
           </div>
-          <div id="citas-list">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 class="font-medium text-blue-800 font-poppins">Próximas Citas</h3>
-                <p class="text-2xl font-bold text-blue-600 font-poppins">0</p>
-              </div>
-              <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h3 class="font-medium text-green-800 font-poppins">Completadas</h3>
-                <p class="text-2xl font-bold text-green-600 font-poppins">0</p>
-              </div>
-              <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                <h3 class="font-medium text-orange-800 font-poppins">Pendientes</h3>
-                <p class="text-2xl font-bold text-orange-600 font-poppins">0</p>
+
+          <!-- Statistics Summary -->
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg">
+                  <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-600 font-poppins">Total</p>
+                  <p class="text-xl font-bold text-blue-800 font-poppins" id="total-citas-detail">0</p>
+                </div>
               </div>
             </div>
-            <div class="mt-6">
-              <p class="text-gray-500 font-poppins">Sistema de gestión de citas en desarrollo...</p>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-yellow-100 rounded-lg">
+                  <svg class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-yellow-600 font-poppins">Pendientes</p>
+                  <p class="text-xl font-bold text-yellow-800 font-poppins" id="pendientes-citas-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg">
+                  <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-green-600 font-poppins">Confirmadas</p>
+                  <p class="text-xl font-bold text-green-800 font-poppins" id="confirmadas-citas-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg">
+                  <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-purple-600 font-poppins">Completadas</p>
+                  <p class="text-xl font-bold text-purple-800 font-poppins" id="completadas-citas-detail">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="mb-6">
+            <div class="flex flex-wrap gap-2">
+              <button class="filter-citas-btn active bg-pink-500 text-white px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="todas">
+                Todas
+              </button>
+              <button class="filter-citas-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="pendiente">
+                Pendientes
+              </button>
+              <button class="filter-citas-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="confirmada">
+                Confirmadas
+              </button>
+              <button class="filter-citas-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="completada">
+                Completadas
+              </button>
+              <button class="filter-citas-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="cancelada">
+                Canceladas
+              </button>
+            </div>
+          </div>
+
+          <!-- Citas List -->
+          <div id="citas-list" class="space-y-4">
+            <div class="flex items-center justify-center py-8">
+              <div class="loading-spinner w-8 h-8"></div>
+              <span class="ml-3 text-gray-500 font-poppins">Cargando citas...</span>
             </div>
           </div>
         </div>
@@ -251,6 +459,100 @@ const title = "Panel de Administración - GlamBook";
                 <p class="text-2xl font-bold text-purple-600 font-poppins" id="system-uptime">99.9%</p>
                 <p class="text-sm text-gray-600 font-poppins">Uptime</p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Usuarios Tab -->
+      <div id="usuarios-tab" class="tab-content" style="display: none;">
+        <div class="admin-card p-6">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800 font-poppins">Gestión de Usuarios</h2>
+              <p class="text-sm text-gray-600 font-poppins">Administra los usuarios registrados y sus roles</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button id="refresh-usuarios" class="admin-button-secondary text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Actualizar
+              </button>
+              <button id="export-usuarios" class="admin-button-primary text-sm">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                </svg>
+                Exportar
+              </button>
+            </div>
+          </div>
+
+          <!-- Statistics Summary -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-blue-100 rounded-lg">
+                  <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-blue-600 font-poppins">Total</p>
+                  <p class="text-xl font-bold text-blue-800 font-poppins" id="total-usuarios-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-green-100 rounded-lg">
+                  <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.25-4.5H3a2.25 2.25 0 00-2.25 2.25v9A2.25 2.25 0 003 19.5h16.5A2.25 2.25 0 0021.75 17V8.25A2.25 2.25 0 0019.5 6H18"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-green-600 font-poppins">Administradores</p>
+                  <p class="text-xl font-bold text-green-800 font-poppins" id="admin-usuarios-detail">0</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+              <div class="flex items-center">
+                <div class="p-2 bg-purple-100 rounded-lg">
+                  <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-purple-600 font-poppins">Clientes</p>
+                  <p class="text-xl font-bold text-purple-800 font-poppins" id="clientes-usuarios-detail">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="mb-6">
+            <div class="flex flex-wrap gap-2">
+              <button class="filter-usuarios-btn active bg-pink-500 text-white px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="todos">
+                Todos
+              </button>
+              <button class="filter-usuarios-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="admin">
+                Administradores
+              </button>
+              <button class="filter-usuarios-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-md font-poppins transition-all duration-300" data-filter="cliente">
+                Clientes
+              </button>
+            </div>
+          </div>
+
+          <!-- Usuarios List -->
+          <div id="usuarios-list" class="space-y-4">
+            <div class="flex items-center justify-center py-8">
+              <div class="loading-spinner w-8 h-8"></div>
+              <span class="ml-3 text-gray-500 font-poppins">Cargando usuarios...</span>
             </div>
           </div>
         </div>
@@ -348,7 +650,7 @@ allNavLinks.forEach(link => {
   });
 });
 
-function showTab(tabName) {
+window.showTab = function showTab(tabName) {
   // Hide all tab contents
   tabContents.forEach(content => content.style.display = 'none');
   
@@ -366,6 +668,10 @@ function showTab(tabName) {
   // Load specific data
   if (tabName === 'testimonios') {
     loadTestimonios();
+  } else if (tabName === 'citas') {
+    loadCitasData();
+  } else if (tabName === 'usuarios') {
+    loadUsuariosData();
   } else if (tabName === 'configuracion') {
     loadConfiguracion();
   }
@@ -374,13 +680,14 @@ function showTab(tabName) {
 // Load dashboard data
 async function loadDashboardData() {
   try {
-    const response = await fetch(getApiUrl('/testimonios?action=todos'));
-    const data = await response.json();
+    // Load testimonios stats
+    const testimoniosResponse = await fetch(getApiUrl('/testimonios?action=todos'));
+    const testimoniosData = await testimoniosResponse.json();
     
-    if (data.success) {
-      const total = data.data.length;
-      const aprobados = data.data.filter(t => t.estado === 'aprobado').length;
-      const pendientes = data.data.filter(t => t.estado === 'pendiente').length;
+    if (testimoniosData.success) {
+      const total = testimoniosData.data.length;
+      const aprobados = testimoniosData.data.filter(t => t.estado === 'aprobado').length;
+      const pendientes = testimoniosData.data.filter(t => t.estado === 'pendiente').length;
       
       document.getElementById('total-testimonios').textContent = total;
       document.getElementById('testimonios-aprobados').textContent = aprobados;
@@ -390,22 +697,58 @@ async function loadDashboardData() {
       if (window.updateNavBadges) {
         window.updateNavBadges(pendientes, 0);
       }
-      
-      // Save stats to localStorage for offline access
-      saveToLocalStorage('dashboard_stats', {
-        total, aprobados, pendientes,
-        lastUpdate: new Date().toISOString()
-      });
     }
+    
+    // Load citas stats
+    try {
+      const citasResponse = await fetch('/api/citas');
+      if (citasResponse.ok) {
+        const citasData = await citasResponse.json();
+        document.getElementById('total-citas').textContent = citasData.length;
+        document.getElementById('citas-pendientes').textContent = 
+          citasData.filter(c => c.estado === 'pendiente').length;
+        document.getElementById('citas-completadas').textContent = 
+          citasData.filter(c => c.estado === 'completada').length;
+      }
+    } catch (error) {
+      console.error('Error loading citas stats:', error);
+    }
+    
+    // Load usuarios stats
+    try {
+      const usuariosResponse = await fetch('/api/usuarios');
+      if (usuariosResponse.ok) {
+        const usuariosData = await usuariosResponse.json();
+        document.getElementById('total-usuarios').textContent = usuariosData.length;
+        document.getElementById('usuarios-admins').textContent = 
+          usuariosData.filter(u => u.rol === 'admin').length;
+        document.getElementById('usuarios-clientes').textContent = 
+          usuariosData.filter(u => u.rol === 'cliente').length;
+      }
+    } catch (error) {
+      console.error('Error loading usuarios stats:', error);
+    }
+    
+    // Save combined stats to localStorage
+    const combinedStats = {
+      testimonios: {
+        total: testimoniosData.success ? testimoniosData.data.length : 0,
+        aprobados: testimoniosData.success ? testimoniosData.data.filter(t => t.estado === 'aprobado').length : 0,
+        pendientes: testimoniosData.success ? testimoniosData.data.filter(t => t.estado === 'pendiente').length : 0,
+      },
+      lastUpdate: new Date().toISOString()
+    };
+    saveToLocalStorage('dashboard_stats', combinedStats);
+    
   } catch (error) {
     console.error('Error cargando dashboard:', error);
     
     // Try to load from localStorage if API fails
     const savedStats = getFromLocalStorage('dashboard_stats');
-    if (savedStats) {
-      document.getElementById('total-testimonios').textContent = savedStats.total;
-      document.getElementById('testimonios-aprobados').textContent = savedStats.aprobados;
-      document.getElementById('testimonios-pendientes').textContent = savedStats.pendientes;
+    if (savedStats && savedStats.testimonios) {
+      document.getElementById('total-testimonios').textContent = savedStats.testimonios.total;
+      document.getElementById('testimonios-aprobados').textContent = savedStats.testimonios.aprobados;
+      document.getElementById('testimonios-pendientes').textContent = savedStats.testimonios.pendientes;
     }
   }
 }
@@ -420,35 +763,72 @@ async function loadTestimonios() {
     const data = await response.json();
     
     if (data.success && data.data.length > 0) {
+      // Update summary stats
+      const total = data.data.length;
+      const aprobados = data.data.filter(t => t.estado === 'aprobado').length;
+      const pendientes = data.data.filter(t => t.estado === 'pendiente').length;
+      
+      document.getElementById('total-testimonios-detail').textContent = total;
+      document.getElementById('pendientes-testimonios-detail').textContent = pendientes;
+      document.getElementById('aprobados-testimonios-detail').textContent = aprobados;
+      
+      // Store current filter
+      window.currentTestimonios = data.data;
+      
       testimoniosList.innerHTML = data.data.map(testimonio => `
-        <div class="admin-card p-4 fade-in ${testimonio.estado === 'pendiente' ? 'border-l-4 border-yellow-400' : 'border-l-4 border-green-400'}">
-          <div class="flex justify-between items-start mb-3">
-            <div class="flex-grow">
-              <h3 class="font-medium text-gray-800 font-poppins">${testimonio.nombre}</h3>
+        <div class="admin-card p-4 fade-in testimonio-card ${testimonio.estado === 'pendiente' ? 'border-l-4 border-yellow-400' : 'border-l-4 border-green-400'}" data-estado="${testimonio.estado}" data-id="${testimonio.id}">
+          <div class="flex flex-col sm:flex-row justify-between items-start mb-3 space-y-2 sm:space-y-0">
+            <div class="flex-grow w-full sm:w-auto">
+              <div class="flex items-center space-x-2 mb-1">
+                <h3 class="font-medium text-gray-800 font-poppins">${testimonio.nombre}</h3>
+                <span class="status-badge ${testimonio.estado === 'aprobado' ? 'status-approved' : 'status-pending'}">
+                  ${testimonio.estado}
+                </span>
+              </div>
               <p class="text-sm text-gray-600 font-poppins">${testimonio.servicio}</p>
+              <p class="text-xs text-gray-500 font-poppins">${testimonio.email}</p>
             </div>
-            <div class="flex items-center space-x-2">
-              <span class="status-badge ${testimonio.estado === 'aprobado' ? 'status-approved' : 'status-pending'}">
-                ${testimonio.estado}
-              </span>
+            
+            <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
               ${testimonio.estado === 'pendiente' ? `
-                <button class="admin-button-primary text-xs py-1 px-2" onclick="aprobarTestimonio('${testimonio.id}')">
+                <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-2 rounded transition-colors duration-300 font-poppins" onclick="aprobarTestimonio('${testimonio.id}')">
+                  <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
                   Aprobar
                 </button>
-              ` : ''}
+                <button class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded transition-colors duration-300 font-poppins" onclick="rechazarTestimonio('${testimonio.id}')">
+                  <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                  Rechazar
+                </button>
+              ` : `
+                <button class="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-2 rounded transition-colors duration-300 font-poppins" onclick="eliminarTestimonio('${testimonio.id}')">
+                  <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                  Eliminar
+                </button>
+              `}
             </div>
           </div>
-          <blockquote class="text-gray-700 font-poppins mb-3 italic border-l-2 border-gray-200 pl-3">
+          
+          <blockquote class="text-gray-700 font-poppins mb-3 italic border-l-2 border-gray-200 pl-3 text-sm sm:text-base">
             "${testimonio.comentario}"
           </blockquote>
-          <div class="flex justify-between items-center text-sm text-gray-500">
+          
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center text-sm text-gray-500 space-y-2 sm:space-y-0">
             <div class="flex items-center space-x-4">
               <span class="flex items-center space-x-1">
-                <span>⭐</span>
-                <span>${testimonio.calificacion}/5</span>
+                <span class="text-yellow-500">⭐</span>
+                <span class="font-medium">${testimonio.calificacion}/5</span>
               </span>
               <span>${formatDate(testimonio.fechaCreacion)}</span>
             </div>
+            <button class="text-blue-500 hover:text-blue-700 text-xs font-poppins transition-colors duration-300" onclick="verDetalleTestimonio('${testimonio.id}')">
+              Ver detalles
+            </button>
           </div>
         </div>
       `).join('');
@@ -498,19 +878,63 @@ async function loadTestimonios() {
 // Filter functionality
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+    
+    // Update active button
     document.querySelectorAll('.filter-btn').forEach(b => {
       b.classList.remove('active', 'bg-pink-500', 'text-white');
-      b.classList.add('bg-gray-100');
+      b.classList.add('bg-gray-100', 'text-gray-700');
     });
     btn.classList.add('active', 'bg-pink-500', 'text-white');
-    btn.classList.remove('bg-gray-100');
+    btn.classList.remove('bg-gray-100', 'text-gray-700');
     
-    // TODO: Implement filtering logic
+    // Filter testimonios
+    const testimonioCards = document.querySelectorAll('.testimonio-card');
+    testimonioCards.forEach(card => {
+      const estado = card.dataset.estado;
+      if (filter === 'todos' || estado === filter) {
+        card.style.display = 'block';
+        card.classList.add('fade-in');
+      } else {
+        card.style.display = 'none';
+      }
+    });
   });
 });
 
 // Refresh testimonios
 document.getElementById('refresh-testimonios').addEventListener('click', loadTestimonios);
+
+// Export testimonios
+document.getElementById('export-testimonios').addEventListener('click', function() {
+  if (!window.currentTestimonios || window.currentTestimonios.length === 0) {
+    showNotification('No hay testimonios para exportar', 'error');
+    return;
+  }
+  
+  const csvContent = 'data:text/csv;charset=utf-8,' + 
+    'Nombre,Email,Servicio,Comentario,Calificacion,Estado,Fecha\n' +
+    window.currentTestimonios.map(t => 
+      `"${t.nombre}","${t.email}","${t.servicio}","${t.comentario}",${t.calificacion},"${t.estado}","${t.fechaCreacion}"`
+    ).join('\n');
+  
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `testimonios_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  showNotification('Testimonios exportados correctamente', 'success');
+});
+
+// Auto-refresh every 30 seconds
+setInterval(() => {
+  if (document.getElementById('testimonios-tab').style.display !== 'none') {
+    loadTestimonios();
+  }
+}, 30000);
 
 // Configuración tab
 function loadConfiguracion() {
@@ -534,10 +958,7 @@ window.aprobarTestimonio = async function(id) {
     const result = await response.json();
     
     if (result.success) {
-      // Show success notification
       showNotification('Testimonio aprobado correctamente', 'success');
-      
-      // Reload data
       loadTestimonios();
       loadDashboardData();
     } else {
@@ -547,6 +968,121 @@ window.aprobarTestimonio = async function(id) {
     console.error('Error aprobando testimonio:', error);
     showNotification(handleApiError(error), 'error');
   }
+};
+
+// Function to reject testimonio
+window.rechazarTestimonio = async function(id) {
+  if (!confirm('¿Estás seguro de que quieres rechazar este testimonio? Esta acción no se puede deshacer.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(getApiUrl('/testimonios'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'rechazar', id: id })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification('Testimonio rechazado y eliminado', 'success');
+      loadTestimonios();
+      loadDashboardData();
+    } else {
+      showNotification(result.message || 'Error rechazando testimonio', 'error');
+    }
+  } catch (error) {
+    console.error('Error rechazando testimonio:', error);
+    showNotification(handleApiError(error), 'error');
+  }
+};
+
+// Function to delete testimonio
+window.eliminarTestimonio = async function(id) {
+  if (!confirm('¿Estás seguro de que quieres eliminar este testimonio permanentemente? Esta acción no se puede deshacer.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(getApiUrl('/testimonios'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'eliminar', id: id })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      showNotification('Testimonio eliminado correctamente', 'success');
+      loadTestimonios();
+      loadDashboardData();
+    } else {
+      showNotification(result.message || 'Error eliminando testimonio', 'error');
+    }
+  } catch (error) {
+    console.error('Error eliminando testimonio:', error);
+    showNotification(handleApiError(error), 'error');
+  }
+};
+
+// Function to view testimonio details
+window.verDetalleTestimonio = function(id) {
+  const testimonio = window.currentTestimonios?.find(t => t.id == id);
+  if (!testimonio) return;
+  
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+  modal.innerHTML = `
+    <div class="bg-white rounded-lg max-w-lg w-full p-6 max-h-96 overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-gray-800 font-poppins">Detalle del Testimonio</h3>
+        <button onclick="this.closest('.fixed').remove()" class="text-gray-500 hover:text-gray-700">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Nombre:</label>
+          <p class="text-gray-900 font-poppins">${testimonio.nombre}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Email:</label>
+          <p class="text-gray-900 font-poppins">${testimonio.email}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Servicio:</label>
+          <p class="text-gray-900 font-poppins">${testimonio.servicio}</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Calificación:</label>
+          <div class="flex items-center">
+            <span class="text-yellow-500 text-lg">⭐ ${testimonio.calificacion}/5</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Comentario:</label>
+          <div class="bg-gray-50 p-3 rounded-md">
+            <p class="text-gray-900 font-poppins italic">"${testimonio.comentario}"</p>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Estado:</label>
+          <span class="status-badge ${testimonio.estado === 'aprobado' ? 'status-approved' : 'status-pending'}">
+            ${testimonio.estado}
+          </span>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Fecha de creación:</label>
+          <p class="text-gray-900 font-poppins">${formatDate(testimonio.fechaCreacion)}</p>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
 };
 
 // Notification system
@@ -585,6 +1121,733 @@ function showNotification(message, type = 'info') {
     }, 300);
   }, 5000);
 }
+
+// ===== CITAS MANAGEMENT =====
+
+let citasData = [];
+let currentCitasFilter = 'todas';
+
+async function loadCitasData() {
+  try {
+    const response = await fetch('/api/citas');
+    if (response.ok) {
+      citasData = await response.json();
+      updateCitasStats();
+      renderCitas();
+    } else {
+      console.error('Error loading citas:', response.status);
+      showNotification('Error al cargar las citas', 'error');
+    }
+  } catch (error) {
+    console.error('Error loading citas:', error);
+    showNotification('Error de conexión al cargar citas', 'error');
+  }
+}
+
+function updateCitasStats() {
+  const total = citasData.length;
+  const pendientes = citasData.filter(cita => cita.estado === 'pendiente').length;
+  const confirmadas = citasData.filter(cita => cita.estado === 'confirmada').length;
+  const completadas = citasData.filter(cita => cita.estado === 'completada').length;
+  
+  document.getElementById('total-citas-detail').textContent = total;
+  document.getElementById('pendientes-citas-detail').textContent = pendientes;
+  document.getElementById('confirmadas-citas-detail').textContent = confirmadas;
+  document.getElementById('completadas-citas-detail').textContent = completadas;
+}
+
+function renderCitas() {
+  const citasList = document.getElementById('citas-list');
+  
+  if (citasData.length === 0) {
+    citasList.innerHTML = `
+      <div class="text-center py-8">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <p class="mt-2 text-gray-500 font-poppins">No hay citas registradas</p>
+      </div>
+    `;
+    return;
+  }
+  
+  const filteredCitas = currentCitasFilter === 'todas' ? 
+    citasData : 
+    citasData.filter(cita => cita.estado === currentCitasFilter);
+  
+  if (filteredCitas.length === 0) {
+    citasList.innerHTML = `
+      <div class="text-center py-8">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <p class="mt-2 text-gray-500 font-poppins">No hay citas con este estado</p>
+      </div>
+    `;
+    return;
+  }
+  
+  const citasHtml = filteredCitas.map(cita => {
+    const estadoColors = {
+      'pendiente': 'bg-yellow-50 border-yellow-200 text-yellow-800',
+      'confirmada': 'bg-green-50 border-green-200 text-green-800',
+      'completada': 'bg-purple-50 border-purple-200 text-purple-800',
+      'cancelada': 'bg-red-50 border-red-200 text-red-800'
+    };
+    
+    const estadoClass = estadoColors[cita.estado] || 'bg-gray-50 border-gray-200 text-gray-800';
+    const fechaCita = new Date(cita.fecha).toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    
+    return `
+      <div class="cita-card border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all duration-300" 
+           data-estado="${cita.estado}" data-id="${cita.id}">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-900 font-poppins">${cita.nombre}</h3>
+            <p class="text-sm text-gray-600 font-poppins">${cita.email}</p>
+            <p class="text-sm text-gray-600 font-poppins">${cita.telefono || 'No proporcionado'}</p>
+          </div>
+          <span class="px-3 py-1 text-xs font-medium rounded-full border ${estadoClass} font-poppins mt-2 sm:mt-0">
+            ${cita.estado.charAt(0).toUpperCase() + cita.estado.slice(1)}
+          </span>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3 text-sm text-gray-600 font-poppins">
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            ${fechaCita}
+          </div>
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            ${cita.hora}
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <p class="text-sm text-gray-700 font-poppins"><strong>Servicio:</strong> ${cita.servicio}</p>
+          ${cita.mensaje ? `<p class="text-sm text-gray-600 font-poppins mt-1"><strong>Mensaje:</strong> ${cita.mensaje}</p>` : ''}
+        </div>
+        
+        <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+          ${cita.estado === 'pendiente' ? `
+            <button onclick="cambiarEstadoCita('${cita.id}', 'confirmada')" 
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Confirmar
+            </button>
+            <button onclick="cambiarEstadoCita('${cita.id}', 'cancelada')" 
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Cancelar
+            </button>
+          ` : ''}
+          
+          ${cita.estado === 'confirmada' ? `
+            <button onclick="cambiarEstadoCita('${cita.id}', 'completada')" 
+                    class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Marcar Completada
+            </button>
+            <button onclick="cambiarEstadoCita('${cita.id}', 'cancelada')" 
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Cancelar
+            </button>
+          ` : ''}
+          
+          <button onclick="eliminarCita('${cita.id}')" 
+                  class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+            Eliminar
+          </button>
+          
+          <button onclick="verDetallesCita('${cita.id}')" 
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+            Ver Detalles
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  citasList.innerHTML = citasHtml;
+}
+
+async function cambiarEstadoCita(citaId, nuevoEstado) {
+  try {
+    const response = await fetch('/api/citas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'cambiar-estado',
+        id: citaId,
+        estado: nuevoEstado
+      })
+    });
+    
+    if (response.ok) {
+      showNotification(`Cita ${nuevoEstado} exitosamente`, 'success');
+      loadCitasData(); // Reload data
+    } else {
+      showNotification('Error al cambiar el estado de la cita', 'error');
+    }
+  } catch (error) {
+    console.error('Error changing cita status:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+async function eliminarCita(citaId) {
+  if (!confirm('¿Estás seguro de que deseas eliminar esta cita? Esta acción no se puede deshacer.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/citas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'eliminar',
+        id: citaId
+      })
+    });
+    
+    if (response.ok) {
+      showNotification('Cita eliminada exitosamente', 'success');
+      loadCitasData(); // Reload data
+    } else {
+      showNotification('Error al eliminar la cita', 'error');
+    }
+  } catch (error) {
+    console.error('Error deleting cita:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+function verDetallesCita(citaId) {
+  const cita = citasData.find(c => c.id === citaId);
+  if (!cita) return;
+  
+  const fechaCita = new Date(cita.fecha).toLocaleDateString('es-ES', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    weekday: 'long'
+  });
+  
+  const modalHtml = `
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onclick="this.remove()">
+      <div class="bg-white rounded-lg max-w-lg w-full mx-4 p-6" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 font-poppins">Detalles de la Cita</h3>
+          <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <p class="font-semibold text-gray-900 font-poppins">${cita.nombre}</p>
+            <p class="text-sm text-gray-600 font-poppins">${cita.email}</p>
+            ${cita.telefono ? `<p class="text-sm text-gray-600 font-poppins">${cita.telefono}</p>` : ''}
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <p class="text-sm font-medium text-gray-700 font-poppins">Fecha</p>
+              <p class="text-sm text-gray-600 font-poppins">${fechaCita}</p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700 font-poppins">Hora</p>
+              <p class="text-sm text-gray-600 font-poppins">${cita.hora}</p>
+            </div>
+          </div>
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">Servicio</p>
+            <p class="text-sm text-gray-600 font-poppins">${cita.servicio}</p>
+          </div>
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">Estado</p>
+            <span class="inline-block px-2 py-1 text-xs font-medium rounded-full ${
+              cita.estado === 'pendiente' ? 'bg-yellow-100 text-yellow-800' :
+              cita.estado === 'confirmada' ? 'bg-green-100 text-green-800' :
+              cita.estado === 'completada' ? 'bg-purple-100 text-purple-800' :
+              'bg-red-100 text-red-800'
+            } font-poppins">
+              ${cita.estado.charAt(0).toUpperCase() + cita.estado.slice(1)}
+            </span>
+          </div>
+          
+          ${cita.mensaje ? `
+            <div>
+              <p class="text-sm font-medium text-gray-700 font-poppins">Mensaje</p>
+              <p class="text-sm text-gray-600 font-poppins bg-gray-50 p-2 rounded">${cita.mensaje}</p>
+            </div>
+          ` : ''}
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">Creada</p>
+            <p class="text-sm text-gray-600 font-poppins">${new Date(cita.createdAt || cita.fecha).toLocaleString('es-ES')}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// Citas filter functionality
+document.querySelectorAll('.filter-citas-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+    currentCitasFilter = filter;
+    
+    // Update active button
+    document.querySelectorAll('.filter-citas-btn').forEach(b => {
+      b.classList.remove('active', 'bg-pink-500', 'text-white');
+      b.classList.add('bg-gray-100', 'text-gray-700');
+    });
+    btn.classList.add('active', 'bg-pink-500', 'text-white');
+    btn.classList.remove('bg-gray-100', 'text-gray-700');
+    
+    renderCitas();
+  });
+});
+
+// Citas refresh and export
+document.getElementById('refresh-citas').addEventListener('click', loadCitasData);
+
+document.getElementById('export-citas').addEventListener('click', function() {
+  if (citasData.length === 0) {
+    showNotification('No hay citas para exportar', 'error');
+    return;
+  }
+  
+  const csvContent = [
+    ['ID', 'Nombre', 'Email', 'Teléfono', 'Fecha', 'Hora', 'Servicio', 'Estado', 'Mensaje', 'Creada'],
+    ...citasData.map(cita => [
+      cita.id,
+      cita.nombre,
+      cita.email,
+      cita.telefono || '',
+      new Date(cita.fecha).toLocaleDateString('es-ES'),
+      cita.hora,
+      cita.servicio,
+      cita.estado,
+      cita.mensaje || '',
+      new Date(cita.createdAt || cita.fecha).toLocaleString('es-ES')
+    ])
+  ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `citas_glambook_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  
+  showNotification('Citas exportadas exitosamente', 'success');
+});
+
+// Auto-refresh citas every 30 seconds
+setInterval(() => {
+  if (document.getElementById('citas-tab').style.display !== 'none') {
+    loadCitasData();
+  }
+}, 30000);
+
+// ===== USUARIOS MANAGEMENT =====
+
+let usuariosData = [];
+let currentUsuariosFilter = 'todos';
+
+async function loadUsuariosData() {
+  try {
+    const response = await fetch('/api/usuarios');
+    if (response.ok) {
+      usuariosData = await response.json();
+      updateUsuariosStats();
+      renderUsuarios();
+    } else {
+      console.error('Error loading usuarios:', response.status);
+      showNotification('Error al cargar los usuarios', 'error');
+    }
+  } catch (error) {
+    console.error('Error loading usuarios:', error);
+    showNotification('Error de conexión al cargar usuarios', 'error');
+  }
+}
+
+function updateUsuariosStats() {
+  const total = usuariosData.length;
+  const admins = usuariosData.filter(user => user.rol === 'admin').length;
+  const clientes = usuariosData.filter(user => user.rol === 'cliente').length;
+  
+  document.getElementById('total-usuarios-detail').textContent = total;
+  document.getElementById('admin-usuarios-detail').textContent = admins;
+  document.getElementById('clientes-usuarios-detail').textContent = clientes;
+}
+
+function renderUsuarios() {
+  const usuariosList = document.getElementById('usuarios-list');
+  
+  if (usuariosData.length === 0) {
+    usuariosList.innerHTML = `
+      <div class="text-center py-8">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+        </svg>
+        <p class="mt-2 text-gray-500 font-poppins">No hay usuarios registrados</p>
+      </div>
+    `;
+    return;
+  }
+  
+  const filteredUsuarios = currentUsuariosFilter === 'todos' ? 
+    usuariosData : 
+    usuariosData.filter(user => user.rol === currentUsuariosFilter);
+  
+  if (filteredUsuarios.length === 0) {
+    usuariosList.innerHTML = `
+      <div class="text-center py-8">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+        </svg>
+        <p class="mt-2 text-gray-500 font-poppins">No hay usuarios con este rol</p>
+      </div>
+    `;
+    return;
+  }
+  
+  const usuariosHtml = filteredUsuarios.map(user => {
+    const rolColors = {
+      'admin': 'bg-green-50 border-green-200 text-green-800',
+      'cliente': 'bg-blue-50 border-blue-200 text-blue-800'
+    };
+    
+    const rolClass = rolColors[user.rol] || 'bg-gray-50 border-gray-200 text-gray-800';
+    const fechaRegistro = new Date(user.fechaRegistro).toLocaleDateString('es-ES', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    });
+    
+    const ultimoAcceso = user.ultimoAcceso ? 
+      new Date(user.ultimoAcceso).toLocaleDateString('es-ES', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      }) : 'Nunca';
+    
+    return `
+      <div class="usuario-card border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all duration-300" 
+           data-rol="${user.rol}" data-id="${user.id}">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <h3 class="font-semibold text-gray-900 font-poppins">${user.nombre}</h3>
+              ${!user.activo ? '<span class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full font-poppins">Inactivo</span>' : ''}
+              ${!user.verificado ? '<span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full font-poppins">No verificado</span>' : ''}
+            </div>
+            <p class="text-sm text-gray-600 font-poppins">${user.email}</p>
+          </div>
+          <span class="px-3 py-1 text-xs font-medium rounded-full border ${rolClass} font-poppins mt-2 sm:mt-0">
+            ${user.rol === 'admin' ? 'Administrador' : 'Cliente'}
+          </span>
+        </div>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3 text-sm text-gray-600 font-poppins">
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Registro: ${fechaRegistro}
+          </div>
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Último acceso: ${ultimoAcceso}
+          </div>
+        </div>
+        
+        <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+          ${user.rol === 'cliente' ? `
+            <button onclick="cambiarRolUsuario('${user.id}', 'admin')" 
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Hacer Admin
+            </button>
+          ` : user.email !== 'admin@glambook.com' ? `
+            <button onclick="cambiarRolUsuario('${user.id}', 'cliente')" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Hacer Cliente
+            </button>
+          ` : ''}
+          
+          ${user.activo ? `
+            <button onclick="cambiarEstadoUsuario('${user.id}', false)" 
+                    class="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Desactivar
+            </button>
+          ` : `
+            <button onclick="cambiarEstadoUsuario('${user.id}', true)" 
+                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Activar
+            </button>
+          `}
+          
+          ${user.email !== 'admin@glambook.com' ? `
+            <button onclick="eliminarUsuario('${user.id}')" 
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+              Eliminar
+            </button>
+          ` : ''}
+          
+          <button onclick="verDetallesUsuario('${user.id}')" 
+                  class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm font-poppins transition-colors">
+            Ver Detalles
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  usuariosList.innerHTML = usuariosHtml;
+}
+
+async function cambiarRolUsuario(userId, nuevoRol) {
+  if (!confirm(`¿Estás seguro de que deseas cambiar el rol a ${nuevoRol === 'admin' ? 'Administrador' : 'Cliente'}?`)) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'cambiar-rol',
+        id: userId,
+        rol: nuevoRol
+      })
+    });
+    
+    if (response.ok) {
+      showNotification(`Rol cambiado a ${nuevoRol === 'admin' ? 'Administrador' : 'Cliente'} exitosamente`, 'success');
+      loadUsuariosData(); // Reload data
+    } else {
+      showNotification('Error al cambiar el rol del usuario', 'error');
+    }
+  } catch (error) {
+    console.error('Error changing user role:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+async function cambiarEstadoUsuario(userId, nuevoEstado) {
+  const accion = nuevoEstado ? 'activar' : 'desactivar';
+  if (!confirm(`¿Estás seguro de que deseas ${accion} este usuario?`)) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'cambiar-estado',
+        id: userId,
+        activo: nuevoEstado
+      })
+    });
+    
+    if (response.ok) {
+      showNotification(`Usuario ${accion}do exitosamente`, 'success');
+      loadUsuariosData(); // Reload data
+    } else {
+      showNotification(`Error al ${accion} el usuario`, 'error');
+    }
+  } catch (error) {
+    console.error('Error changing user status:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+async function eliminarUsuario(userId) {
+  if (!confirm('¿Estás seguro de que deseas eliminar este usuario? Esta acción no se puede deshacer.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        action: 'eliminar',
+        id: userId
+      })
+    });
+    
+    if (response.ok) {
+      showNotification('Usuario eliminado exitosamente', 'success');
+      loadUsuariosData(); // Reload data
+    } else {
+      showNotification('Error al eliminar el usuario', 'error');
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    showNotification('Error de conexión', 'error');
+  }
+}
+
+function verDetallesUsuario(userId) {
+  const user = usuariosData.find(u => u.id === userId);
+  if (!user) return;
+  
+  const fechaRegistro = new Date(user.fechaRegistro).toLocaleString('es-ES');
+  const ultimoAcceso = user.ultimoAcceso ? 
+    new Date(user.ultimoAcceso).toLocaleString('es-ES') : 'Nunca ha accedido';
+  
+  const modalHtml = `
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onclick="this.remove()">
+      <div class="bg-white rounded-lg max-w-lg w-full mx-4 p-6" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-start mb-4">
+          <h3 class="text-lg font-semibold text-gray-900 font-poppins">Detalles del Usuario</h3>
+          <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="bg-gray-50 p-3 rounded-lg">
+            <p class="font-semibold text-gray-900 font-poppins">${user.nombre}</p>
+            <p class="text-sm text-gray-600 font-poppins">${user.email}</p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <p class="text-sm font-medium text-gray-700 font-poppins">Rol</p>
+              <span class="inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                user.rol === 'admin' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'
+              } font-poppins">
+                ${user.rol === 'admin' ? 'Administrador' : 'Cliente'}
+              </span>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-700 font-poppins">Estado</p>
+              <span class="inline-block px-2 py-1 text-xs font-medium rounded-full ${
+                user.activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              } font-poppins">
+                ${user.activo ? 'Activo' : 'Inactivo'}
+              </span>
+            </div>
+          </div>
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">Verificación</p>
+            <span class="inline-block px-2 py-1 text-xs font-medium rounded-full ${
+              user.verificado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+            } font-poppins">
+              ${user.verificado ? 'Verificado' : 'Pendiente de verificación'}
+            </span>
+          </div>
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">Fecha de Registro</p>
+            <p class="text-sm text-gray-600 font-poppins">${fechaRegistro}</p>
+          </div>
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">Último Acceso</p>
+            <p class="text-sm text-gray-600 font-poppins">${ultimoAcceso}</p>
+          </div>
+          
+          <div>
+            <p class="text-sm font-medium text-gray-700 font-poppins">ID del Usuario</p>
+            <p class="text-sm text-gray-600 font-poppins font-mono bg-gray-50 p-1 rounded">${user.id}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// Usuarios filter functionality
+document.querySelectorAll('.filter-usuarios-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+    currentUsuariosFilter = filter;
+    
+    // Update active button
+    document.querySelectorAll('.filter-usuarios-btn').forEach(b => {
+      b.classList.remove('active', 'bg-pink-500', 'text-white');
+      b.classList.add('bg-gray-100', 'text-gray-700');
+    });
+    btn.classList.add('active', 'bg-pink-500', 'text-white');
+    btn.classList.remove('bg-gray-100', 'text-gray-700');
+    
+    renderUsuarios();
+  });
+});
+
+// Usuarios refresh and export
+document.getElementById('refresh-usuarios').addEventListener('click', loadUsuariosData);
+
+document.getElementById('export-usuarios').addEventListener('click', function() {
+  if (usuariosData.length === 0) {
+    showNotification('No hay usuarios para exportar', 'error');
+    return;
+  }
+  
+  const csvContent = [
+    ['ID', 'Nombre', 'Email', 'Rol', 'Estado', 'Verificado', 'Fecha Registro', 'Último Acceso'],
+    ...usuariosData.map(user => [
+      user.id,
+      user.nombre,
+      user.email,
+      user.rol,
+      user.activo ? 'Activo' : 'Inactivo',
+      user.verificado ? 'Sí' : 'No',
+      new Date(user.fechaRegistro).toLocaleString('es-ES'),
+      user.ultimoAcceso ? new Date(user.ultimoAcceso).toLocaleString('es-ES') : 'Nunca'
+    ])
+  ].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+  
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `usuarios_glambook_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  
+  showNotification('Usuarios exportados exitosamente', 'success');
+});
+
+// Auto-refresh usuarios every 60 seconds
+setInterval(() => {
+  if (document.getElementById('usuarios-tab').style.display !== 'none') {
+    loadUsuariosData();
+  }
+}, 60000);
 </script>
 
 <style>

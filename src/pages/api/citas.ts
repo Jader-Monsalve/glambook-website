@@ -11,11 +11,11 @@ const citasData = [
     email: "maria@email.com",
     telefono: "+57 300 123 4567",
     servicio: "Maquillaje",
-    fecha: "2024-10-25",
+    fecha: "2025-10-25",
     hora: "10:00",
-    mensaje: "Para evento especial",
+    mensaje: "Para evento especial, necesito maquillaje elegante",
     estado: "confirmada",
-    fechaCreacion: "2024-10-18"
+    fechaCreacion: "2025-10-18"
   },
   {
     id: 2,
@@ -23,11 +23,59 @@ const citasData = [
     email: "ana@email.com",
     telefono: "+57 300 987 6543",
     servicio: "Uñas acrílicas",
-    fecha: "2024-10-26",
+    fecha: "2025-10-26",
     hora: "14:00",
-    mensaje: "Primera vez",
+    mensaje: "Primera vez, quiero diseño francés",
     estado: "pendiente",
-    fechaCreacion: "2024-10-18"
+    fechaCreacion: "2025-10-18"
+  },
+  {
+    id: 3,
+    nombre: "Carmen Silva",
+    email: "carmen@email.com",
+    telefono: "+57 301 555 7890",
+    servicio: "Cejas",
+    fecha: "2025-10-27",
+    hora: "09:00",
+    mensaje: "Microblading, tengo cita previa consultada",
+    estado: "confirmada",
+    fechaCreacion: "2025-10-19"
+  },
+  {
+    id: 4,
+    nombre: "Laura Martín",
+    email: "laura@email.com",
+    telefono: "+57 312 444 5678",
+    servicio: "Pestañas",
+    fecha: "2025-10-28",
+    hora: "15:00",
+    mensaje: "Extensiones de pestañas volumen ruso",
+    estado: "pendiente",
+    fechaCreacion: "2025-10-20"
+  },
+  {
+    id: 5,
+    nombre: "Sofia Rodríguez",
+    email: "sofia@email.com",
+    telefono: "+57 320 777 9012",
+    servicio: "Maquillaje",
+    fecha: "2025-10-29",
+    hora: "16:00",
+    mensaje: "Maquillaje para graduación",
+    estado: "completada",
+    fechaCreacion: "2025-10-17"
+  },
+  {
+    id: 6,
+    nombre: "Isabella Torres",
+    email: "isabella@email.com",
+    telefono: "+57 315 888 3456",
+    servicio: "Uñas gel",
+    fecha: "2025-10-30",
+    hora: "11:00",
+    mensaje: "Diseño con flores, tengo referencia",
+    estado: "cancelada",
+    fechaCreacion: "2025-10-19"
   }
 ];
 
@@ -152,7 +200,7 @@ export const POST: APIRoute = async ({ request }) => {
     const data = await request.json();
     console.log(`📥 POST /api/citas - Data:`, data);
 
-    const { action, nombre, email, telefono, servicio, fecha, hora, mensaje } = data;
+    const { action, nombre, email, telefono, servicio, fecha, hora, mensaje, id, nuevoEstado } = data;
 
     if (action === 'crear-cita') {
       // Validaciones básicas
@@ -210,6 +258,81 @@ export const POST: APIRoute = async ({ request }) => {
         message: 'Cita agendada correctamente. Recibirás un email de confirmación.'
       }), {
         status: 201,
+        headers: corsHeaders
+      });
+    }
+
+    if (action === 'cambiar-estado') {
+      if (!id || !nuevoEstado) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'ID de la cita y nuevo estado requeridos'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      const citaIndex = citasData.findIndex(cita => cita.id == id);
+      
+      if (citaIndex === -1) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Cita no encontrada'
+        }), {
+          status: 404,
+          headers: corsHeaders
+        });
+      }
+
+      const estadoAnterior = citasData[citaIndex].estado;
+      citasData[citaIndex].estado = nuevoEstado;
+
+      console.log(`🔄 Estado de cita cambiado: ${citasData[citaIndex].nombre} - ${estadoAnterior} → ${nuevoEstado}`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: citasData[citaIndex],
+        message: `Estado de la cita cambiado a ${nuevoEstado}`
+      }), {
+        status: 200,
+        headers: corsHeaders
+      });
+    }
+
+    if (action === 'eliminar') {
+      if (!id) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'ID de la cita requerido'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      const citaIndex = citasData.findIndex(cita => cita.id == id);
+      
+      if (citaIndex === -1) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Cita no encontrada'
+        }), {
+          status: 404,
+          headers: corsHeaders
+        });
+      }
+
+      const citaEliminada = citasData.splice(citaIndex, 1)[0];
+
+      console.log(`🗑️ Cita eliminada: ${citaEliminada.nombre} - ${citaEliminada.fecha} ${citaEliminada.hora}`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: citaEliminada,
+        message: 'Cita eliminada correctamente'
+      }), {
+        status: 200,
         headers: corsHeaders
       });
     }

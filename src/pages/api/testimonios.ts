@@ -134,7 +134,7 @@ export const POST: APIRoute = async ({ request }) => {
     const data = await request.json();
     console.log(`📥 POST /api/testimonios - Data:`, data);
 
-    const { action, nombre, email, servicio, comentario, calificacion, consentimiento } = data;
+    const { action, nombre, email, servicio, comentario, calificacion, consentimiento, id } = data;
 
     if (action === 'crear') {
       // Validaciones básicas
@@ -224,6 +224,95 @@ export const POST: APIRoute = async ({ request }) => {
         success: true,
         data: testimonio,
         message: 'Testimonio aprobado correctamente'
+      }), {
+        status: 200,
+        headers: corsHeaders
+      });
+    }
+
+    if (action === 'rechazar') {
+      if (!id) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'ID del testimonio es requerido'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      // Buscar testimonio en pendientes
+      const testimonioIndex = testimoniosPendientes.findIndex(t => t.id == id);
+      
+      if (testimonioIndex === -1) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Testimonio no encontrado'
+        }), {
+          status: 404,
+          headers: corsHeaders
+        });
+      }
+
+      // Eliminar de pendientes
+      const testimonio = testimoniosPendientes[testimonioIndex];
+      testimoniosPendientes.splice(testimonioIndex, 1);
+
+      console.log(`❌ Testimonio rechazado: ${testimonio.nombre} - ${testimonio.servicio}`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: testimonio,
+        message: 'Testimonio rechazado y eliminado'
+      }), {
+        status: 200,
+        headers: corsHeaders
+      });
+    }
+
+    if (action === 'eliminar') {
+      if (!id) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'ID del testimonio es requerido'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      // Buscar en pendientes
+      let testimonioIndex = testimoniosPendientes.findIndex(t => t.id == id);
+      let testimonio = null;
+      
+      if (testimonioIndex !== -1) {
+        testimonio = testimoniosPendientes[testimonioIndex];
+        testimoniosPendientes.splice(testimonioIndex, 1);
+      } else {
+        // Buscar en aprobados
+        testimonioIndex = testimoniosAprobados.findIndex(t => t.id == id);
+        if (testimonioIndex !== -1) {
+          testimonio = testimoniosAprobados[testimonioIndex];
+          testimoniosAprobados.splice(testimonioIndex, 1);
+        }
+      }
+
+      if (!testimonio) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Testimonio no encontrado'
+        }), {
+          status: 404,
+          headers: corsHeaders
+        });
+      }
+
+      console.log(`🗑️ Testimonio eliminado: ${testimonio.nombre} - ${testimonio.servicio}`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: testimonio,
+        message: 'Testimonio eliminado correctamente'
       }), {
         status: 200,
         headers: corsHeaders

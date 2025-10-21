@@ -40,21 +40,21 @@
         </a>
         
         <a 
-          href="#estadisticas" 
+          href="#citas" 
           class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins admin-nav-link"
-          data-page="estadisticas"
+          data-page="citas"
         >
-          <span class="text-lg">📈</span>
-          Estadísticas
+          <span class="text-lg">�</span>
+          Citas
         </a>
         
         <a 
-          href="#configuracion" 
+          href="#usuarios" 
           class="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins admin-nav-link"
-          data-page="configuracion"
+          data-page="usuarios"
         >
-          <span class="text-lg">⚙️</span>
-          Configuración
+          <span class="text-lg">👥</span>
+          Usuarios
         </a>
       </div>
 
@@ -183,21 +183,21 @@
         </a>
         
         <a 
-          href="#estadisticas" 
+          href="#citas" 
           class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins touch-manipulation mobile-nav-link"
-          data-page="estadisticas"
+          data-page="citas"
         >
-          <span class="text-xl">📈</span>
-          <span class="font-medium">Estadísticas</span>
+          <span class="text-xl">�</span>
+          <span class="font-medium">Citas</span>
         </a>
         
         <a 
-          href="#configuracion" 
+          href="#usuarios" 
           class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins touch-manipulation mobile-nav-link"
-          data-page="configuracion"
+          data-page="usuarios"
         >
-          <span class="text-xl">⚙️</span>
-          <span class="font-medium">Configuración</span>
+          <span class="text-xl">👥</span>
+          <span class="font-medium">Usuarios</span>
         </a>
 
         <!-- Separador -->
@@ -524,7 +524,15 @@
         e.preventDefault();
         const target = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
         if (target && target !== '#') {
-          scrollToSection(target.substring(1));
+          const sectionId = target.substring(1);
+          
+          // Usar función global si está disponible
+          if (typeof (window as any).showTab === 'function') {
+            (window as any).showTab(sectionId + '-tab');
+          } else {
+            scrollToSection(sectionId);
+          }
+          
           // Cerrar menú móvil después de navegar
           closeMobileMenu();
         }

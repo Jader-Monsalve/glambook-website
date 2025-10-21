@@ -27,49 +27,97 @@ const { currentUser } = Astro.props;
       </div>
 
       <!-- Navegación central -->
-      <div class="hidden md:block">
-        <div class="ml-10 flex items-baseline space-x-4">
+      <div class="hidden lg:block">
+        <div class="ml-10 flex items-baseline space-x-2 xl:space-x-4">
           <button 
-            class="nav-link text-white hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-2"
+            class="nav-link text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2"
             data-tab="dashboard"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
             </svg>
-            <span>Dashboard</span>
+            <span class="hidden xl:inline">Dashboard</span>
           </button>
           
           <button 
-            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-2"
+            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2 relative"
             data-tab="testimonios"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="17 8h1a4 4 0 010 8h-1m-3.5-6h.01m0 0L12 8.5l.01.01M4.5 12H3a4 4 0 010-8h1.5l1.5 4 1.5-4H8a4 4 0 010 8H6.5l-1.5-4-1.5 4z"></path>
             </svg>
-            <span>Testimonios</span>
-            <span id="testimonios-badge" class="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+            <span class="hidden xl:inline">Testimonios</span>
+            <span id="testimonios-badge" class="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full absolute -top-2 -right-2" style="display: none;">0</span>
           </button>
           
           <button 
-            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-2"
+            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2 relative"
             data-tab="citas"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
-            <span>Citas</span>
-            <span id="citas-badge" class="bg-blue-400 text-blue-900 text-xs font-bold px-2 py-1 rounded-full hidden">0</span>
+            <span class="hidden xl:inline">Citas</span>
+            <span id="citas-badge" class="bg-blue-400 text-blue-900 text-xs font-bold px-2 py-1 rounded-full absolute -top-2 -right-2" style="display: none;">0</span>
           </button>
           
           <button 
-            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-2 rounded-md text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-2"
+            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2"
+            data-tab="usuarios"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+            <span class="hidden xl:inline">Usuarios</span>
+          </button>
+          
+          <button 
+            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2"
             data-tab="configuracion"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
-            <span>Configuración</span>
+            <span class="hidden xl:inline">Config</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navegación para tablets (md-lg) -->
+      <div class="hidden md:block lg:hidden">
+        <div class="flex items-center space-x-1">
+          <button class="nav-link text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300" data-tab="dashboard" title="Dashboard">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+          </button>
+          
+          <button class="nav-link text-pink-100 hover:text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300 relative" data-tab="testimonios" title="Testimonios">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="17 8h1a4 4 0 010 8h-1m-3.5-6h.01m0 0L12 8.5l.01.01M4.5 12H3a4 4 0 010-8h1.5l1.5 4 1.5-4H8a4 4 0 010 8H6.5l-1.5-4-1.5 4z"></path>
+            </svg>
+            <span class="testimonios-badge-tablet bg-yellow-400 text-yellow-900 text-xs font-bold px-1.5 py-0.5 rounded-full absolute -top-2 -right-2" style="display: none;">0</span>
+          </button>
+          
+          <button class="nav-link text-pink-100 hover:text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300 relative" data-tab="citas" title="Citas">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="citas-badge-tablet bg-blue-400 text-blue-900 text-xs font-bold px-1.5 py-0.5 rounded-full absolute -top-2 -right-2" style="display: none;">0</span>
+          </button>
+          
+          <button class="nav-link text-pink-100 hover:text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300" data-tab="usuarios" title="Usuarios">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </button>
+          
+          <button class="nav-link text-pink-100 hover:text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300" data-tab="configuracion" title="Configuración">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
           </button>
         </div>
       </div>
@@ -151,19 +199,48 @@ const { currentUser } = Astro.props;
   </div>
 
   <!-- Menú móvil desplegable -->
-  <div id="mobile-menu" class="hidden md:hidden bg-pink-700 border-t border-pink-500/20">
+  <div id="mobile-menu" class="md:hidden bg-pink-700 border-t border-pink-500/20 transform transition-transform duration-300 -translate-y-full opacity-0 invisible">
     <div class="px-2 pt-2 pb-3 space-y-1">
-      <button class="mobile-nav-link block text-white hover:bg-white/20 px-3 py-2 rounded-md text-base font-medium font-poppins w-full text-left" data-tab="dashboard">
-        Dashboard
+      <button class="mobile-nav-link text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center space-x-3 transition-all duration-300" data-tab="dashboard">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+        </svg>
+        <span>Dashboard</span>
       </button>
-      <button class="mobile-nav-link block text-pink-100 hover:text-white hover:bg-white/20 px-3 py-2 rounded-md text-base font-medium font-poppins w-full text-left" data-tab="testimonios">
-        Testimonios
+      
+      <button class="mobile-nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center justify-between transition-all duration-300" data-tab="testimonios">
+        <div class="flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="17 8h1a4 4 0 010 8h-1m-3.5-6h.01m0 0L12 8.5l.01.01M4.5 12H3a4 4 0 010-8h1.5l1.5 4 1.5-4H8a4 4 0 010 8H6.5l-1.5-4-1.5 4z"></path>
+          </svg>
+          <span>Testimonios</span>
+        </div>
+        <span class="testimonios-badge-mobile bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full" style="display: none;">0</span>
       </button>
-      <button class="mobile-nav-link block text-pink-100 hover:text-white hover:bg-white/20 px-3 py-2 rounded-md text-base font-medium font-poppins w-full text-left" data-tab="citas">
-        Citas
+      
+      <button class="mobile-nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center justify-between transition-all duration-300" data-tab="citas">
+        <div class="flex items-center space-x-3">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <span>Citas</span>
+        </div>
+        <span class="citas-badge-mobile bg-blue-400 text-blue-900 text-xs font-bold px-2 py-1 rounded-full" style="display: none;">0</span>
       </button>
-      <button class="mobile-nav-link block text-pink-100 hover:text-white hover:bg-white/20 px-3 py-2 rounded-md text-base font-medium font-poppins w-full text-left" data-tab="configuracion">
-        Configuración
+      
+      <button class="mobile-nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center space-x-3 transition-all duration-300" data-tab="usuarios">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+        </svg>
+        <span>Usuarios</span>
+      </button>
+      
+      <button class="mobile-nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center space-x-3 transition-all duration-300" data-tab="configuracion">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <span>Configuración</span>
       </button>
     </div>
   </div>
@@ -172,14 +249,49 @@ const { currentUser } = Astro.props;
 <script>
 // Navbar functionality
 document.addEventListener('DOMContentLoaded', function() {
-  // Mobile menu toggle
+  // Mobile menu toggle with animations
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
+  let mobileMenuOpen = false;
   
   if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMobileMenu();
     });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (mobileMenuOpen && !mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+  }
+
+  function toggleMobileMenu() {
+    if (mobileMenuOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  }
+
+  function openMobileMenu() {
+    mobileMenuOpen = true;
+    mobileMenu.classList.remove('invisible');
+    setTimeout(() => {
+      mobileMenu.classList.remove('-translate-y-full', 'opacity-0');
+      mobileMenu.classList.add('translate-y-0', 'opacity-100');
+    }, 10);
+  }
+
+  function closeMobileMenu() {
+    mobileMenuOpen = false;
+    mobileMenu.classList.remove('translate-y-0', 'opacity-100');
+    mobileMenu.classList.add('-translate-y-full', 'opacity-0');
+    setTimeout(() => {
+      mobileMenu.classList.add('invisible');
+    }, 300);
   }
 
   // User menu toggle
@@ -228,28 +340,43 @@ document.addEventListener('DOMContentLoaded', function() {
   // Expose function globally for use in admin page
   window.updateActiveNav = updateActiveNav;
 
-  // Update badges function
+  // Update badges function for all screen sizes
   window.updateNavBadges = function(testimoniosPendientes = 0, citasPendientes = 0) {
+    // Desktop badges
     const testimoniosBadge = document.getElementById('testimonios-badge');
     const citasBadge = document.getElementById('citas-badge');
     
-    if (testimoniosBadge) {
-      if (testimoniosPendientes > 0) {
-        testimoniosBadge.textContent = testimoniosPendientes;
-        testimoniosBadge.classList.remove('hidden');
-      } else {
-        testimoniosBadge.classList.add('hidden');
-      }
-    }
+    // Tablet badges
+    const testimoniosBadgeTablet = document.querySelector('.testimonios-badge-tablet');
+    const citasBadgeTablet = document.querySelector('.citas-badge-tablet');
     
-    if (citasBadge) {
-      if (citasPendientes > 0) {
-        citasBadge.textContent = citasPendientes;
-        citasBadge.classList.remove('hidden');
-      } else {
-        citasBadge.classList.add('hidden');
+    // Mobile badges
+    const testimoniosBadgeMobile = document.querySelector('.testimonios-badge-mobile');
+    const citasBadgeMobile = document.querySelector('.citas-badge-mobile');
+    
+    // Update testimonios badges
+    [testimoniosBadge, testimoniosBadgeTablet, testimoniosBadgeMobile].forEach(badge => {
+      if (badge) {
+        if (testimoniosPendientes > 0) {
+          badge.textContent = testimoniosPendientes;
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
       }
-    }
+    });
+    
+    // Update citas badges
+    [citasBadge, citasBadgeTablet, citasBadgeMobile].forEach(badge => {
+      if (badge) {
+        if (citasPendientes > 0) {
+          badge.textContent = citasPendientes;
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    });
   };
 
   // Connection status
