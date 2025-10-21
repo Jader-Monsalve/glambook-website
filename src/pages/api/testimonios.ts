@@ -1,305 +1,130 @@
 import type { APIRoute } from 'astro';
-import fs from 'fs';
-import path from 'path';
-import { defaultTestimoniosPendientes } from '../../utils/defaultData';
 
 // Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
 
-// Función para obtener la ruta del archivo de datos
-function getDataPath(filename: string): string {
-  // En desarrollo
-  if (process.env.NODE_ENV === 'development') {
-    return path.join(process.cwd(), 'src', 'data', filename);
+// Datos embebidos directamente en la API (sin archivos JSON)
+const testimoniosAprobados = [
+  {
+    id: 1,
+    nombre: "María González",
+    email: "maria@email.com",
+    servicio: "Maquillaje",
+    comentario: "Excelente servicio, quedé muy contenta con el resultado. El equipo es muy profesional.",
+    calificacion: 5,
+    fechaCreacion: "2024-10-15",
+    estado: "aprobado"
+  },
+  {
+    id: 2,
+    nombre: "Ana López",
+    email: "ana@email.com", 
+    servicio: "Uñas acrílicas",
+    comentario: "Me encantaron mis uñas, el diseño quedó perfecto. Definitivamente vuelvo.",
+    calificacion: 5,
+    fechaCreacion: "2024-10-12",
+    estado: "aprobado"
+  },
+  {
+    id: 3,
+    nombre: "Carmen Silva",
+    email: "carmen@email.com",
+    servicio: "Cejas",
+    comentario: "Las cejas me quedaron hermosas, muy natural. Excelente trabajo.",
+    calificacion: 5,
+    fechaCreacion: "2024-10-10",
+    estado: "aprobado"
   }
-  
-  // En producción con Netlify
-  // Los archivos se copian a la función, buscar en diferentes ubicaciones posibles
-  const possiblePaths = [
-    path.join(process.cwd(), 'src', 'data', filename),
-    path.join(__dirname, '..', '..', 'data', filename),
-    path.join(__dirname, 'src', 'data', filename),
-    path.join(process.cwd(), 'data', filename)
-  ];
-  
-  for (const testPath of possiblePaths) {
-    if (fs.existsSync(testPath)) {
-      console.log(`📁 Encontrado archivo en: ${testPath}`);
-      return testPath;
-    }
+];
+
+const testimoniosPendientes = [
+  {
+    id: 4,
+    nombre: "Laura Martín",
+    email: "laura@email.com",
+    servicio: "Pestañas",
+    comentario: "Muy buen servicio, las pestañas se ven naturales pero con volumen.",
+    calificacion: 4,
+    fechaCreacion: "2024-10-18",
+    estado: "pendiente"
   }
-  
-  console.warn(`⚠️ No se encontró el archivo ${filename} en ninguna ubicación`);
-  return possiblePaths[0]; // Fallback
-}
+];
 
-// Archivos para testimonios
-const TESTIMONIOS_PENDIENTES_FILE = getDataPath('testimonios-pendientes.json');
-const TESTIMONIOS_APROBADOS_FILE = getDataPath('testimonios.ts');
+// Headers CORS para todas las respuestas
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Content-Type': 'application/json'
+};
 
-// Función para leer testimonios pendientes
-function leerTestimoniosPendientes() {
-  try {
-    console.log(`🔍 Intentando leer: ${TESTIMONIOS_PENDIENTES_FILE}`);
-    
-    if (fs.existsSync(TESTIMONIOS_PENDIENTES_FILE)) {
-      const data = fs.readFileSync(TESTIMONIOS_PENDIENTES_FILE, 'utf8');
-      const testimonios = JSON.parse(data) || [];
-      console.log(`✅ Testimonios pendientes leídos: ${testimonios.length}`);
-      return testimonios;
-    } else {
-      console.log(`⚠️ Archivo no existe, usando datos por defecto y creando archivo: ${TESTIMONIOS_PENDIENTES_FILE}`);
-      // Crear el archivo con datos por defecto
-      ensureDirectoryExists(path.dirname(TESTIMONIOS_PENDIENTES_FILE));
-      fs.writeFileSync(TESTIMONIOS_PENDIENTES_FILE, JSON.stringify(defaultTestimoniosPendientes, null, 2));
-      return defaultTestimoniosPendientes;
-    }
-  } catch (error) {
-    console.error('❌ Error al leer testimonios pendientes:', error);
-    return [];
-  }
-}
-
-// Función para asegurar que el directorio existe
-function ensureDirectoryExists(dirPath: string) {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
-  }
-}
-
-// Función para leer testimonios aprobados del archivo TypeScript
-async function leerTestimoniosAprobados() {
-  try {
-    // Importar dinámicamente los testimonios aprobados
-    const { testimoniosAprobados } = await import('../../data/testimonios');
-    return testimoniosAprobados || [];
-  } catch (error) {
-    console.error('Error al leer testimonios aprobados:', error);
-    return [];
-  }
-}
-
-// Función para guardar testimonios pendientes
-function guardarTestimoniosPendientes(testimonios: any[]) {
-  try {
-    // Crear directorio si no existe
-    const dir = path.dirname(TESTIMONIOS_PENDIENTES_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    
-    fs.writeFileSync(TESTIMONIOS_PENDIENTES_FILE, JSON.stringify(testimonios, null, 2));
-    return true;
-  } catch (error) {
-    console.error('Error al guardar testimonios pendientes:', error);
-    return false;
-  }
-}
-
-// Función para agregar testimonio aprobado al archivo TypeScript
-function agregarTestimonioAprobado(testimonio: any) {
-  try {
-    // Leer el archivo actual
-    let contenido = fs.readFileSync(TESTIMONIOS_APROBADOS_FILE, 'utf8');
-    
-    // Obtener el último ID
-    const matches = contenido.match(/id:\s*(\d+)/g);
-    let ultimoId = 6; // Empezar desde 6 (los que ya están)
-    if (matches) {
-      ultimoId = Math.max(...matches.map(match => parseInt(match.match(/\d+/)![0])));
-    }
-    
-    // Crear nuevo testimonio
-    const nuevoId = ultimoId + 1;
-    const fechaHoy = new Date().toISOString().split('T')[0];
-    
-    // Avatars aleatorios
-    const avatars = ['👩🏻', '👩🏼', '👩🏽', '👩🏾', '👩🏿', '👨🏻', '👨🏼', '👨🏽', '👨🏾', '👨🏿'];
-    const avatar = avatars[Math.floor(Math.random() * avatars.length)];
-    
-    const nuevoTestimonio = `  {
-    id: ${nuevoId},
-    nombre: "${testimonio.nombre}",
-    calificacion: ${testimonio.calificacion},
-    comentario: "${testimonio.comentario.replace(/"/g, '\\"')}",
-    servicio: "${testimonio.servicio || ''}",
-    fecha: "${fechaHoy}",
-    aprobado: true,
-    avatar: "${avatar}"
-  }`;
-
-    // Encontrar el final del array y agregar el nuevo testimonio
-    const arrayEndIndex = contenido.lastIndexOf('];');
-    if (arrayEndIndex !== -1) {
-      // Si ya hay testimonios, agregar coma
-      const beforeArrayEnd = contenido.substring(0, arrayEndIndex);
-      const afterArrayEnd = contenido.substring(arrayEndIndex);
-      
-      // Verificar si necesitamos agregar coma
-      const needsComma = beforeArrayEnd.trim().endsWith('}');
-      const coma = needsComma ? ',' : '';
-      
-      contenido = beforeArrayEnd + coma + '\n' + nuevoTestimonio + '\n' + afterArrayEnd;
-      
-      fs.writeFileSync(TESTIMONIOS_APROBADOS_FILE, contenido);
-      return true;
-    }
-    
-    return false;
-  } catch (error) {
-    console.error('Error al agregar testimonio aprobado:', error);
-    return false;
-  }
-}
-
-// Función para eliminar testimonio aprobado del archivo TypeScript
-function eliminarTestimonioAprobado(id: number) {
-  try {
-    // Leer el archivo actual
-    let contenido = fs.readFileSync(TESTIMONIOS_APROBADOS_FILE, 'utf8');
-    
-    // Crear expresión regular para encontrar el testimonio completo
-    const patronTestimonio = new RegExp(`\\s*{[^}]*id:\\s*${id}[^}]*}(?:,?\\s*\\n?)?`, 'g');
-    
-    // Verificar si el testimonio existe antes de eliminar
-    if (!patronTestimonio.test(contenido)) {
-      console.log(`Testimonio con ID ${id} no encontrado en aprobados`);
-      return false;
-    }
-    
-    // Reiniciar el patrón para hacer el reemplazo
-    const patronTestimonio2 = new RegExp(`\\s*{[^}]*id:\\s*${id}[^}]*}(?:,?\\s*\\n?)?`, 'g');
-    
-    // Eliminar el testimonio
-    const nuevoContenido = contenido.replace(patronTestimonio2, '');
-    
-    // Limpiar comas duplicadas que puedan quedar
-    const contenidoLimpio = nuevoContenido
-      .replace(/,(\s*),/g, ',')  // Eliminar comas duplicadas
-      .replace(/,(\s*)\]/g, '\n]'); // Eliminar coma antes del cierre del array
-    
-    fs.writeFileSync(TESTIMONIOS_APROBADOS_FILE, contenidoLimpio);
-    console.log(`Testimonio con ID ${id} eliminado de aprobados`);
-    return true;
-  } catch (error) {
-    console.error('Error al eliminar testimonio aprobado:', error);
-    return false;
-  }
-}
+export const OPTIONS: APIRoute = async () => {
+  return new Response(null, {
+    status: 200,
+    headers: corsHeaders
+  });
+};
 
 export const GET: APIRoute = async ({ url }) => {
-  console.log('=== GET /api/testimonios ===');
-  console.log('URL:', url.toString());
-  
   try {
-    const action = url.searchParams.get('action');
-    console.log('Action:', action);
-    
-    if (action === 'pendientes') {
-      console.log('Obteniendo testimonios pendientes...');
-      const testimonios = leerTestimoniosPendientes();
-      console.log('Testimonios encontrados:', testimonios.length);
-      console.log('Testimonios:', JSON.stringify(testimonios, null, 2));
-      
-      return new Response(JSON.stringify(testimonios), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
+    const searchParams = new URL(url).searchParams;
+    const action = searchParams.get('action');
+
+    console.log(`📥 GET /api/testimonios - Action: ${action}`);
+
+    switch (action) {
+      case 'aprobados':
+        return new Response(JSON.stringify({
+          success: true,
+          data: testimoniosAprobados,
+          message: 'Testimonios aprobados obtenidos correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      case 'pendientes':
+        return new Response(JSON.stringify({
+          success: true,
+          data: testimoniosPendientes,
+          message: 'Testimonios pendientes obtenidos correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      case 'todos':
+        const todos = [...testimoniosAprobados, ...testimoniosPendientes];
+        return new Response(JSON.stringify({
+          success: true,
+          data: todos,
+          message: 'Todos los testimonios obtenidos correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      default:
+        // Sin action específica, devolver aprobados por defecto
+        return new Response(JSON.stringify({
+          success: true,
+          data: testimoniosAprobados,
+          message: 'Testimonios obtenidos correctamente (por defecto: aprobados)'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
     }
 
-    if (action === 'aprobados') {
-      console.log('Obteniendo testimonios aprobados...');
-      try {
-        // Leer testimonios aprobados del archivo TypeScript
-        const testimoniosAprobados = await leerTestimoniosAprobados();
-        console.log('Testimonios aprobados encontrados:', testimoniosAprobados.length);
-        
-        return new Response(JSON.stringify(testimoniosAprobados), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-      } catch (error) {
-        console.error('Error leyendo testimonios aprobados:', error);
-        return new Response(JSON.stringify([]), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-      }
-    }
-
-    if (action === 'aprobados') {
-      console.log('Obteniendo testimonios aprobados...');
-      try {
-        // Leer el archivo de testimonios aprobados
-        const contenido = fs.readFileSync(TESTIMONIOS_APROBADOS_FILE, 'utf8');
-        
-        // Extraer el array de testimonios usando regex
-        const match = contenido.match(/export\s+const\s+testimonios\s*=\s*(\[[\s\S]*?\]);/);
-        
-        if (match) {
-          // Evaluar el array de forma segura
-          const testimoniosString = match[1];
-          // Reemplazar las comillas simples por dobles para JSON válido
-          const jsonString = testimoniosString
-            .replace(/(\w+):/g, '"$1":')  // Convertir claves a strings
-            .replace(/'/g, '"')           // Convertir comillas simples a dobles
-            .replace(/,(\s*[}\]])/g, '$1'); // Eliminar comas finales
-          
-          const testimonios = JSON.parse(jsonString);
-          console.log('Testimonios aprobados encontrados:', testimonios.length);
-          
-          return new Response(JSON.stringify(testimonios), {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-            },
-          });
-        }
-        
-        return new Response(JSON.stringify([]), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-        
-      } catch (error) {
-        console.error('Error al leer testimonios aprobados:', error);
-        return new Response(JSON.stringify([]), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-      }
-    }
-    
-    console.log('Acción no válida:', action);
-    return new Response(JSON.stringify({ error: 'Acción no válida' }), {
-      status: 400,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
   } catch (error) {
-    console.error('Error en GET:', error);
-    return new Response(JSON.stringify({ error: 'Error interno del servidor' }), {
+    console.error('❌ Error en GET /api/testimonios:', error);
+    return new Response(JSON.stringify({
+      success: false,
+      message: 'Error interno del servidor',
+      error: error instanceof Error ? error.message : 'Error desconocido'
+    }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: corsHeaders
     });
   }
 };
@@ -307,127 +132,77 @@ export const GET: APIRoute = async ({ url }) => {
 export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
-    console.log('Datos recibidos:', data);
-    
-    const { action, testimonio, id } = data;
-    
-    if (action === 'agregar-pendiente') {
-      // Agregar testimonio a lista de pendientes
-      const testimonios = leerTestimoniosPendientes();
+    console.log(`📥 POST /api/testimonios - Data:`, data);
+
+    const { action, nombre, email, servicio, comentario, calificacion, consentimiento } = data;
+
+    if (action === 'crear') {
+      // Validaciones básicas
+      if (!nombre || !email || !comentario || !calificacion) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Faltan campos obligatorios: nombre, email, comentario y calificación'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      if (!consentimiento) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Debe aceptar el consentimiento para publicar el testimonio'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      // Crear nuevo testimonio
       const nuevoTestimonio = {
-        id: Date.now(),
-        nombre: testimonio.nombre,
-        email: testimonio.email,
-        calificacion: testimonio.calificacion,
-        comentario: testimonio.comentario,
-        servicio: testimonio.servicio || '',
-        fechaEnvio: new Date().toISOString(),
+        id: Date.now(), // ID simple basado en timestamp
+        nombre: nombre.trim(),
+        email: email.trim().toLowerCase(),
+        servicio: servicio || 'No especificado',
+        comentario: comentario.trim(),
+        calificacion: parseInt(calificacion),
+        fechaCreacion: new Date().toISOString().split('T')[0],
         estado: 'pendiente'
       };
-      
-      testimonios.push(nuevoTestimonio);
-      
-      if (guardarTestimoniosPendientes(testimonios)) {
-        console.log('Testimonio agregado:', nuevoTestimonio);
-        return new Response(JSON.stringify({ success: true, id: nuevoTestimonio.id }), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      } else {
-        throw new Error('No se pudo guardar el testimonio');
-      }
-    }
-    
-    if (action === 'aprobar') {
-      const testimonios = leerTestimoniosPendientes();
-      const testimonioIndex = testimonios.findIndex((t: any) => t.id === id);
-      
-      if (testimonioIndex !== -1) {
-        const testimonio = testimonios[testimonioIndex];
-        
-        // Agregar a testimonios aprobados
-        if (agregarTestimonioAprobado(testimonio)) {
-          // Remover de pendientes
-          testimonios.splice(testimonioIndex, 1);
-          guardarTestimoniosPendientes(testimonios);
-          
-          return new Response(JSON.stringify({ success: true }), {
-            status: 200,
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-        } else {
-          throw new Error('No se pudo aprobar el testimonio');
-        }
-      } else {
-        throw new Error('Testimonio no encontrado');
-      }
-    }
-    
-    if (action === 'rechazar') {
-      const testimonios = leerTestimoniosPendientes();
-      const testimonioIndex = testimonios.findIndex((t: any) => t.id === id);
-      
-      if (testimonioIndex !== -1) {
-        testimonios.splice(testimonioIndex, 1);
-        guardarTestimoniosPendientes(testimonios);
-        
-        return new Response(JSON.stringify({ success: true }), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      } else {
-        throw new Error('Testimonio no encontrado');
-      }
+
+      // En una implementación real, aquí guardaríamos en base de datos
+      // Por ahora, solo agregamos a la lista en memoria
+      testimoniosPendientes.push(nuevoTestimonio);
+
+      console.log(`✅ Testimonio creado: ${nuevoTestimonio.nombre} - ${nuevoTestimonio.servicio}`);
+
+      return new Response(JSON.stringify({
+        success: true,
+        data: nuevoTestimonio,
+        message: 'Testimonio creado correctamente. Será revisado antes de publicarse.'
+      }), {
+        status: 201,
+        headers: corsHeaders
+      });
     }
 
-    if (action === 'eliminar') {
-      // Eliminar testimonio de pendientes si está ahí
-      const testimoniosPendientes = leerTestimoniosPendientes();
-      const indexPendiente = testimoniosPendientes.findIndex((t: any) => t.id === id);
-      
-      if (indexPendiente !== -1) {
-        testimoniosPendientes.splice(indexPendiente, 1);
-        guardarTestimoniosPendientes(testimoniosPendientes);
-        
-        return new Response(JSON.stringify({ success: true, origen: 'pendientes' }), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      }
+    return new Response(JSON.stringify({
+      success: false,
+      message: 'Acción no válida'
+    }), {
+      status: 400,
+      headers: corsHeaders
+    });
 
-      // Si no está en pendientes, eliminar de aprobados
-      if (eliminarTestimonioAprobado(id)) {
-        return new Response(JSON.stringify({ success: true, origen: 'aprobados' }), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-      } else {
-        throw new Error('Testimonio no encontrado en ninguna lista');
-      }
-    }
-    
-    throw new Error('Acción no válida');
-    
   } catch (error) {
-    console.error('Error en POST:', error);
-    return new Response(JSON.stringify({ 
-      error: error instanceof Error ? error.message : 'Error interno del servidor',
-      details: error instanceof Error ? error.stack : 'Error desconocido'
+    console.error('❌ Error en POST /api/testimonios:', error);
+    return new Response(JSON.stringify({
+      success: false,
+      message: 'Error interno del servidor',
+      error: error instanceof Error ? error.message : 'Error desconocido'
     }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: corsHeaders
     });
   }
 };

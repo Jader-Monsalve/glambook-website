@@ -221,12 +221,16 @@
                 arrow?.classList.add('rotate-180');
                 // Animación de entrada suave
                 setTimeout(() => {
-                    mobileBlogSubmenu?.style.opacity = '1';
-                    mobileBlogSubmenu?.style.transform = 'translateY(0)';
+                    if (mobileBlogSubmenu) {
+                        mobileBlogSubmenu.style.opacity = '1';
+                        mobileBlogSubmenu.style.transform = 'translateY(0)';
+                    }
                 }, 10);
             } else {
-                mobileBlogSubmenu?.style.opacity = '0';
-                mobileBlogSubmenu?.style.transform = 'translateY(-10px)';
+                if (mobileBlogSubmenu) {
+                    mobileBlogSubmenu.style.opacity = '0';
+                    mobileBlogSubmenu.style.transform = 'translateY(-10px)';
+                }
                 arrow?.classList.remove('rotate-180');
                 setTimeout(() => {
                     mobileBlogSubmenu?.classList.add('hidden');
