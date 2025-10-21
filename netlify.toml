@@ -16,10 +16,6 @@
   # Configurar las notificaciones de formularios
   # Los formularios se enviarán al panel de administración de Netlify
 
-# Configuración de funciones serverless para las APIs
-[functions]
-  directory = "netlify/functions"
-
 # Headers para seguridad y CORS
 [[headers]]
   for = "/api/*"
@@ -28,22 +24,18 @@
     Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type, Authorization"
 
-# Redirecciones para las APIs de Astro a funciones de Netlify
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
-
-# Redirecciones para SPA routing
+# Redirecciones para SPA routing - NO redirigir las APIs
 [[redirects]]
   from = "/admin"
-  to = "/admin/index.html"
+  to = "/admin"
   status = 200
+  force = false
 
 [[redirects]]
   from = "/login"
-  to = "/login/index.html"
+  to = "/login"
   status = 200
+  force = false
 
 # Redirección de 404
 [[redirects]]

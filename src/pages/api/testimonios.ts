@@ -5,21 +5,64 @@ import path from 'path';
 // Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
 
-// Archivo para testimonios pendientes
-const TESTIMONIOS_PENDIENTES_FILE = path.join(process.cwd(), 'src', 'data', 'testimonios-pendientes.json');
-const TESTIMONIOS_APROBADOS_FILE = path.join(process.cwd(), 'src', 'data', 'testimonios.ts');
+// Función para obtener la ruta del archivo de datos
+function getDataPath(filename: string): string {
+  // En desarrollo
+  if (process.env.NODE_ENV === 'development') {
+    return path.join(process.cwd(), 'src', 'data', filename);
+  }
+  
+  // En producción con Netlify
+  // Los archivos se copian a la función, buscar en diferentes ubicaciones posibles
+  const possiblePaths = [
+    path.join(process.cwd(), 'src', 'data', filename),
+    path.join(__dirname, '..', '..', 'data', filename),
+    path.join(__dirname, 'src', 'data', filename),
+    path.join(process.cwd(), 'data', filename)
+  ];
+  
+  for (const testPath of possiblePaths) {
+    if (fs.existsSync(testPath)) {
+      console.log(`📁 Encontrado archivo en: ${testPath}`);
+      return testPath;
+    }
+  }
+  
+  console.warn(`⚠️ No se encontró el archivo ${filename} en ninguna ubicación`);
+  return possiblePaths[0]; // Fallback
+}
+
+// Archivos para testimonios
+const TESTIMONIOS_PENDIENTES_FILE = getDataPath('testimonios-pendientes.json');
+const TESTIMONIOS_APROBADOS_FILE = getDataPath('testimonios.ts');
 
 // Función para leer testimonios pendientes
 function leerTestimoniosPendientes() {
   try {
+    console.log(`🔍 Intentando leer: ${TESTIMONIOS_PENDIENTES_FILE}`);
+    
     if (fs.existsSync(TESTIMONIOS_PENDIENTES_FILE)) {
       const data = fs.readFileSync(TESTIMONIOS_PENDIENTES_FILE, 'utf8');
-      return JSON.parse(data) || [];
+      const testimonios = JSON.parse(data) || [];
+      console.log(`✅ Testimonios pendientes leídos: ${testimonios.length}`);
+      return testimonios;
+    } else {
+      console.log(`⚠️ Archivo no existe, creando uno nuevo: ${TESTIMONIOS_PENDIENTES_FILE}`);
+      // Crear el archivo si no existe
+      ensureDirectoryExists(path.dirname(TESTIMONIOS_PENDIENTES_FILE));
+      fs.writeFileSync(TESTIMONIOS_PENDIENTES_FILE, JSON.stringify([], null, 2));
+      return [];
     }
-    return [];
   } catch (error) {
-    console.error('Error al leer testimonios pendientes:', error);
+    console.error('❌ Error al leer testimonios pendientes:', error);
     return [];
+  }
+}
+
+// Función para asegurar que el directorio existe
+function ensureDirectoryExists(dirPath: string) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
   }
 }
 

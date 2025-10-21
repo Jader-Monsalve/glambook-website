@@ -6,18 +6,59 @@ import { enviarConfirmacionCita, enviarNotificacionAdmin } from '../../utils/ema
 // Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
 
+// Función para obtener la ruta del archivo de datos
+function getDataPath(filename: string): string {
+  // En desarrollo
+  if (process.env.NODE_ENV === 'development') {
+    return path.join(process.cwd(), 'src', 'data', filename);
+  }
+  
+  // En producción con Netlify
+  const possiblePaths = [
+    path.join(process.cwd(), 'src', 'data', filename),
+    path.join(__dirname, '..', '..', 'data', filename),
+    path.join(__dirname, 'src', 'data', filename),
+    path.join(process.cwd(), 'data', filename)
+  ];
+  
+  for (const testPath of possiblePaths) {
+    if (fs.existsSync(testPath)) {
+      console.log(`📁 Encontrado archivo en: ${testPath}`);
+      return testPath;
+    }
+  }
+  
+  console.warn(`⚠️ No se encontró el archivo ${filename} en ninguna ubicación`);
+  return possiblePaths[0]; // Fallback
+}
+
+// Función para asegurar que el directorio existe
+function ensureDirectoryExists(dirPath: string) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
 // Archivos de datos
-const CITAS_FILE = path.join(process.cwd(), 'src', 'data', 'citas.json');
-const HORARIOS_FILE = path.join(process.cwd(), 'src', 'data', 'horarios.json');
+const CITAS_FILE = getDataPath('citas.json');
+const HORARIOS_FILE = getDataPath('horarios.json');
 
 // Función para leer citas
 function leerCitas() {
   try {
+    console.log(`🔍 Intentando leer citas: ${CITAS_FILE}`);
+    
     if (fs.existsSync(CITAS_FILE)) {
       const data = fs.readFileSync(CITAS_FILE, 'utf8');
-      return JSON.parse(data) || [];
+      const citas = JSON.parse(data) || [];
+      console.log(`✅ Citas leídas: ${citas.length}`);
+      return citas;
+    } else {
+      console.log(`⚠️ Archivo de citas no existe, creando uno nuevo: ${CITAS_FILE}`);
+      ensureDirectoryExists(path.dirname(CITAS_FILE));
+      fs.writeFileSync(CITAS_FILE, JSON.stringify([], null, 2));
+      return [];
     }
-    return [];
   } catch (error) {
     console.error('Error al leer citas:', error);
     return [];
