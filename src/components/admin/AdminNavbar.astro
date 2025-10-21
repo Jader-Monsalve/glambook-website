@@ -73,6 +73,16 @@ const { currentUser } = Astro.props;
           
           <button 
             class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2"
+            data-tab="disponibilidad"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <span class="hidden xl:inline">Disponibilidad</span>
+          </button>
+          
+          <button 
+            class="nav-link text-pink-100 hover:text-white hover:bg-white/20 px-2 xl:px-3 py-2 rounded-md text-xs xl:text-sm font-medium font-poppins transition-all duration-300 flex items-center space-x-1 xl:space-x-2"
             data-tab="configuracion"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,6 +120,12 @@ const { currentUser } = Astro.props;
           <button class="nav-link text-pink-100 hover:text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300" data-tab="usuarios" title="Usuarios">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </button>
+          
+          <button class="nav-link text-pink-100 hover:text-white hover:bg-white/20 p-2 rounded-md transition-all duration-300" data-tab="disponibilidad" title="Disponibilidad">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
             </svg>
           </button>
           
@@ -233,6 +249,13 @@ const { currentUser } = Astro.props;
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
         </svg>
         <span>Usuarios</span>
+      </button>
+      
+      <button class="mobile-nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center space-x-3 transition-all duration-300" data-tab="disponibilidad">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span>Disponibilidad</span>
       </button>
       
       <button class="mobile-nav-link text-pink-100 hover:text-white hover:bg-white/20 px-3 py-3 rounded-md text-sm font-medium font-poppins w-full text-left flex items-center space-x-3 transition-all duration-300" data-tab="configuracion">
