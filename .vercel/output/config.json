@@ -28,15 +28,15 @@
 			"dest": "_render"
 		},
 		{
-			"src": "^/admin/?$",
-			"dest": "_render"
-		},
-		{
 			"src": "^/api/citas/?$",
 			"dest": "_render"
 		},
 		{
-			"src": "^/api/emails/?$",
+			"src": "^/api/edge-test/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/api/health/?$",
 			"dest": "_render"
 		},
 		{
@@ -56,15 +56,15 @@
 			"dest": "_render"
 		},
 		{
+			"src": "^/api/testimonios-simple/?$",
+			"dest": "_render"
+		},
+		{
 			"src": "^/aviso-legal/?$",
 			"dest": "_render"
 		},
 		{
 			"src": "^/blog/?$",
-			"dest": "_render"
-		},
-		{
-			"src": "^/cambiar-password/?$",
 			"dest": "_render"
 		},
 		{
@@ -84,10 +84,6 @@
 			"dest": "_render"
 		},
 		{
-			"src": "^/login/?$",
-			"dest": "_render"
-		},
-		{
 			"src": "^/maquillaje-eventos/?$",
 			"dest": "_render"
 		},
@@ -101,6 +97,10 @@
 		},
 		{
 			"src": "^/terminos/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/test/?$",
 			"dest": "_render"
 		},
 		{
