@@ -37,9 +37,9 @@
   status = 200
   force = false
 
-# Redirección de 404
+# Redirecciones para páginas específicas solamente
 [[redirects]]
-  from = "/*"
+  from = "/undefined"
   to = "/404.html"
   status = 404
 
