@@ -1,73 +1,553 @@
 ---
 import Layout from '../layouts/Layout.astro';
-const title = "Blog de Belleza - GlamBook";
+const title = "Contacto - GlamBook";
 ---
 
 <Layout title={title}>
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
     <div class="container mx-auto px-4">
       <!-- Título -->
       <div class="text-center mb-12">
         <h1 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-4 font-poppins">
-          Blog de Belleza
+          Contáctanos
         </h1>
         <p class="text-gray-600 text-lg font-poppins">
-          Tips, tendencias y consejos de belleza profesional
+          Estamos aquí para ayudarte. Reserva tu cita o pregúntanos lo que necesites
         </p>
       </div>
 
-      <!-- Grid de artículos -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
         
-        <!-- Artículo 1 -->
-        <article class="bg-gray-50 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div class="h-48 bg-gradient-to-br from-pink-300 to-rose-300 flex items-center justify-center">
-            <span class="text-white font-bold font-poppins">💅</span>
+        <!-- Información de contacto -->
+        <div class="space-y-8">
+          <h2 class="text-2xl font-bold text-gray-800 font-poppins">Información de Contacto</h2>
+          
+          <!-- Dirección -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              📍
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Dirección</h3>
+              <p class="text-gray-600 font-poppins">Calle Principal #123<br>Ciudad, País</p>
+            </div>
           </div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-3 font-poppins">
-              Tendencias en Uñas 2025
-            </h3>
-            <p class="text-gray-600 mb-4 font-poppins">
-              Descubre los colores y diseños que están marcando tendencia este año...
-            </p>
-            <span class="text-pink-500 text-sm font-poppins">Próximamente</span>
-          </div>
-        </article>
 
-        <!-- Artículo 2 -->
-        <article class="bg-gray-50 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div class="h-48 bg-gradient-to-br from-purple-300 to-indigo-300 flex items-center justify-center">
-            <span class="text-white font-bold font-poppins">💄</span>
+          <!-- Teléfono -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              📞
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Teléfono</h3>
+              <p class="text-gray-600 font-poppins">+1 (555) 123-4567</p>
+            </div>
           </div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-3 font-poppins">
-              Cuidado de la Piel
-            </h3>
-            <p class="text-gray-600 mb-4 font-poppins">
-              Rutinas básicas para mantener tu piel radiante y saludable...
-            </p>
-            <span class="text-pink-500 text-sm font-poppins">Próximamente</span>
-          </div>
-        </article>
 
-        <!-- Artículo 3 -->
-        <article class="bg-gray-50 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div class="h-48 bg-gradient-to-br from-yellow-300 to-orange-300 flex items-center justify-center">
-            <span class="text-white font-bold font-poppins">✨</span>
+          <!-- Email -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              ✉️
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Email</h3>
+              <p class="text-gray-600 font-poppins">info@glambook.com</p>
+            </div>
           </div>
-          <div class="p-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-3 font-poppins">
-              Maquillaje para Eventos
-            </h3>
-            <p class="text-gray-600 mb-4 font-poppins">
-              Consejos para lucir perfecta en bodas, graduaciones y celebraciones...
-            </p>
-            <span class="text-pink-500 text-sm font-poppins">Próximamente</span>
+
+          <!-- Horarios -->
+          <div class="flex items-start space-x-4">
+            <div class="bg-pink-500 text-white p-3 rounded-lg">
+              🕒
+            </div>
+            <div>
+              <h3 class="font-semibold text-gray-800 font-poppins">Horarios</h3>
+              <p class="text-gray-600 font-poppins">
+                Lunes - Viernes: 9:00 AM - 7:00 PM<br>
+                Sábados: 9:00 AM - 5:00 PM<br>
+                Domingos: Cerrado
+              </p>
+            </div>
           </div>
-        </article>
+        </div>
+
+        <!-- Formulario de contacto -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6 font-poppins">Reserva tu Cita</h2>
+          
+          <!-- Pestañas -->
+          <div class="flex border-b border-gray-200 mb-6">
+            <button 
+              id="tab-mensaje"
+              onclick="cambiarTab('mensaje')"
+              class="tab-btn flex-1 py-2 px-4 text-center font-poppins border-b-2 border-pink-500 text-pink-600"
+            >
+              💬 Mensaje
+            </button>
+            <button 
+              id="tab-cita"
+              onclick="cambiarTab('cita')"
+              class="tab-btn flex-1 py-2 px-4 text-center font-poppins border-b-2 border-transparent text-gray-500 hover:text-gray-700"
+            >
+              📅 Reservar Cita
+            </button>
+          </div>
+
+          <!-- Formulario de mensaje -->
+          <div id="form-mensaje" class="tab-content">
+            <form class="space-y-6" data-netlify="true">
+              <input type="hidden" name="form-name" value="contact" />
+              
+              <!-- Nombre -->
+              <div>
+                <label for="nombre" class="block text-gray-700 font-medium mb-2 font-poppins">Nombre</label>
+                <input 
+                  type="text" 
+                  id="nombre" 
+                  name="nombre" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="Tu nombre completo"
+                >
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label for="email" class="block text-gray-700 font-medium mb-2 font-poppins">Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="tu@email.com"
+                >
+              </div>
+
+              <!-- Servicio -->
+              <div>
+                <label for="servicio" class="block text-gray-700 font-medium mb-2 font-poppins">Servicio de Interés</label>
+                <select 
+                  id="servicio" 
+                  name="servicio" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                >
+                  <option value="">Selecciona un servicio</option>
+                  <option value="unas-naturales">Uñas Naturales</option>
+                  <option value="unas-acrilicas">Uñas Acrílicas</option>
+                  <option value="maquillaje">Maquillaje</option>
+                  <option value="peinados">Peinados</option>
+                  <option value="cejas">Cejas</option>
+                  <option value="pestanas">Pestañas</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <!-- Mensaje -->
+              <div>
+                <label for="mensaje" class="block text-gray-700 font-medium mb-2 font-poppins">Mensaje</label>
+                <textarea 
+                  id="mensaje" 
+                  name="mensaje" 
+                  rows="4"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="Cuéntanos sobre tu cita ideal..."
+                ></textarea>
+              </div>
+
+              <!-- Botón -->
+              <button 
+                type="submit"
+                class="w-full bg-pink-500 text-white py-3 px-6 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-poppins font-medium"
+              >
+                Enviar Mensaje
+              </button>
+            </form>
+          </div>
+
+          <!-- Formulario de reserva de cita -->
+          <div id="form-cita" class="tab-content hidden">
+            <form id="reserva-form" class="space-y-6">
+              
+              <!-- Información personal -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="cita-nombre" class="block text-gray-700 font-medium mb-2 font-poppins">Nombre</label>
+                  <input 
+                    type="text" 
+                    id="cita-nombre" 
+                    name="nombre" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                    placeholder="Tu nombre completo"
+                  >
+                </div>
+
+                <div>
+                  <label for="cita-email" class="block text-gray-700 font-medium mb-2 font-poppins">Email</label>
+                  <input 
+                    type="email" 
+                    id="cita-email" 
+                    name="email" 
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                    placeholder="tu@email.com"
+                  >
+                </div>
+              </div>
+
+              <!-- Teléfono -->
+              <div>
+                <label for="cita-telefono" class="block text-gray-700 font-medium mb-2 font-poppins">Teléfono</label>
+                <input 
+                  type="tel" 
+                  id="cita-telefono" 
+                  name="telefono" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="+1 (555) 123-4567"
+                >
+              </div>
+
+              <!-- Servicio -->
+              <div>
+                <label for="cita-servicio" class="block text-gray-700 font-medium mb-2 font-poppins">Servicio</label>
+                <select 
+                  id="cita-servicio" 
+                  name="servicio" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                >
+                  <option value="">Selecciona un servicio</option>
+                  <option value="unas-naturales">Uñas Naturales</option>
+                  <option value="unas-acrilicas">Uñas Acrílicas</option>
+                  <option value="maquillaje">Maquillaje</option>
+                  <option value="peinados">Peinados</option>
+                  <option value="cejas">Cejas</option>
+                  <option value="pestanas">Pestañas</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <!-- Calendario -->
+              <div>
+                <label for="cita-fecha" class="block text-gray-700 font-medium mb-2 font-poppins">Fecha</label>
+                <input 
+                  type="date" 
+                  id="cita-fecha" 
+                  name="fecha" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                >
+              </div>
+
+              <!-- Horarios disponibles -->
+              <div id="horarios-container" class="hidden">
+                <label class="block text-gray-700 font-medium mb-2 font-poppins">Horarios Disponibles</label>
+                <div id="horarios-grid" class="grid grid-cols-3 gap-2">
+                  <!-- Se llenarán dinámicamente -->
+                </div>
+              </div>
+
+              <!-- Comentarios adicionales -->
+              <div>
+                <label for="cita-comentarios" class="block text-gray-700 font-medium mb-2 font-poppins">Comentarios Adicionales</label>
+                <textarea 
+                  id="cita-comentarios" 
+                  name="comentarios" 
+                  rows="3"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="Comentarios especiales o preferencias..."
+                ></textarea>
+              </div>
+
+              <!-- Botón -->
+              <button 
+                type="submit"
+                id="reservar-btn"
+                class="w-full bg-pink-500 text-white py-3 px-6 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-poppins font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                disabled
+              >
+                Reservar Cita
+              </button>
+
+              <!-- Estado -->
+              <div id="estado-reserva" class="text-center hidden">
+                <!-- Mensajes de estado -->
+              </div>
+            </form>
+          </div>
+        </div>
 
       </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  // Variables globales
+  let horariosDisponibles: string[] = [];
+  let horaSeleccionada: string = '';
+
+  // Función para cambiar pestañas
+  function cambiarTab(tab: string) {
+    // Actualizar botones
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(t => {
+      t.classList.remove('border-pink-500', 'text-pink-600');
+      t.classList.add('border-transparent', 'text-gray-500');
+    });
+    
+    const activeTab = document.getElementById(`tab-${tab}`);
+    if (activeTab) {
+      activeTab.classList.remove('border-transparent', 'text-gray-500');
+      activeTab.classList.add('border-pink-500', 'text-pink-600');
+    }
+    
+    // Mostrar/ocultar contenido
+    const contents = document.querySelectorAll('.tab-content');
+    contents.forEach(c => c.classList.add('hidden'));
+    
+    const activeContent = document.getElementById(`form-${tab}`);
+    if (activeContent) {
+      activeContent.classList.remove('hidden');
+    }
+  }
+
+  // Función para cargar horarios disponibles
+  async function cargarHorariosDisponibles(fecha: string) {
+    try {
+      const response = await fetch(`/api/citas?action=horarios-disponibles&fecha=${fecha}`);
+      if (response.ok) {
+        horariosDisponibles = await response.json();
+        renderizarHorarios();
+      } else {
+        console.error('Error al cargar horarios');
+        mostrarEstado('Error al cargar horarios disponibles', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      mostrarEstado('Error de conexión', 'error');
+    }
+  }
+
+  // Función para renderizar horarios
+  function renderizarHorarios() {
+    const horariosGrid = document.getElementById('horarios-grid');
+    const horariosContainer = document.getElementById('horarios-container');
+    const reservarBtn = document.getElementById('reservar-btn') as HTMLButtonElement;
+    
+    if (!horariosGrid || !horariosContainer || !reservarBtn) return;
+    
+    if (horariosDisponibles.length === 0) {
+      horariosContainer.classList.add('hidden');
+      horariosGrid.innerHTML = '';
+      reservarBtn.disabled = true;
+      mostrarEstado('No hay horarios disponibles para esta fecha', 'warning');
+      return;
+    }
+    
+    horariosContainer.classList.remove('hidden');
+    horariosGrid.innerHTML = horariosDisponibles.map(hora => `
+      <button 
+        type="button"
+        onclick="seleccionarHora('${hora}')"
+        class="hora-btn px-3 py-2 border border-gray-300 rounded-lg text-sm font-poppins hover:border-pink-500 hover:text-pink-600 transition-colors"
+        data-hora="${hora}"
+      >
+        ${hora}
+      </button>
+    `).join('');
+    
+    // Limpiar selección anterior
+    horaSeleccionada = '';
+    reservarBtn.disabled = true;
+  }
+
+  // Función para seleccionar hora
+  function seleccionarHora(hora: string) {
+    horaSeleccionada = hora;
+    
+    // Actualizar estilos
+    const horaBtns = document.querySelectorAll('.hora-btn');
+    horaBtns.forEach(btn => {
+      btn.classList.remove('bg-pink-500', 'text-white');
+      btn.classList.add('border-gray-300');
+    });
+    
+    const selectedBtn = document.querySelector(`[data-hora="${hora}"]`);
+    if (selectedBtn) {
+      selectedBtn.classList.add('bg-pink-500', 'text-white');
+      selectedBtn.classList.remove('border-gray-300');
+    }
+    
+    // Habilitar botón de reserva
+    const reservarBtn = document.getElementById('reservar-btn') as HTMLButtonElement;
+    if (reservarBtn) {
+      reservarBtn.disabled = false;
+    }
+    
+    limpiarEstado();
+  }
+
+  // Función para mostrar estado
+  function mostrarEstado(mensaje: string, tipo: 'success' | 'error' | 'warning' = 'success') {
+    const estadoDiv = document.getElementById('estado-reserva');
+    if (!estadoDiv) return;
+    
+    const colors = {
+      success: 'bg-green-100 text-green-700 border-green-200',
+      error: 'bg-red-100 text-red-700 border-red-200',
+      warning: 'bg-yellow-100 text-yellow-700 border-yellow-200'
+    };
+    
+    const icons = {
+      success: '✅',
+      error: '❌',
+      warning: '⚠️'
+    };
+    
+    estadoDiv.className = `text-center border rounded-lg p-4 ${colors[tipo]}`;
+    estadoDiv.innerHTML = `
+      <div class="flex items-center justify-center gap-2">
+        <span class="text-lg">${icons[tipo]}</span>
+        <span class="font-poppins">${mensaje}</span>
+      </div>
+    `;
+    estadoDiv.classList.remove('hidden');
+  }
+
+  // Función para limpiar estado
+  function limpiarEstado() {
+    const estadoDiv = document.getElementById('estado-reserva');
+    if (estadoDiv) {
+      estadoDiv.classList.add('hidden');
+    }
+  }
+
+  // Función para enviar reserva
+  async function enviarReserva(formData: FormData) {
+    const data = {
+      action: 'crear-cita',
+      nombre: formData.get('nombre'),
+      email: formData.get('email'),
+      telefono: formData.get('telefono'),
+      servicio: formData.get('servicio'),
+      fecha: formData.get('fecha'),
+      hora: horaSeleccionada,
+      comentarios: formData.get('comentarios')
+    };
+    
+    try {
+      const response = await fetch('/api/citas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        mostrarEstado('¡Cita reservada exitosamente! Te enviaremos un email de confirmación.', 'success');
+        
+        // Limpiar formulario
+        const form = document.getElementById('reserva-form') as HTMLFormElement;
+        if (form) {
+          form.reset();
+        }
+        
+        // Limpiar horarios
+        const horariosContainer = document.getElementById('horarios-container');
+        if (horariosContainer) {
+          horariosContainer.classList.add('hidden');
+        }
+        
+        horaSeleccionada = '';
+        horariosDisponibles = [];
+        
+        // Deshabilitar botón
+        const reservarBtn = document.getElementById('reservar-btn') as HTMLButtonElement;
+        if (reservarBtn) {
+          reservarBtn.disabled = true;
+        }
+        
+      } else {
+        mostrarEstado(result.error || 'Error al reservar la cita', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      mostrarEstado('Error de conexión al reservar la cita', 'error');
+    }
+  }
+
+  // Configurar fecha mínima (hoy)
+  function configurarFechaMinima() {
+    const fechaInput = document.getElementById('cita-fecha') as HTMLInputElement;
+    if (fechaInput) {
+      const hoy = new Date();
+      const manana = new Date(hoy);
+      manana.setDate(hoy.getDate() + 1); // Permitir reservas desde mañana
+      
+      const fechaMinima = manana.toISOString().split('T')[0];
+      fechaInput.min = fechaMinima;
+      
+      // Configurar fecha máxima (30 días adelante)
+      const fechaMaxima = new Date(hoy);
+      fechaMaxima.setDate(hoy.getDate() + 30);
+      fechaInput.max = fechaMaxima.toISOString().split('T')[0];
+    }
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    configurarFechaMinima();
+    
+    // Event listener para cambio de fecha
+    const fechaInput = document.getElementById('cita-fecha');
+    if (fechaInput) {
+      fechaInput.addEventListener('change', (e) => {
+        const fecha = (e.target as HTMLInputElement).value;
+        if (fecha) {
+          cargarHorariosDisponibles(fecha);
+        }
+      });
+    }
+    
+    // Event listener para formulario de reserva
+    const reservaForm = document.getElementById('reserva-form');
+    if (reservaForm) {
+      reservaForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        if (!horaSeleccionada) {
+          mostrarEstado('Por favor selecciona un horario', 'warning');
+          return;
+        }
+        
+        const formData = new FormData(e.target as HTMLFormElement);
+        enviarReserva(formData);
+      });
+    }
+  });
+
+  // Hacer funciones disponibles globalmente
+  (window as any).cambiarTab = cambiarTab;
+  (window as any).seleccionarHora = seleccionarHora;
+</script>
+
+<style>
+  .tab-btn {
+    transition: all 0.3s ease;
+  }
+  
+  .hora-btn {
+    transition: all 0.2s ease;
+  }
+  
+  .hora-btn:hover {
+    transform: translateY(-1px);
+  }
+</style>

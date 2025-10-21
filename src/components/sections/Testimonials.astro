@@ -1,5 +1,5 @@
 ---
-// CSS importado globalmente en Layout.astro
+import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
 ---
 
 <section class="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
@@ -15,60 +15,386 @@
       </p>
     </div>
 
-    <!-- Grid de testimonios -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-      
-      <!-- Testimonio 1 -->
-      <div class="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="text-yellow-400 text-xl mb-4">⭐⭐⭐⭐⭐</div>
-        <p class="text-gray-600 mb-4 font-poppins">
-          "El mejor salón de la ciudad. Las uñas me quedaron perfectas y el trato fue excepcional."
+    <!-- Grid de testimonios dinámicos -->
+    <TestimoniosDinamicos />
+
+    <!-- Formulario para nuevos testimonios -->
+    <div class="mt-16 max-w-2xl mx-auto">
+      <div class="text-center mb-8">
+        <h3 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-2 font-poppins">
+          ¿Quieres compartir tu experiencia?
+        </h3>
+        <p class="text-gray-600 font-poppins">
+          Tu opinión es muy importante para nosotros
         </p>
-        <div class="flex items-center">
-          <div class="w-10 h-10 bg-pink-200 rounded-full flex items-center justify-center mr-3">
-            👩🏻
-          </div>
-          <div>
-            <p class="font-semibold text-gray-800 font-poppins">María González</p>
-            <p class="text-gray-500 text-sm font-poppins">Cliente frecuente</p>
-          </div>
-        </div>
       </div>
 
-      <!-- Testimonio 2 -->
-      <div class="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="text-yellow-400 text-xl mb-4">⭐⭐⭐⭐⭐</div>
-        <p class="text-gray-600 mb-4 font-poppins">
-          "Increíble trabajo con el maquillaje para mi boda. Me sentí como una princesa."
+      <form 
+        name="testimonios" 
+        method="POST" 
+        data-netlify="true" 
+        netlify-honeypot="bot-field"
+        action="/gracias"
+        class="bg-white rounded-xl p-6 lg:p-8 shadow-lg"
+      >
+        <!-- Campo oculto para Netlify -->
+        <input type="hidden" name="form-name" value="testimonios" />
+        <!-- Honeypot para prevenir spam -->
+        <p class="hidden">
+          <label>
+            No llenes esto si eres humano: <input name="bot-field" />
+          </label>
         </p>
-        <div class="flex items-center">
-          <div class="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center mr-3">
-            👰🏽
-          </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <!-- Nombre -->
           <div>
-            <p class="font-semibold text-gray-800 font-poppins">Ana Rodríguez</p>
-            <p class="text-gray-500 text-sm font-poppins">Novia 2024</p>
+            <label for="nombre" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+              Nombre completo *
+            </label>
+            <input 
+              type="text" 
+              id="nombre" 
+              name="nombre" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins"
+              placeholder="Tu nombre completo"
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+              Email *
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins"
+              placeholder="tu@email.com"
+            />
           </div>
         </div>
-      </div>
 
-      <!-- Testimonio 3 -->
-      <div class="bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="text-yellow-400 text-xl mb-4">⭐⭐⭐⭐⭐</div>
-        <p class="text-gray-600 mb-4 font-poppins">
-          "Profesionales en todo momento. Siempre salgo feliz de mis citas aquí."
-        </p>
-        <div class="flex items-center">
-          <div class="w-10 h-10 bg-yellow-200 rounded-full flex items-center justify-center mr-3">
-            👩🏾
-          </div>
-          <div>
-            <p class="font-semibold text-gray-800 font-poppins">Carmen López</p>
-            <p class="text-gray-500 text-sm font-poppins">Cliente VIP</p>
+        <!-- Calificación -->
+        <div class="mb-6">
+          <label class="block text-sm font-semibold text-gray-700 mb-3 font-poppins">
+            Calificación *
+          </label>
+          <div class="flex gap-2" id="rating-stars">
+            <input type="radio" name="calificacion" value="1" id="star1" class="hidden" required />
+            <label for="star1" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="1">⭐</label>
+            
+            <input type="radio" name="calificacion" value="2" id="star2" class="hidden" />
+            <label for="star2" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="2">⭐</label>
+            
+            <input type="radio" name="calificacion" value="3" id="star3" class="hidden" />
+            <label for="star3" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="3">⭐</label>
+            
+            <input type="radio" name="calificacion" value="4" id="star4" class="hidden" />
+            <label for="star4" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="4">⭐</label>
+            
+            <input type="radio" name="calificacion" value="5" id="star5" class="hidden" />
+            <label for="star5" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="5">⭐</label>
           </div>
         </div>
-      </div>
 
+        <!-- Servicio utilizado -->
+        <div class="mb-6">
+          <label for="servicio" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+            Servicio utilizado
+          </label>
+          <select 
+            id="servicio" 
+            name="servicio"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins"
+          >
+            <option value="">Selecciona un servicio</option>
+            <option value="maquillaje">Maquillaje profesional</option>
+            <option value="unas">Diseño de uñas</option>
+            <option value="cejas">Diseño de cejas</option>
+            <option value="pestanas">Extensiones de pestañas</option>
+            <option value="facial">Tratamiento facial</option>
+            <option value="otro">Otro servicio</option>
+          </select>
+        </div>
+
+        <!-- Comentario -->
+        <div class="mb-6">
+          <label for="comentario" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+            Tu experiencia *
+          </label>
+          <textarea 
+            id="comentario" 
+            name="comentario" 
+            rows="4" 
+            required
+            minlength="10"
+            maxlength="500"
+            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins resize-none"
+            placeholder="Cuéntanos sobre tu experiencia en GlamBook... (mínimo 10 caracteres)"
+          ></textarea>
+          <div class="flex justify-between text-sm text-gray-500 mt-1 font-poppins">
+            <span>Mínimo 10 caracteres</span>
+            <span id="char-count">0/500</span>
+          </div>
+        </div>
+
+        <!-- Campos adicionales de seguridad -->
+        <input type="hidden" name="timestamp" id="timestamp" />
+        <input type="hidden" name="user-agent" id="user-agent" />
+
+        <!-- Checkbox de consentimiento -->
+        <div class="mb-6">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              name="consentimiento" 
+              required
+              class="mt-1 w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+            />
+            <span class="text-sm text-gray-600 font-poppins">
+              Acepto que mi testimonio sea publicado en la página web de GlamBook y autorizo el uso de mis datos para este propósito. *
+            </span>
+          </label>
+        </div>
+
+        <!-- Botón de envío -->
+        <button 
+          type="submit"
+          class="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 font-poppins"
+        >
+          Enviar testimonio ✨
+        </button>
+
+        <!-- Mensaje de estado -->
+        <div id="form-status" class="mt-4 text-center hidden">
+          <p class="text-green-600 font-poppins">¡Gracias por tu testimonio! Lo revisaremos pronto.</p>
+        </div>
+      </form>
     </div>
+
   </div>
 </section>
+
+<script>
+  // Script para el sistema de calificación con estrellas
+  document.addEventListener('DOMContentLoaded', function() {
+    // Agregar timestamp y user-agent para seguridad
+    const timestampField = document.getElementById('timestamp') as HTMLInputElement;
+    const userAgentField = document.getElementById('user-agent') as HTMLInputElement;
+    
+    if (timestampField) timestampField.value = new Date().toISOString();
+    if (userAgentField) userAgentField.value = navigator.userAgent;
+
+    // Contador de caracteres
+    const comentarioTextarea = document.getElementById('comentario') as HTMLTextAreaElement;
+    const charCount = document.getElementById('char-count');
+    
+    if (comentarioTextarea && charCount) {
+      comentarioTextarea.addEventListener('input', function() {
+        const currentLength = this.value.length;
+        charCount.textContent = `${currentLength}/500`;
+        
+        // Cambiar color según límite
+        if (currentLength < 10) {
+          charCount.className = 'text-red-500';
+        } else if (currentLength > 450) {
+          charCount.className = 'text-yellow-500';
+        } else {
+          charCount.className = 'text-gray-500';
+        }
+      });
+    }
+
+    const stars = document.querySelectorAll('#rating-stars label') as NodeListOf<HTMLLabelElement>;
+    const inputs = document.querySelectorAll('#rating-stars input') as NodeListOf<HTMLInputElement>;
+    
+    stars.forEach((star, index) => {
+      star.addEventListener('click', () => {
+        const rating = parseInt(star.dataset.rating || '0');
+        
+        // Marcar el input correspondiente
+        if (inputs[index]) {
+          inputs[index].checked = true;
+        }
+        
+        // Actualizar apariencia de las estrellas
+        stars.forEach((s, i) => {
+          if (i < rating) {
+            s.classList.remove('text-gray-300');
+            s.classList.add('text-yellow-400');
+          } else {
+            s.classList.remove('text-yellow-400');
+            s.classList.add('text-gray-300');
+          }
+        });
+      });
+      
+      // Efecto hover
+      star.addEventListener('mouseenter', () => {
+        const rating = parseInt(star.dataset.rating || '0');
+        stars.forEach((s, i) => {
+          if (i < rating) {
+            s.classList.add('text-yellow-400');
+          }
+        });
+      });
+    });
+    
+    // Restaurar estado al salir del hover
+    const ratingContainer = document.getElementById('rating-stars');
+    if (ratingContainer) {
+      ratingContainer.addEventListener('mouseleave', () => {
+        const checkedInput = document.querySelector('#rating-stars input:checked') as HTMLInputElement;
+        if (checkedInput) {
+          const rating = parseInt(checkedInput.value);
+          stars.forEach((s, i) => {
+            if (i < rating) {
+              s.classList.remove('text-gray-300');
+              s.classList.add('text-yellow-400');
+            } else {
+              s.classList.remove('text-yellow-400');
+              s.classList.add('text-gray-300');
+            }
+          });
+        } else {
+          stars.forEach(s => {
+            s.classList.remove('text-yellow-400');
+            s.classList.add('text-gray-300');
+          });
+        }
+      });
+    }
+
+    // Manejo del envío del formulario
+    const form = document.querySelector('form[name="testimonios"]') as HTMLFormElement;
+    const statusDiv = document.getElementById('form-status');
+    
+    if (form && statusDiv) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validaciones adicionales
+        const nombre = (form.querySelector('#nombre') as HTMLInputElement)?.value;
+        const email = (form.querySelector('#email') as HTMLInputElement)?.value;
+        const comentario = (form.querySelector('#comentario') as HTMLTextAreaElement)?.value;
+        const calificacion = form.querySelector('input[name="calificacion"]:checked');
+        const consentimiento = (form.querySelector('input[name="consentimiento"]') as HTMLInputElement)?.checked;
+        
+        // Validar campos requeridos
+        if (!nombre || nombre.length < 2) {
+          alert('El nombre debe tener al menos 2 caracteres');
+          return;
+        }
+        
+        if (!email || !email.includes('@')) {
+          alert('Por favor ingresa un email válido');
+          return;
+        }
+        
+        if (!comentario || comentario.length < 10) {
+          alert('El comentario debe tener al menos 10 caracteres');
+          return;
+        }
+        
+        if (!calificacion) {
+          alert('Por favor selecciona una calificación');
+          return;
+        }
+        
+        if (!consentimiento) {
+          alert('Debes aceptar el consentimiento para publicar tu testimonio');
+          return;
+        }
+        
+        // Filtro básico de spam
+        const spamWords = ['spam', 'fake', 'promoción', 'descuento', 'gratis', 'oferta'];
+        const comentarioLower = comentario.toLowerCase();
+        const containsSpam = spamWords.some(word => comentarioLower.includes(word));
+        
+        if (containsSpam) {
+          alert('Tu comentario contiene palabras no permitidas. Por favor revísalo.');
+          return;
+        }
+        
+        // Mostrar mensaje de carga
+        const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+        if (submitBtn) {
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = 'Enviando... ⏳';
+          submitBtn.disabled = true;
+          
+          // Crear FormData y convertir a URLSearchParams
+          const formData = new FormData(form);
+          const params = new URLSearchParams();
+          
+          // Convertir FormData a URLSearchParams manualmente
+          for (const [key, value] of formData.entries()) {
+            params.append(key, value.toString());
+          }
+          
+          // Simular envío (en producción esto se manejaría por Netlify)
+          fetch('/', {
+            method: 'POST',
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: params.toString()
+          })
+          .then(async () => {
+            console.log('Formulario enviado a Netlify exitosamente');
+            
+            // También enviar a la API para el panel de admin
+            try {
+              console.log('Enviando a API para panel de admin...');
+              const apiResponse = await fetch('/api/testimonios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  action: 'agregar-pendiente',
+                  testimonio: {
+                    nombre: nombre,
+                    email: email,
+                    calificacion: parseInt((calificacion as HTMLInputElement).value),
+                    comentario: comentario,
+                    servicio: (form.querySelector('#servicio') as HTMLSelectElement)?.value || ''
+                  }
+                })
+              });
+              
+              console.log('API Response status:', apiResponse.status);
+              
+              if (apiResponse.ok) {
+                const apiResult = await apiResponse.json();
+                console.log('API Response:', apiResult);
+              } else {
+                const errorText = await apiResponse.text();
+                console.error('API Error:', errorText);
+              }
+            } catch (apiError) {
+              console.error('Error enviando a API:', apiError);
+              // No fallar si la API falla, Netlify Forms sigue funcionando
+            }
+            
+            statusDiv.classList.remove('hidden');
+            form.reset();
+            // Resetear estrellas
+            stars.forEach(s => {
+              s.classList.remove('text-yellow-400');
+              s.classList.add('text-gray-300');
+            });
+          })
+          .catch(() => {
+            statusDiv.innerHTML = '<p class="text-red-600 font-poppins">Error al enviar. Inténtalo de nuevo.</p>';
+            statusDiv.classList.remove('hidden');
+          })
+          .finally(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          });
+        }
+      });
+    }
+  });
+</script>

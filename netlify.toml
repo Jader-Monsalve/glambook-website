@@ -5,7 +5,19 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Configuración de formularios
+[form]
+  # Configurar las notificaciones de formularios
+  # Los formularios se enviarán al panel de administración de Netlify
+
 [[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404
+
+# Redireccionar después del envío del formulario
+[[redirects]]
+  from = "/testimonios"
+  to = "/gracias"
+  status = 200
+  force = false

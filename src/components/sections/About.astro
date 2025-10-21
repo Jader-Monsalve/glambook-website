@@ -46,33 +46,65 @@
           </div>
         </div>
       </div>
-
       <!-- Estadísticas -->
       <div class="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-8">
         <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center font-poppins">Nuestros Números</h3>
         
         <div class="grid grid-cols-2 gap-6">
           <div class="text-center">
-            <div class="text-3xl font-bold text-pink-500 font-poppins">500+</div>
-            <p class="text-gray-600 font-poppins">Clientas felices</p>
+        <div class="text-3xl font-bold text-pink-500 font-poppins" data-target="500">0</div>
+        <p class="text-gray-600 font-poppins">Clientas felices</p>
           </div>
           
           <div class="text-center">
-            <div class="text-3xl font-bold text-purple-500 font-poppins">5</div>
-            <p class="text-gray-600 font-poppins">Años de experiencia</p>
+        <div class="text-3xl font-bold text-purple-500 font-poppins" data-target="5">0</div>
+        <p class="text-gray-600 font-poppins">Años de experiencia</p>
           </div>
           
           <div class="text-center">
-            <div class="text-3xl font-bold text-yellow-500 font-poppins">1000+</div>
-            <p class="text-gray-600 font-poppins">Servicios realizados</p>
+        <div class="text-3xl font-bold text-yellow-500 font-poppins" data-target="1000">0</div>
+        <p class="text-gray-600 font-poppins">Servicios realizados</p>
           </div>
           
           <div class="text-center">
-            <div class="text-3xl font-bold text-green-500 font-poppins">98%</div>
-            <p class="text-gray-600 font-poppins">Satisfacción</p>
+        <div class="text-3xl font-bold text-green-500 font-poppins" data-target="98">0</div>
+        <p class="text-gray-600 font-poppins">Satisfacción</p>
           </div>
         </div>
       </div>
+
+      <script>
+        function animateCounters() {
+          const counters = document.querySelectorAll('[data-target]');
+          
+          const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const counter = entry.target;
+            const target = parseInt(counter.getAttribute('data-target') || '0');
+            const increment = target / 100;
+            let count = 0;
+            
+            const timer = setInterval(() => {
+          count += increment;
+          if (count >= target) {
+            counter.textContent = target + (target === 98 ? '%' : target === 1000 ? '+' : target === 500 ? '+' : '');
+            clearInterval(timer);
+          } else {
+            counter.textContent = Math.ceil(count) + (target === 98 ? '%' : target === 1000 ? '+' : target === 500 ? '+' : '');
+          }
+            }, 20);
+            
+            observer.unobserve(counter);
+          }
+        });
+          });
+          
+          counters.forEach(counter => observer.observe(counter));
+        }
+        
+        document.addEventListener('DOMContentLoaded', animateCounters);
+      </script>
 
     </div>
   </div>
