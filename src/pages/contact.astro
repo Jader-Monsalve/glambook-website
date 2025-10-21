@@ -322,14 +322,23 @@ const title = "Contacto - GlamBook";
     try {
       const response = await fetch(`/api/citas?action=horarios-disponibles&fecha=${fecha}`);
       if (response.ok) {
-        horariosDisponibles = await response.json();
-        renderizarHorarios();
+        const result = await response.json();
+        if (result.success && result.data && result.data.horariosDisponibles) {
+          horariosDisponibles = result.data.horariosDisponibles;
+          renderizarHorarios();
+        } else {
+          console.error('Error en respuesta de horarios:', result);
+          horariosDisponibles = [];
+          mostrarEstado(result.message || 'Error al cargar horarios disponibles', 'error');
+        }
       } else {
-        console.error('Error al cargar horarios');
+        console.error('Error al cargar horarios:', response.status);
+        horariosDisponibles = [];
         mostrarEstado('Error al cargar horarios disponibles', 'error');
       }
     } catch (error) {
       console.error('Error:', error);
+      horariosDisponibles = [];
       mostrarEstado('Error de conexión', 'error');
     }
   }
@@ -438,7 +447,7 @@ const title = "Contacto - GlamBook";
       servicio: formData.get('servicio'),
       fecha: formData.get('fecha'),
       hora: horaSeleccionada,
-      comentarios: formData.get('comentarios')
+      mensaje: formData.get('comentarios') // La API espera 'mensaje', no 'comentarios'
     };
     
     try {
@@ -452,8 +461,8 @@ const title = "Contacto - GlamBook";
       
       const result = await response.json();
       
-      if (result.success) {
-        mostrarEstado('¡Cita reservada exitosamente! Te enviaremos un email de confirmación.', 'success');
+      if (response.ok && result.success) {
+        mostrarEstado(result.message || '¡Cita reservada exitosamente! Te enviaremos un email de confirmación.', 'success');
         
         // Limpiar formulario
         const form = document.getElementById('reserva-form') as HTMLFormElement;
@@ -477,7 +486,7 @@ const title = "Contacto - GlamBook";
         }
         
       } else {
-        mostrarEstado(result.error || 'Error al reservar la cita', 'error');
+        mostrarEstado(result.message || result.error || 'Error al reservar la cita', 'error');
       }
     } catch (error) {
       console.error('Error:', error);
