@@ -1,0 +1,872 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+const title = "Maquillajes para Eventos - Looks Perfectos para Cada Ocasión | GlamBook";
+const description = "Descubre los mejores looks de maquillaje para bodas, fiestas, graduaciones y eventos especiales. Técnicas profesionales y tendencias actuales.";
+---
+
+<Layout title={title}>
+  <Navbar />
+  
+  <!-- Hero Section -->
+  <section class="relative bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 py-20">
+    <div class="absolute inset-0 bg-white/60"></div>
+    <div class="relative container mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-800 mb-6 font-poppins">
+        Maquillajes para
+        <span class="bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">Eventos</span>
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8 font-poppins">
+        Looks profesionales para cada ocasión especial, desde bodas elegantes hasta fiestas glamorosas
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium font-poppins">✨ Glamour</span>
+        <span class="bg-pink-100 text-pink-800 px-4 py-2 rounded-full text-sm font-medium font-poppins">💄 Profesional</span>
+        <span class="bg-rose-100 text-rose-800 px-4 py-2 rounded-full text-sm font-medium font-poppins">🎉 Eventos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tipos de Eventos -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 font-poppins">Looks por Tipo de Evento</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto font-poppins">
+          Cada ocasión requiere un estilo único. Encuentra el look perfecto para tu evento especial.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Bodas -->
+        <div class="group bg-gradient-to-br from-rose-50 to-pink-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <!-- Imagen de referencia -->
+          <div class="h-48 w-full mb-6 rounded-xl overflow-hidden relative">
+            <img 
+              src="/Images/Maquillaje.jpg" 
+              alt="Maquillaje para bodas" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+              <span class="text-rose-500 text-xl">👰</span>
+            </div>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4 font-poppins">Bodas</h3>
+          <p class="text-gray-600 mb-6 font-poppins text-center">El día más importante merece un look impecable y duradero</p>
+          
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-rose-100 rounded-full flex items-center justify-center mr-2 text-xs">💕</span>
+                Novia Clásica
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Base perfecta y duradera</li>
+                <li>• Ojos suaves con tonos neutros</li>
+                <li>• Labios nude o rosa suave</li>
+                <li>• Iluminador sutil</li>
+              </ul>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-rose-100 rounded-full flex items-center justify-center mr-2 text-xs">✨</span>
+                Invitada Elegante
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Smokey eyes en tonos marrones</li>
+                <li>• Labios statement</li>
+                <li>• Contorno definido</li>
+                <li>• Acabado luminoso</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fiestas de Noche -->
+        <div class="group bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <!-- Imagen de referencia -->
+          <div class="h-48 w-full mb-6 rounded-xl overflow-hidden relative">
+            <img 
+              src="/Images/pestañas.jpg" 
+              alt="Maquillaje de noche glamoroso" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+              <span class="text-purple-500 text-xl">🌙</span>
+            </div>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4 font-poppins">Fiestas de Noche</h3>
+          <p class="text-gray-600 mb-6 font-poppins text-center">Glamour intenso para brillar bajo las luces nocturnas</p>
+          
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mr-2 text-xs">💜</span>
+                Smokey Dramático
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Ojos ahumados intensos</li>
+                <li>• Delineado marcado</li>
+                <li>• Pestañas postizas</li>
+                <li>• Labios nude o rojos</li>
+              </ul>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center mr-2 text-xs">✨</span>
+                Glitter Glam
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Sombras con glitter</li>
+                <li>• Iluminador intenso</li>
+                <li>• Labios glossy</li>
+                <li>• Bronceado dorado</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graduaciones -->
+        <div class="group bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <!-- Imagen de referencia -->
+          <div class="h-48 w-full mb-6 rounded-xl overflow-hidden relative">
+            <img 
+              src="/Images/cejas.jpg" 
+              alt="Maquillaje para graduación" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+              <span class="text-blue-500 text-xl">🎓</span>
+            </div>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4 font-poppins">Graduaciones</h3>
+          <p class="text-gray-600 mb-6 font-poppins text-center">Elegancia apropiada para una celebración memorable</p>
+          
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2 text-xs">🎓</span>
+                Look Académico
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Maquillaje natural perfeccionado</li>
+                <li>• Ojos definidos pero suaves</li>
+                <li>• Labios en tonos naturales</li>
+                <li>• Base impecable para fotos</li>
+              </ul>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2 text-xs">📸</span>
+                Celebración Familiar
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Maquillaje fotogénico</li>
+                <li>• Colores que resalten</li>
+                <li>• Duración todo el día</li>
+                <li>• Apropiado para todas las edades</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eventos Corporativos -->
+        <div class="group bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <!-- Imagen de referencia -->
+          <div class="h-48 w-full mb-6 rounded-xl overflow-hidden relative">
+            <img 
+              src="/Images/image-hover.png" 
+              alt="Maquillaje corporativo profesional" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+              <span class="text-emerald-500 text-xl">💼</span>
+            </div>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4 font-poppins">Eventos Corporativos</h3>
+          <p class="text-gray-600 mb-6 font-poppins text-center">Profesionalismo con un toque de sofisticación</p>
+          
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-2 text-xs">💼</span>
+                Business Elegante
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Base mate y uniforme</li>
+                <li>• Ojos sutiles pero definidos</li>
+                <li>• Labios en tonos profesionales</li>
+                <li>• Contorno suave</li>
+              </ul>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center mr-2 text-xs">🥂</span>
+                Cocktail Empresarial
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Un toque más glamoroso</li>
+                <li>• Labios más intensos</li>
+                <li>• Iluminador estratégico</li>
+                <li>• Elegancia refinada</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quinceañeras -->
+        <div class="group bg-gradient-to-br from-fuchsia-50 to-purple-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <!-- Imagen de referencia -->
+          <div class="h-48 w-full mb-6 rounded-xl overflow-hidden relative">
+            <img 
+              src="/Images/Peinados.jpg" 
+              alt="Maquillaje para quinceañera" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+              <span class="text-fuchsia-500 text-xl">👑</span>
+            </div>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4 font-poppins">Quinceañeras</h3>
+          <p class="text-gray-600 mb-6 font-poppins text-center">La transición a la edad adulta merece un look especial</p>
+          
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-fuchsia-100 rounded-full flex items-center justify-center mr-2 text-xs">👑</span>
+                Princesa Moderna
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Maquillaje juvenil pero elegante</li>
+                <li>• Ojos con brillos sutiles</li>
+                <li>• Labios rosados o corales</li>
+                <li>• Base natural y fresca</li>
+              </ul>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-fuchsia-100 rounded-full flex items-center justify-center mr-2 text-xs">✨</span>
+                Glamour Juvenil
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Colores vibrantes pero apropiados</li>
+                <li>• Delineado perfecto</li>
+                <li>• Contouring suave</li>
+                <li>• Acabado radiante</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eventos de Día -->
+        <div class="group bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 cursor-pointer">
+          <!-- Imagen de referencia -->
+          <div class="h-48 w-full mb-6 rounded-xl overflow-hidden relative">
+            <img 
+              src="/Images/Uñas-Natural.jpg" 
+              alt="Maquillaje natural para eventos de día" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
+              <span class="text-yellow-500 text-xl">☀️</span>
+            </div>
+          </div>
+          
+          <h3 class="text-2xl font-bold text-gray-800 text-center mb-4 font-poppins">Eventos de Día</h3>
+          <p class="text-gray-600 mb-6 font-poppins text-center">Frescura y naturalidad para celebraciones diurnas</p>
+          
+          <div class="space-y-4">
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center mr-2 text-xs">🥐</span>
+                Brunch Elegante
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Base ligera y natural</li>
+                <li>• Ojos en tonos suaves</li>
+                <li>• Labios con color sutil</li>
+                <li>• Aspecto fresco y luminoso</li>
+              </ul>
+            </div>
+            <div class="bg-white rounded-lg p-4 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins flex items-center">
+                <span class="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center mr-2 text-xs">🌸</span>
+                Garden Party
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-1 font-poppins">
+                <li>• Colores coral y melocotón</li>
+                <li>• Acabado dewy</li>
+                <li>• Resistente al calor</li>
+                <li>• Toque romántico</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galería de Looks Inspiración -->
+  <section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 font-poppins">Galería de Inspiración</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto font-poppins">
+          Explora nuestros looks más populares y encuentra la inspiración perfecta para tu evento
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+        <!-- Look 1 -->
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+          <img 
+            src="/Images/Maquillaje.jpg" 
+            alt="Maquillaje elegante para boda" 
+            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-2 font-poppins">Elegancia Nupcial</h3>
+            <p class="text-sm opacity-90 font-poppins">Look clásico y atemporal para el día más especial</p>
+            <div class="flex items-center mt-3">
+              <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-poppins">Bodas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Look 2 -->
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+          <img 
+            src="/Images/pestañas.jpg" 
+            alt="Maquillaje dramático para fiesta" 
+            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-2 font-poppins">Glamour Nocturno</h3>
+            <p class="text-sm opacity-90 font-poppins">Dramático y sofisticado para noches especiales</p>
+            <div class="flex items-center mt-3">
+              <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-poppins">Fiestas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Look 3 -->
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+          <img 
+            src="/Images/cejas.jpg" 
+            alt="Maquillaje natural para graduación" 
+            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-2 font-poppins">Naturalidad Perfeccionada</h3>
+            <p class="text-sm opacity-90 font-poppins">Fresco y apropiado para celebraciones familiares</p>
+            <div class="flex items-center mt-3">
+              <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-poppins">Graduaciones</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Look 4 -->
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+          <img 
+            src="/Images/image-hover.png" 
+            alt="Maquillaje profesional corporativo" 
+            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-2 font-poppins">Profesional Chic</h3>
+            <p class="text-sm opacity-90 font-poppins">Elegancia refinada para el mundo empresarial</p>
+            <div class="flex items-center mt-3">
+              <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-poppins">Corporativo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Look 5 -->
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+          <img 
+            src="/Images/Peinados.jpg" 
+            alt="Maquillaje juvenil para quinceañera" 
+            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-2 font-poppins">Princesa Moderna</h3>
+            <p class="text-sm opacity-90 font-poppins">Juventud y elegancia en perfecta armonía</p>
+            <div class="flex items-center mt-3">
+              <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-poppins">Quinceañeras</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Look 6 -->
+        <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+          <img 
+            src="/Images/Uñas-Natural.jpg" 
+            alt="Maquillaje fresco para eventos de día" 
+            class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-2 font-poppins">Frescura Diurna</h3>
+            <p class="text-sm opacity-90 font-poppins">Luminoso y natural para celebraciones de día</p>
+            <div class="flex items-center mt-3">
+              <span class="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-poppins">Eventos de Día</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA de la galería -->
+      <div class="text-center">
+        <p class="text-gray-600 mb-6 font-poppins">¿Te inspiraste? Reserva tu cita y recrea estos looks profesionales</p>
+        <a 
+          href="/contact" 
+          class="inline-flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-poppins shadow-lg hover:shadow-xl"
+        >
+          Reservar Sesión de Maquillaje
+          <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Técnicas Profesionales -->
+  <section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 font-poppins">Técnicas Profesionales</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto font-poppins">
+          Domina las técnicas que usan los maquilladores profesionales para eventos especiales
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <!-- Preparación de la Piel -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6 font-poppins flex items-center">
+            <span class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+              <span class="text-blue-600">🎨</span>
+            </span>
+            Preparación de la Piel
+          </h3>
+          
+          <div class="space-y-6">
+            <div class="border-l-4 border-blue-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Primer Perfecto</h4>
+              <p class="text-gray-600 font-poppins">Un primer de calidad es la base de cualquier maquillaje duradero. Elige según tu tipo de piel: hidratante para piel seca, matificante para piel grasa.</p>
+            </div>
+            
+            <div class="border-l-4 border-blue-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Base de Larga Duración</h4>
+              <p class="text-gray-600 font-poppins">Aplica la base en capas finas con una beauty blender húmeda. Para eventos, usa bases de alta cobertura y larga duración.</p>
+            </div>
+            
+            <div class="border-l-4 border-blue-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Corrector Estratégico</h4>
+              <p class="text-gray-600 font-poppins">Aplica corrector después de la base para un acabado más natural. Usa un tono más claro bajo los ojos para iluminar.</p>
+            </div>
+            
+            <div class="border-l-4 border-blue-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Fijación Profesional</h4>
+              <p class="text-gray-600 font-poppins">Sella todo con polvo translúcido y spray fijador. Para eventos largos, usa la técnica de "baking" en áreas clave.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Técnicas de Ojos -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6 font-poppins flex items-center">
+            <span class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+              <span class="text-purple-600">👁️</span>
+            </span>
+            Técnicas de Ojos
+          </h3>
+          
+          <div class="space-y-6">
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Smokey Eyes Perfecto</h4>
+              <p class="text-gray-600 font-poppins">Comienza con tonos claros y difumina gradualmente hacia colores más oscuros. La clave está en la transición suave entre colores.</p>
+            </div>
+            
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Delineado Duradero</h4>
+              <p class="text-gray-600 font-poppins">Usa un delineador waterproof y aplica primero una base de sombra del mismo color para mayor duración y intensidad.</p>
+            </div>
+            
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Pestañas de Impacto</h4>
+              <p class="text-gray-600 font-poppins">Curva las pestañas antes del maquillaje, aplica máscara en capas finas, y considera pestañas postizas para eventos especiales.</p>
+            </div>
+            
+            <div class="border-l-4 border-purple-500 pl-6">
+              <h4 class="font-semibold text-gray-800 mb-2 font-poppins">Cejas Definidas</h4>
+              <p class="text-gray-600 font-poppins">Unas cejas bien definidas enmarcan el rostro. Rellena con trazos suaves que imiten el pelo natural.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Paleta de Colores por Temporada -->
+  <section class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 font-poppins">Paletas de Color por Temporada</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto font-poppins">
+          Elige los colores perfectos según la época del año y el ambiente del evento
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        <!-- Primavera -->
+        <div class="bg-gradient-to-br from-green-50 to-yellow-50 rounded-2xl p-6 text-center">
+          <div class="w-16 h-16 bg-green-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">🌸</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4 font-poppins">Primavera</h3>
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="w-full h-8 bg-pink-300 rounded"></div>
+            <div class="w-full h-8 bg-coral-400 rounded"></div>
+            <div class="w-full h-8 bg-yellow-300 rounded"></div>
+            <div class="w-full h-8 bg-green-300 rounded"></div>
+            <div class="w-full h-8 bg-blue-300 rounded"></div>
+            <div class="w-full h-8 bg-purple-300 rounded"></div>
+          </div>
+          <p class="text-sm text-gray-600 font-poppins">Colores frescos y vibrantes que reflejan el renacimiento de la naturaleza</p>
+        </div>
+
+        <!-- Verano -->
+        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 text-center">
+          <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">☀️</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4 font-poppins">Verano</h3>
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="w-full h-8 bg-blue-400 rounded"></div>
+            <div class="w-full h-8 bg-cyan-400 rounded"></div>
+            <div class="w-full h-8 bg-teal-400 rounded"></div>
+            <div class="w-full h-8 bg-coral-500 rounded"></div>
+            <div class="w-full h-8 bg-orange-400 rounded"></div>
+            <div class="w-full h-8 bg-yellow-400 rounded"></div>
+          </div>
+          <p class="text-sm text-gray-600 font-poppins">Tonos brillantes y tropicales perfectos para eventos al aire libre</p>
+        </div>
+
+        <!-- Otoño -->
+        <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-6 text-center">
+          <div class="w-16 h-16 bg-orange-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">🍂</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4 font-poppins">Otoño</h3>
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="w-full h-8 bg-orange-600 rounded"></div>
+            <div class="w-full h-8 bg-red-600 rounded"></div>
+            <div class="w-full h-8 bg-yellow-600 rounded"></div>
+            <div class="w-full h-8 bg-amber-700 rounded"></div>
+            <div class="w-full h-8 bg-brown-600 rounded"></div>
+            <div class="w-full h-8 bg-burgundy-600 rounded"></div>
+          </div>
+          <p class="text-sm text-gray-600 font-poppins">Colores cálidos y terrosos que evocan la calidez del otoño</p>
+        </div>
+
+        <!-- Invierno -->
+        <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 text-center">
+          <div class="w-16 h-16 bg-gray-400 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span class="text-white text-2xl">❄️</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-4 font-poppins">Invierno</h3>
+          <div class="grid grid-cols-3 gap-2 mb-4">
+            <div class="w-full h-8 bg-gray-600 rounded"></div>
+            <div class="w-full h-8 bg-blue-600 rounded"></div>
+            <div class="w-full h-8 bg-purple-600 rounded"></div>
+            <div class="w-full h-8 bg-black rounded"></div>
+            <div class="w-full h-8 bg-silver-400 rounded"></div>
+            <div class="w-full h-8 bg-burgundy-700 rounded"></div>
+          </div>
+          <p class="text-sm text-gray-600 font-poppins">Tonos profundos y elegantes ideales para eventos sofisticados</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Productos Recomendados -->
+  <section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 font-poppins">Kit de Maquillaje para Eventos</h2>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto font-poppins">
+          Los productos esenciales que todo maquillador profesional debe tener
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Base y Corrector -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <div class="w-16 h-16 bg-beige-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-beige-600 text-2xl">🎨</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 text-center mb-4 font-poppins">Base y Corrector</h3>
+          <ul class="space-y-3 text-gray-600 font-poppins">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+              Primer de larga duración
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+              Base full coverage
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+              Corrector waterproof
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+              Polvo fijador translúcido
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-pink-500 rounded-full mr-3"></span>
+              Spray fijador setting
+            </li>
+          </ul>
+        </div>
+
+        <!-- Ojos -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-purple-600 text-2xl">👁️</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 text-center mb-4 font-poppins">Ojos</h3>
+          <ul class="space-y-3 text-gray-600 font-poppins">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Paleta de sombras neutras
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Delineador líquido waterproof
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Máscara de pestañas resistente
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Pestañas postizas diversas
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
+              Gel para cejas
+            </li>
+          </ul>
+        </div>
+
+        <!-- Labios y Mejillas -->
+        <div class="bg-white rounded-2xl p-8 shadow-lg">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <span class="text-red-600 text-2xl">💋</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 text-center mb-4 font-poppins">Labios y Mejillas</h3>
+          <ul class="space-y-3 text-gray-600 font-poppins">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+              Paleta de rubores variada
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+              Iluminador de alta pigmentación
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+              Contorno en polvo y crema
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+              Labiales de larga duración
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-red-500 rounded-full mr-3"></span>
+              Gloss en tonos diversos
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consejos de Durabilidad -->
+  <section class="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-bold text-gray-800 mb-6 font-poppins">Maquillaje que Dura Toda la Noche</h2>
+          <p class="text-lg text-gray-600 font-poppins">Secretos profesionales para un look impecable durante horas</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Tips de Aplicación -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 font-poppins flex items-center">
+              <span class="mr-3">⏰</span>
+              Tips de Aplicación
+            </h3>
+            <div class="space-y-4">
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-indigo-600 text-xs font-bold">1</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Prepara la piel con un primer específico para tu tipo de piel</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-indigo-600 text-xs font-bold">2</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Usa productos waterproof en zonas propensas al sudor</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-indigo-600 text-xs font-bold">3</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Aplica en capas finas y fija cada una antes de continuar</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-indigo-600 text-xs font-bold">4</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Usa la técnica de "baking" en zonas que tienden a deslizarse</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kit de Retoque -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 font-poppins flex items-center">
+              <span class="mr-3">💄</span>
+              Kit de Retoque
+            </h3>
+            <div class="space-y-4">
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-purple-600 text-xs font-bold">✓</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Polvo compacto para controlar el brillo</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-purple-600 text-xs font-bold">✓</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Labial y delineador de labios para retoques</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-purple-600 text-xs font-bold">✓</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Toallitas para limpiar errores sin dañar el maquillaje</p>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span class="text-purple-600 text-xs font-bold">✓</span>
+                </div>
+                <p class="text-gray-700 font-poppins">Spray fijador para refrescar el look</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-20 bg-gradient-to-br from-purple-500 to-pink-600 text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-4xl font-bold mb-6 font-poppins">¿Lista para tu Evento Especial?</h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto font-poppins opacity-90">
+        Nuestros maquilladores profesionales crearán el look perfecto para tu ocasión especial.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a 
+          href="/contact" 
+          class="bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 font-poppins"
+        >
+          Reservar Cita
+        </a>
+        <a 
+          href="/designs" 
+          class="border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-purple-600 transition-colors duration-300 font-poppins"
+        >
+          Ver Portfolio
+        </a>
+      </div>
+      
+      <!-- Estadísticas -->
+      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+        <div class="text-center">
+          <div class="text-3xl font-bold mb-2 font-poppins">1000+</div>
+          <div class="text-sm opacity-80 font-poppins">Eventos Realizados</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold mb-2 font-poppins">8h</div>
+          <div class="text-sm opacity-80 font-poppins">Duración Garantizada</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold mb-2 font-poppins">100%</div>
+          <div class="text-sm opacity-80 font-poppins">Satisfacción</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold mb-2 font-poppins">24/7</div>
+          <div class="text-sm opacity-80 font-poppins">Soporte</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+  
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* Gradientes personalizados */
+  .bg-clip-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
+  /* Efectos hover mejorados */
+  .hover\:shadow-xl:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Colores personalizados para las paletas */
+  .bg-coral-400 { background-color: #ff7875; }
+  .bg-coral-500 { background-color: #ff6b6b; }
+  .bg-brown-600 { background-color: #8b4513; }
+  .bg-burgundy-600 { background-color: #800020; }
+  .bg-burgundy-700 { background-color: #660018; }
+  .bg-silver-400 { background-color: #c0c0c0; }
+  .bg-beige-100 { background-color: #f5f5dc; }
+  .text-beige-600 { color: #d2b48c; }
+</style>
