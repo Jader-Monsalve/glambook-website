@@ -2408,6 +2408,19 @@ setInterval(() => {
     loadDisponibilidadData();
   }
 }, 60000);
+
+// Ensure all global functions are available
+window.cambiarEstadoCita = cambiarEstadoCita;
+window.eliminarCita = eliminarCita;
+window.verDetallesCita = verDetallesCita;
+window.cambiarRolUsuario = cambiarRolUsuario;
+window.cambiarEstadoUsuario = cambiarEstadoUsuario;
+window.eliminarUsuario = eliminarUsuario;
+window.verDetallesUsuario = verDetallesUsuario;
+window.toggleBloqueoEstado = toggleBloqueoEstado;
+window.eliminarBloqueo = eliminarBloqueo;
+
+console.log('✅ Admin panel JavaScript loaded successfully');
 </script>
 
 <style>
@@ -2419,4 +2432,137 @@ setInterval(() => {
     border-bottom-color: #ec4899;
     color: #ec4899;
   }
+
+  .admin-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .admin-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .admin-button-primary {
+    background: linear-gradient(135deg, #ec4899, #9333ea);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-button-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+  }
+
+  .admin-button-secondary {
+    background: white;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .admin-button-secondary:hover {
+    background: #f9fafb;
+    color: #374151;
+    border-color: #9ca3af;
+  }
+
+  .admin-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 0.25rem;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .status-approved {
+    background-color: #d1fae5;
+    color: #065f46;
+  }
+
+  .status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  .loading-spinner {
+    border: 2px solid #f3f4f6;
+    border-top: 2px solid #ec4899;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .fade-in {
+    animation: fadeIn 0.5s ease-in;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Custom scrollbar for modal */
+  .max-h-\[90vh\]::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .max-h-\[90vh\]::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .max-h-\[90vh\]::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  .max-h-\[90vh\]::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
+
+  /* Responsive improvements */
+  @media (max-width: 640px) {
+    .admin-card {
+      margin: 0 -0.5rem;
+      border-radius: 0;
+      border-left: none;
+      border-right: none;
+    }
+  }
 </style>
+</AdminLayout>
