@@ -2,74 +2,96 @@
 // CSS importado globalmente en Layout.astro
 ---
 
-<section class="py-16 bg-white">
-  <div class="container mx-auto px-4">
+<section class="py-12 xs:py-14 sm:py-16 bg-white">
+  <div class="container mx-auto px-4 xs:px-6">
     
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto items-center">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xs:gap-10 sm:gap-12 max-w-6xl mx-auto items-center">
       
       <!-- Contenido -->
-      <div>
-        <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-6 font-poppins">
+      <div class="order-2 lg:order-1">
+        <h2 class="text-2xl xs:text-3xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-4 xs:mb-6 font-poppins text-center lg:text-left">
           Sobre GlamBook
         </h2>
         
-        <div class="space-y-6">
-          <p class="text-gray-600 font-poppins">
+        <div class="space-y-4 xs:space-y-6">
+          <p class="text-gray-600 font-poppins text-sm xs:text-base sm:text-lg leading-relaxed text-center lg:text-left">
             Desde 2020, GlamBook ha sido el salón de belleza de confianza para cientos de clientas. 
             Nos especializamos en tratamientos de uñas, maquillaje profesional y cuidado personal.
           </p>
           
-          <div class="space-y-4">
-            <div class="flex items-start space-x-3">
-              <div class="bg-pink-100 p-2 rounded-lg">✨</div>
-              <div>
-                <h3 class="font-semibold text-gray-800 font-poppins">Nuestra Misión</h3>
-                <p class="text-gray-600 font-poppins">Realzar la belleza natural de cada cliente con técnicas profesionales y productos de calidad.</p>
+          <div class="space-y-3 xs:space-y-4">
+            <div class="flex items-start space-x-3 xs:space-x-4 p-3 xs:p-4 rounded-lg hover:bg-pink-50 transition-colors duration-200">
+              <div class="bg-pink-100 p-2 xs:p-3 rounded-lg flex-shrink-0">
+                <span class="text-lg xs:text-xl">✨</span>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Nuestra Misión</h3>
+                <p class="text-gray-600 font-poppins text-xs xs:text-sm sm:text-base leading-relaxed">
+                  Realzar la belleza natural de cada cliente con técnicas profesionales y productos de calidad.
+                </p>
               </div>
             </div>
             
-            <div class="flex items-start space-x-3">
-              <div class="bg-purple-100 p-2 rounded-lg">🎯</div>
-              <div>
-                <h3 class="font-semibold text-gray-800 font-poppins">Nuestra Visión</h3>
-                <p class="text-gray-600 font-poppins">Ser el salón de belleza líder, reconocido por la excelencia en el servicio y la satisfacción del cliente.</p>
+            <div class="flex items-start space-x-3 xs:space-x-4 p-3 xs:p-4 rounded-lg hover:bg-purple-50 transition-colors duration-200">
+              <div class="bg-purple-100 p-2 xs:p-3 rounded-lg flex-shrink-0">
+                <span class="text-lg xs:text-xl">🎯</span>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Nuestra Visión</h3>
+                <p class="text-gray-600 font-poppins text-xs xs:text-sm sm:text-base leading-relaxed">
+                  Ser el salón de belleza líder, reconocido por la excelencia en el servicio y la satisfacción del cliente.
+                </p>
               </div>
             </div>
             
-            <div class="flex items-start space-x-3">
-              <div class="bg-yellow-100 p-2 rounded-lg">💎</div>
-              <div>
-                <h3 class="font-semibold text-gray-800 font-poppins">Nuestros Valores</h3>
-                <p class="text-gray-600 font-poppins">Profesionalismo, calidad, innovación y un trato personalizado para cada cliente.</p>
+            <div class="flex items-start space-x-3 xs:space-x-4 p-3 xs:p-4 rounded-lg hover:bg-yellow-50 transition-colors duration-200">
+              <div class="bg-yellow-100 p-2 xs:p-3 rounded-lg flex-shrink-0">
+                <span class="text-lg xs:text-xl">💎</span>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Nuestros Valores</h3>
+                <p class="text-gray-600 font-poppins text-xs xs:text-sm sm:text-base leading-relaxed">
+                  Profesionalismo, calidad, innovación y un trato personalizado para cada cliente.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <!-- Estadísticas -->
-      <div class="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-8">
-        <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center font-poppins">Nuestros Números</h3>
+      <div class="order-1 lg:order-2 bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-6 xs:p-8 shadow-lg">
+        <h3 class="text-xl xs:text-2xl font-bold text-gray-800 mb-4 xs:mb-6 text-center font-poppins">
+          Nuestros Números
+        </h3>
         
-        <div class="grid grid-cols-2 gap-6">
-          <div class="text-center">
-        <div class="text-3xl font-bold text-pink-500 font-poppins" data-target="500">0</div>
-        <p class="text-gray-600 font-poppins">Clientas felices</p>
+        <div class="grid grid-cols-2 gap-4 xs:gap-6">
+          <div class="text-center p-3 xs:p-4 rounded-lg bg-white/50 hover:bg-white/70 transition-colors duration-200">
+            <div class="text-2xl xs:text-3xl sm:text-4xl font-bold text-pink-500 font-poppins mb-1" data-target="500">0</div>
+            <p class="text-gray-600 font-poppins text-xs xs:text-sm font-medium">Clientas felices</p>
           </div>
           
-          <div class="text-center">
-        <div class="text-3xl font-bold text-purple-500 font-poppins" data-target="5">0</div>
-        <p class="text-gray-600 font-poppins">Años de experiencia</p>
+          <div class="text-center p-3 xs:p-4 rounded-lg bg-white/50 hover:bg-white/70 transition-colors duration-200">
+            <div class="text-2xl xs:text-3xl sm:text-4xl font-bold text-purple-500 font-poppins mb-1" data-target="5">0</div>
+            <p class="text-gray-600 font-poppins text-xs xs:text-sm font-medium">Años de experiencia</p>
           </div>
           
-          <div class="text-center">
-        <div class="text-3xl font-bold text-yellow-500 font-poppins" data-target="1000">0</div>
-        <p class="text-gray-600 font-poppins">Servicios realizados</p>
+          <div class="text-center p-3 xs:p-4 rounded-lg bg-white/50 hover:bg-white/70 transition-colors duration-200">
+            <div class="text-2xl xs:text-3xl sm:text-4xl font-bold text-yellow-500 font-poppins mb-1" data-target="1000">0</div>
+            <p class="text-gray-600 font-poppins text-xs xs:text-sm font-medium">Servicios realizados</p>
           </div>
           
-          <div class="text-center">
-        <div class="text-3xl font-bold text-green-500 font-poppins" data-target="98">0</div>
-        <p class="text-gray-600 font-poppins">Satisfacción</p>
+          <div class="text-center p-3 xs:p-4 rounded-lg bg-white/50 hover:bg-white/70 transition-colors duration-200">
+            <div class="text-2xl xs:text-3xl sm:text-4xl font-bold text-green-500 font-poppins mb-1" data-target="98">0</div>
+            <p class="text-gray-600 font-poppins text-xs xs:text-sm font-medium">% Satisfacción</p>
           </div>
+        </div>
+        
+        <!-- Call to action adicional en móvil -->
+        <div class="mt-6 xs:mt-8 text-center lg:hidden">
+          <a href="/contact#citas" 
+             class="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 xs:px-8 py-3 xs:py-4 rounded-full font-semibold font-poppins text-sm xs:text-base hover:from-pink-600 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg">
+            🗓️ Reservar Cita
+          </a>
         </div>
       </div>
 

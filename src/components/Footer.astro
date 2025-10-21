@@ -2,101 +2,134 @@
 // CSS importado globalmente en Layout.astro
 ---
 
-<footer class="bg-gray-900 text-white py-12">
-  <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<footer class="bg-gray-900 text-white py-8 xs:py-10 sm:py-12">
+  <div class="container mx-auto px-4 xs:px-6">
+    <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8">
       
       <!-- Logo y descripción -->
-      <div class="lg:col-span-1">
-        <h3 class="text-2xl font-bold text-pink-400 mb-4 font-poppins">GlamBook</h3>
-        <p class="text-gray-300 mb-4 font-poppins">
+      <div class="xs:col-span-2 lg:col-span-1 text-center xs:text-left">
+        <h3 class="text-xl xs:text-2xl font-bold text-pink-400 mb-3 xs:mb-4 font-poppins">GlamBook</h3>
+        <p class="text-gray-300 mb-4 font-poppins text-sm xs:text-base leading-relaxed">
           Tu salón de belleza de confianza. Especialistas en uñas, maquillaje y cuidado personal.
         </p>
-        <div class="flex space-x-4">
-          <a href="#" class="text-pink-400 hover:text-pink-300 transition">📱</a>
-          <a href="#" class="text-pink-400 hover:text-pink-300 transition">📘</a>
-          <a href="#" class="text-pink-400 hover:text-pink-300 transition">📸</a>
-          <a href="#" class="text-pink-400 hover:text-pink-300 transition">🐦</a>
+        <div class="flex justify-center xs:justify-start space-x-3 xs:space-x-4">
+          <a href="#" class="text-pink-400 hover:text-pink-300 transition-colors duration-200 text-xl xs:text-2xl" 
+             aria-label="WhatsApp">📱</a>
+          <a href="#" class="text-pink-400 hover:text-pink-300 transition-colors duration-200 text-xl xs:text-2xl" 
+             aria-label="Facebook">📘</a>
+          <a href="#" class="text-pink-400 hover:text-pink-300 transition-colors duration-200 text-xl xs:text-2xl" 
+             aria-label="Instagram">📸</a>
+          <a href="#" class="text-pink-400 hover:text-pink-300 transition-colors duration-200 text-xl xs:text-2xl" 
+             aria-label="Twitter">🐦</a>
         </div>
       </div>
 
       <!-- Enlaces rápidos -->
-      <div>
-        <h4 class="text-lg font-semibold mb-4 font-poppins">Enlaces</h4>
+      <div class="text-center xs:text-left">
+        <h4 class="text-base xs:text-lg font-semibold mb-3 xs:mb-4 font-poppins text-pink-300">Enlaces</h4>
         <ul class="space-y-2 font-poppins">
-          <li><a href="/" class="text-gray-300 hover:text-pink-400 transition">Inicio</a></li>
-          <li><a href="/about" class="text-gray-300 hover:text-pink-400 transition">Servicios</a></li>
-          <li><a href="/designs" class="text-gray-300 hover:text-pink-400 transition">Galería</a></li>
-          <li><a href="/contact" class="text-gray-300 hover:text-pink-400 transition">Contacto</a></li>
-          <li><a href="/contact#citas" class="text-gray-300 hover:text-pink-400 transition">Reservar Cita</a></li>
-        </ul>
-      </div>
-
-      <!-- Legal -->
-      <div>
-        <h4 class="text-lg font-semibold mb-4 font-poppins">Legal</h4>
-        <ul class="space-y-2 font-poppins">
-          <li><a href="/terminos" class="text-gray-300 hover:text-pink-400 transition">Términos y Condiciones</a></li>
-          <li><a href="/privacidad" class="text-gray-300 hover:text-pink-400 transition">Política de Privacidad</a></li>
-          <li><a href="/aviso-legal" class="text-gray-300 hover:text-pink-400 transition">Aviso Legal</a></li>
-          <li><a href="/cookies" class="text-gray-300 hover:text-pink-400 transition">Política de Cookies</a></li>
+          <li><a href="/" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Inicio</a></li>
+          <li><a href="/about" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Servicios</a></li>
+          <li><a href="/designs" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Galería</a></li>
+          <li><a href="/contact" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Contacto</a></li>
+          <li><a href="/contact#citas" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base font-medium">Reservar Cita</a></li>
         </ul>
       </div>
 
       <!-- Contacto -->
-      <div>
-        <h4 class="text-lg font-semibold mb-4 font-poppins">Contacto</h4>
+      <div class="text-center xs:text-left xs:col-span-2 lg:col-span-1">
+        <h4 class="text-base xs:text-lg font-semibold mb-3 xs:mb-4 font-poppins text-pink-300">Contacto</h4>
         <div class="space-y-2 text-gray-300 font-poppins">
-          <p>📍 Medellín, Colombia</p>
-          <p>📞 +57 300 699 7396</p>
-          <p>✉️ jadermonsalve9@gmail.com</p>
-          <div class="mt-4">
-            <p class="font-semibold">Horarios:</p>
-            <p class="text-sm">Lun-Vie: 9AM-7PM</p>
-            <p class="text-sm">Sáb: 9AM-5PM</p>
-            <p class="text-sm">Dom: Cerrado</p>
+          <p class="flex items-center justify-center xs:justify-start text-sm xs:text-base">
+            <span class="mr-2">📍</span> Medellín, Colombia
+          </p>
+          <p class="flex items-center justify-center xs:justify-start text-sm xs:text-base">
+            <span class="mr-2">📞</span> 
+            <a href="tel:+573006997396" class="hover:text-pink-400 transition-colors duration-200">+57 300 699 7396</a>
+          </p>
+          <p class="flex items-center justify-center xs:justify-start text-sm xs:text-base">
+            <span class="mr-2">✉️</span> 
+            <a href="mailto:jadermonsalve9@gmail.com" class="hover:text-pink-400 transition-colors duration-200 break-all">jadermonsalve9@gmail.com</a>
+          </p>
+          <div class="mt-3 xs:mt-4 p-3 xs:p-4 bg-gray-800 rounded-lg">
+            <p class="font-semibold text-pink-300 mb-2 text-sm xs:text-base">Horarios:</p>
+            <div class="text-xs xs:text-sm space-y-1">
+              <p><span class="font-medium">Lun-Vie:</span> 9AM-7PM</p>
+              <p><span class="font-medium">Sábado:</span> 9AM-5PM</p>
+              <p><span class="font-medium">Domingo:</span> Cerrado</p>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Legal (oculto en móvil pequeño, visible en xs+) -->
+      <div class="hidden lg:block text-center xs:text-left">
+        <h4 class="text-base xs:text-lg font-semibold mb-3 xs:mb-4 font-poppins text-pink-300">Legal</h4>
+        <ul class="space-y-2 font-poppins">
+          <li><a href="/terminos" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Términos y Condiciones</a></li>
+          <li><a href="/privacidad" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Política de Privacidad</a></li>
+          <li><a href="/aviso-legal" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Aviso Legal</a></li>
+          <li><a href="/cookies" class="text-gray-300 hover:text-pink-400 transition-colors duration-200 text-sm xs:text-base">Política de Cookies</a></li>
+        </ul>
       </div>
 
     </div>
     
     <!-- Copyright -->
-    <div class="border-t border-gray-700 mt-8 pt-8">
+    <div class="border-t border-gray-700 mt-6 xs:mt-8 pt-6 xs:pt-8">
       
-      <!-- Enlaces legales en línea -->
-      <div class="text-center mb-4">
+      <!-- Enlaces legales en línea (más prominentes en móvil) -->
+      <div class="text-center mb-4 xs:mb-6 lg:hidden">
+        <h5 class="text-sm font-semibold text-pink-300 mb-3 font-poppins">Enlaces Legales</h5>
+        <div class="grid grid-cols-2 gap-2 xs:flex xs:flex-wrap xs:justify-center xs:gap-3">
+          <a href="/terminos" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins text-xs xs:text-sm">
+            Términos
+          </a>
+          <a href="/privacidad" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins text-xs xs:text-sm">
+            Privacidad
+          </a>
+          <a href="/aviso-legal" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins text-xs xs:text-sm">
+            Aviso Legal
+          </a>
+          <a href="/cookies" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins text-xs xs:text-sm">
+            Cookies
+          </a>
+        </div>
+      </div>
+
+      <!-- Enlaces legales en línea para desktop -->
+      <div class="hidden lg:block text-center mb-4">
         <div class="flex flex-wrap justify-center gap-4 text-sm">
-          <a href="/terminos" class="text-gray-400 hover:text-pink-400 transition font-poppins">
+          <a href="/terminos" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins">
             Términos y Condiciones
           </a>
           <span class="text-gray-600">|</span>
-          <a href="/privacidad" class="text-gray-400 hover:text-pink-400 transition font-poppins">
+          <a href="/privacidad" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins">
             Política de Privacidad
           </a>
           <span class="text-gray-600">|</span>
-          <a href="/aviso-legal" class="text-gray-400 hover:text-pink-400 transition font-poppins">
+          <a href="/aviso-legal" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins">
             Aviso Legal
           </a>
           <span class="text-gray-600">|</span>
-          <a href="/cookies" class="text-gray-400 hover:text-pink-400 transition font-poppins">
+          <a href="/cookies" class="text-gray-400 hover:text-pink-400 transition-colors duration-200 font-poppins">
             Cookies
           </a>
         </div>
       </div>
 
       <!-- Copyright y créditos -->
-      <div class="text-center space-y-2">
-        <p class="text-gray-400 font-poppins">
-          © 2025 GlamBook Studio. Todos los derechos reservados.
+      <div class="text-center space-y-2 xs:space-y-3">
+        <p class="text-gray-400 font-poppins text-sm xs:text-base">
+          © 2025 <span class="text-pink-400 font-medium">GlamBook Studio</span>. Todos los derechos reservados.
         </p>
-        <p class="text-sm text-gray-500 font-poppins">
-          Desarrollado con ❤️ por <span class="text-pink-400 font-semibold">M-Technology</span>
+        <p class="text-xs xs:text-sm text-gray-500 font-poppins">
+          Desarrollado con <span class="text-red-400">❤️</span> por <span class="text-pink-400 font-semibold hover:text-pink-300 transition-colors duration-200">M-Technology</span>
         </p>
         
         <!-- Enlace discreto al admin -->
-        <div class="mt-3">
-          <a href="/admin" class="text-xs text-gray-600 hover:text-gray-400 transition font-poppins">
+        <div class="mt-2 xs:mt-3">
+          <a href="/admin" class="text-xs text-gray-600 hover:text-gray-400 transition-colors duration-200 font-poppins">
             Panel de Administración
           </a>
         </div>

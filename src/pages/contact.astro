@@ -4,65 +4,65 @@ const title = "Contacto - GlamBook";
 ---
 
 <Layout title={title}>
-  <section class="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
-    <div class="container mx-auto px-4">
+  <section class="py-12 xs:py-14 sm:py-16 bg-gradient-to-br from-pink-50 to-purple-50">
+    <div class="container mx-auto px-4 xs:px-6">
       <!-- Título -->
-      <div class="text-center mb-12">
-        <h1 class="text-4xl lg:text-5xl font-bold text-gray-800 mb-4 font-poppins">
+      <div class="text-center mb-8 xs:mb-10 sm:mb-12">
+        <h1 class="text-3xl xs:text-4xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 xs:mb-4 font-poppins">
           Contáctanos
         </h1>
-        <p class="text-gray-600 text-lg font-poppins">
+        <p class="text-gray-600 text-base xs:text-lg sm:text-lg font-poppins leading-relaxed max-w-2xl mx-auto">
           Estamos aquí para ayudarte. Reserva tu cita o pregúntanos lo que necesites
         </p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xs:gap-10 sm:gap-12 max-w-6xl mx-auto">
         
         <!-- Información de contacto -->
-        <div class="space-y-8">
-          <h2 class="text-2xl font-bold text-gray-800 font-poppins">Información de Contacto</h2>
+        <div class="space-y-6 xs:space-y-8">
+          <h2 class="text-xl xs:text-2xl font-bold text-gray-800 font-poppins">Información de Contacto</h2>
           
           <!-- Dirección -->
-          <div class="flex items-start space-x-4">
-            <div class="bg-pink-500 text-white p-3 rounded-lg">
-              📍
+          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
+              <span class="text-sm xs:text-base">📍</span>
             </div>
             <div>
-              <h3 class="font-semibold text-gray-800 font-poppins">Dirección</h3>
-              <p class="text-gray-600 font-poppins">Calle Principal #123<br>Ciudad, País</p>
+              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Dirección</h3>
+              <p class="text-gray-600 font-poppins text-sm xs:text-base">Calle Principal #123<br>Ciudad, País</p>
             </div>
           </div>
 
           <!-- Teléfono -->
-          <div class="flex items-start space-x-4">
-            <div class="bg-pink-500 text-white p-3 rounded-lg">
-              📞
+          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
+              <span class="text-sm xs:text-base">📞</span>
             </div>
             <div>
-              <h3 class="font-semibold text-gray-800 font-poppins">Teléfono</h3>
-              <p class="text-gray-600 font-poppins">+1 (555) 123-4567</p>
+              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Teléfono</h3>
+              <p class="text-gray-600 font-poppins text-sm xs:text-base">+1 (555) 123-4567</p>
             </div>
           </div>
 
           <!-- Email -->
-          <div class="flex items-start space-x-4">
-            <div class="bg-pink-500 text-white p-3 rounded-lg">
-              ✉️
+          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
+              <span class="text-sm xs:text-base">✉️</span>
             </div>
             <div>
-              <h3 class="font-semibold text-gray-800 font-poppins">Email</h3>
-              <p class="text-gray-600 font-poppins">info@glambook.com</p>
+              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Email</h3>
+              <p class="text-gray-600 font-poppins text-sm xs:text-base">info@glambook.com</p>
             </div>
           </div>
 
           <!-- Horarios -->
-          <div class="flex items-start space-x-4">
-            <div class="bg-pink-500 text-white p-3 rounded-lg">
-              🕒
+          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
+            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
+              <span class="text-sm xs:text-base">🕒</span>
             </div>
             <div>
-              <h3 class="font-semibold text-gray-800 font-poppins">Horarios</h3>
-              <p class="text-gray-600 font-poppins">
+              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Horarios</h3>
+              <p class="text-gray-600 font-poppins text-sm xs:text-base leading-relaxed">
                 Lunes - Viernes: 9:00 AM - 7:00 PM<br>
                 Sábados: 9:00 AM - 5:00 PM<br>
                 Domingos: Cerrado
@@ -72,24 +72,26 @@ const title = "Contacto - GlamBook";
         </div>
 
         <!-- Formulario de contacto -->
-        <div class="bg-white rounded-lg shadow-lg p-8">
-          <h2 class="text-2xl font-bold text-gray-800 mb-6 font-poppins">Reserva tu Cita</h2>
+        <div class="bg-white rounded-lg shadow-lg p-6 xs:p-8">
+          <h2 class="text-xl xs:text-2xl font-bold text-gray-800 mb-4 xs:mb-6 font-poppins">Reserva tu Cita</h2>
           
           <!-- Pestañas -->
-          <div class="flex border-b border-gray-200 mb-6">
+          <div class="flex border-b border-gray-200 mb-4 xs:mb-6">
             <button 
               id="tab-mensaje"
               onclick="cambiarTab('mensaje')"
-              class="tab-btn flex-1 py-2 px-4 text-center font-poppins border-b-2 border-pink-500 text-pink-600"
+              class="tab-btn flex-1 py-2 px-2 xs:px-4 text-center font-poppins border-b-2 border-pink-500 text-pink-600 text-sm xs:text-base"
             >
-              💬 Mensaje
+              <span class="xs:hidden">💬</span>
+              <span class="hidden xs:inline">💬 Mensaje</span>
             </button>
             <button 
               id="tab-cita"
               onclick="cambiarTab('cita')"
-              class="tab-btn flex-1 py-2 px-4 text-center font-poppins border-b-2 border-transparent text-gray-500 hover:text-gray-700"
+              class="tab-btn flex-1 py-2 px-2 xs:px-4 text-center font-poppins border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-sm xs:text-base"
             >
-              📅 Reservar Cita
+              <span class="xs:hidden">📅</span>
+              <span class="hidden xs:inline">📅 Reservar Cita</span>
             </button>
           </div>
 

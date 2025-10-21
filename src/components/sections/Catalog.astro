@@ -2,144 +2,162 @@
 // CSS importado globalmente en Layout.astro
 ---
 
-<section class="py-16 bg-gray-50">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-12 xs:py-14 sm:py-16 bg-gray-50">
+  <div class="container mx-auto px-4 xs:px-6 sm:px-6 lg:px-8">
     
     <!-- Título de la sección -->
-    <div class="text-center mb-12">
-      <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-4 font-poppins">
+    <div class="text-center mb-8 xs:mb-10 sm:mb-12">
+      <h2 class="text-2xl xs:text-3xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 xs:mb-4 font-poppins">
         Catálogo de estilos
       </h2>
-      <p class="text-gray-600 font-poppins">
+      <p class="text-gray-600 font-poppins text-sm xs:text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
         Explora nuestros servicios de belleza profesional
       </p>
     </div>
 
     <!-- Grid de servicios -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 sm:gap-8 max-w-7xl mx-auto">
       
       <!-- Uñas naturales -->
-      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="h-56 relative bg-gray-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="h-48 xs:h-52 sm:h-56 relative bg-gray-50 flex items-center justify-center p-3 xs:p-4">
           <img 
             src="/Images/Uñas-Natural.jpg" 
             alt="Uñas Naturales" 
             class="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-sm"
           />
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 font-poppins">
+        <div class="p-4 xs:p-5 sm:p-6">
+          <h3 class="text-lg xs:text-xl font-semibold text-gray-800 mb-3 xs:mb-4 font-poppins">
             Uñas naturales
           </h3>
-           <a href="#servicios" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
-            <span class="relative z-10">Agendar ahora</span>
+           <a href="#servicios" class="group relative inline-flex items-center justify-center w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 sm:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 text-sm xs:text-base">
+            <span class="relative z-10">
+              <span class="xs:hidden">Agendar</span>
+              <span class="hidden xs:inline">Agendar ahora</span>
+            </span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
+            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">�</div>
           </a>   
         </div>
       </div>
 
       <!-- Uñas acrílicas -->
-      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="h-56 relative bg-gray-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="h-48 xs:h-52 sm:h-56 relative bg-gray-50 flex items-center justify-center p-3 xs:p-4">
           <img 
             src="/Images/Uñas-Acrilicas.jpg" 
             alt="Uñas Acrílicas" 
             class="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-sm"
           />
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 font-poppins">
+        <div class="p-4 xs:p-5 sm:p-6">
+          <h3 class="text-lg xs:text-xl font-semibold text-gray-800 mb-3 xs:mb-4 font-poppins">
             Uñas acrílicas
           </h3>
-           <a href="#servicios" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
-            <span class="relative z-10">Agendar ahora</span>
+           <a href="#servicios" class="group relative inline-flex items-center justify-center w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 sm:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 text-sm xs:text-base">
+            <span class="relative z-10">
+              <span class="xs:hidden">Agendar</span>
+              <span class="hidden xs:inline">Agendar ahora</span>
+            </span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
+            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">�</div>
           </a>
         </div>
       </div>
 
       <!-- Maquillaje -->
-      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="h-56 relative bg-gray-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="h-48 xs:h-52 sm:h-56 relative bg-gray-50 flex items-center justify-center p-3 xs:p-4">
           <img 
             src="/Images/Maquillaje.jpg" 
             alt="Maquillaje Profesional" 
             class="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-sm"
           />
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 font-poppins">
+        <div class="p-4 xs:p-5 sm:p-6">
+          <h3 class="text-lg xs:text-xl font-semibold text-gray-800 mb-3 xs:mb-4 font-poppins">
             Maquillaje
           </h3>
-           <a href="#servicios" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
-            <span class="relative z-10">Agendar ahora</span>
+           <a href="#servicios" class="group relative inline-flex items-center justify-center w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 sm:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 text-sm xs:text-base">
+            <span class="relative z-10">
+              <span class="xs:hidden">Agendar</span>
+              <span class="hidden xs:inline">Agendar ahora</span>
+            </span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
+            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
           </a>
         </div>
       </div>
 
       <!-- Peinados -->
-      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="h-56 relative bg-gray-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="h-48 xs:h-52 sm:h-56 relative bg-gray-50 flex items-center justify-center p-3 xs:p-4">
           <img 
             src="/Images/Peinados.jpg" 
             alt="Peinados Profesionales" 
             class="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-sm"
           />
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 font-poppins">
+        <div class="p-4 xs:p-5 sm:p-6">
+          <h3 class="text-lg xs:text-xl font-semibold text-gray-800 mb-3 xs:mb-4 font-poppins">
             Peinados
           </h3>
-           <a href="#servicios" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
-            <span class="relative z-10">Agendar ahora</span>
+           <a href="#servicios" class="group relative inline-flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 sm:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 text-sm xs:text-base">
+            <span class="relative z-10">
+              <span class="xs:hidden">Agendar</span>
+              <span class="hidden xs:inline">Agendar ahora</span>
+            </span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
+            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">�‍♀️</div>
           </a>
         </div>
       </div>
 
       <!-- Cejas -->
-      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="h-56 relative bg-gray-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="h-48 xs:h-52 sm:h-56 relative bg-gray-50 flex items-center justify-center p-3 xs:p-4">
           <img 
             src="/Images/cejas.jpg" 
             alt="Diseño de Cejas" 
             class="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-sm"
           />
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 font-poppins">
+        <div class="p-4 xs:p-5 sm:p-6">
+          <h3 class="text-lg xs:text-xl font-semibold text-gray-800 mb-3 xs:mb-4 font-poppins">
             Cejas
           </h3>
-           <a href="#servicios" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
-            <span class="relative z-10">Agendar ahora</span>
+           <a href="#servicios" class="group relative inline-flex items-center justify-center w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 sm:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 text-sm xs:text-base">
+            <span class="relative z-10">
+              <span class="xs:hidden">Agendar</span>
+              <span class="hidden xs:inline">Agendar ahora</span>
+            </span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
+            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">🤩</div>
           </a>
         </div>
       </div>
 
       <!-- Pestañas -->
-      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-        <div class="h-56 relative bg-gray-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 xs:col-span-2 lg:col-span-1">
+        <div class="h-48 xs:h-52 sm:h-56 relative bg-gray-50 flex items-center justify-center p-3 xs:p-4">
           <img 
             src="/Images/pestañas.jpg" 
             alt="Extensiones de Pestañas" 
             class="max-w-full max-h-full object-contain hover:scale-105 transition-transform duration-300 rounded-lg shadow-sm"
           />
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-semibold text-gray-800 mb-4 font-poppins">
+        <div class="p-4 xs:p-5 sm:p-6">
+          <h3 class="text-lg xs:text-xl font-semibold text-gray-800 mb-3 xs:mb-4 font-poppins">
             Pestañas
           </h3>
-           <a href="#servicios" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
-            <span class="relative z-10">Agendar ahora</span>
+           <a href="#servicios" class="group relative inline-flex items-center justify-center w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 sm:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 text-sm xs:text-base">
+            <span class="relative z-10">
+              <span class="xs:hidden">Agendar</span>
+              <span class="hidden xs:inline">Agendar ahora</span>
+            </span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
+            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">�️</div>
           </a>
         </div>
       </div>

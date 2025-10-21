@@ -2,15 +2,15 @@
 import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
 ---
 
-<section class="py-16 bg-gradient-to-br from-pink-50 to-purple-50">
-  <div class="container mx-auto px-4">
+<section class="py-12 xs:py-14 sm:py-16 bg-gradient-to-br from-pink-50 to-purple-50">
+  <div class="container mx-auto px-4 xs:px-6">
     
     <!-- Título -->
-    <div class="text-center mb-12">
-      <h2 class="text-3xl lg:text-4xl font-bold text-gray-800 mb-4 font-poppins">
+    <div class="text-center mb-8 xs:mb-10 sm:mb-12">
+      <h2 class="text-2xl xs:text-3xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 xs:mb-4 font-poppins">
         Lo que dicen nuestras clientas
       </h2>
-      <p class="text-gray-600 font-poppins">
+      <p class="text-gray-600 font-poppins text-sm xs:text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
         Testimonios reales de quienes confían en GlamBook
       </p>
     </div>
@@ -19,12 +19,12 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
     <TestimoniosDinamicos />
 
     <!-- Formulario para nuevos testimonios -->
-    <div class="mt-16 max-w-2xl mx-auto">
-      <div class="text-center mb-8">
-        <h3 class="text-2xl lg:text-3xl font-bold text-gray-800 mb-2 font-poppins">
+    <div class="mt-12 xs:mt-14 sm:mt-16 max-w-2xl mx-auto">
+      <div class="text-center mb-6 xs:mb-8">
+        <h3 class="text-xl xs:text-2xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2 xs:mb-3 font-poppins">
           ¿Quieres compartir tu experiencia?
         </h3>
-        <p class="text-gray-600 font-poppins">
+        <p class="text-gray-600 font-poppins text-sm xs:text-base">
           Tu opinión es muy importante para nosotros
         </p>
       </div>
@@ -35,7 +35,7 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
         data-netlify="true" 
         netlify-honeypot="bot-field"
         action="/gracias"
-        class="bg-white rounded-xl p-6 lg:p-8 shadow-lg"
+        class="bg-white rounded-xl p-4 xs:p-6 sm:p-6 lg:p-8 shadow-lg"
       >
         <!-- Campo oculto para Netlify -->
         <input type="hidden" name="form-name" value="testimonios" />
@@ -46,10 +46,10 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
           </label>
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 xs:gap-6 mb-4 xs:mb-6">
           <!-- Nombre -->
           <div>
-            <label for="nombre" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+            <label for="nombre" class="block text-xs xs:text-sm font-semibold text-gray-700 mb-2 font-poppins">
               Nombre completo *
             </label>
             <input 
@@ -57,14 +57,14 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
               id="nombre" 
               name="nombre" 
               required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins"
+              class="w-full px-3 xs:px-4 py-2 xs:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins text-sm xs:text-base"
               placeholder="Tu nombre completo"
             />
           </div>
 
           <!-- Email -->
           <div>
-            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+            <label for="email" class="block text-xs xs:text-sm font-semibold text-gray-700 mb-2 font-poppins">
               Email *
             </label>
             <input 
@@ -72,44 +72,44 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
               id="email" 
               name="email" 
               required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins"
+              class="w-full px-3 xs:px-4 py-2 xs:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins text-sm xs:text-base"
               placeholder="tu@email.com"
             />
           </div>
         </div>
 
         <!-- Calificación -->
-        <div class="mb-6">
-          <label class="block text-sm font-semibold text-gray-700 mb-3 font-poppins">
+        <div class="mb-4 xs:mb-6">
+          <label class="block text-xs xs:text-sm font-semibold text-gray-700 mb-2 xs:mb-3 font-poppins">
             Calificación *
           </label>
-          <div class="flex gap-2" id="rating-stars">
+          <div class="flex gap-1 xs:gap-2 justify-center xs:justify-start" id="rating-stars">
             <input type="radio" name="calificacion" value="1" id="star1" class="hidden" required />
-            <label for="star1" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="1">⭐</label>
+            <label for="star1" class="text-xl xs:text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="1">⭐</label>
             
             <input type="radio" name="calificacion" value="2" id="star2" class="hidden" />
-            <label for="star2" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="2">⭐</label>
+            <label for="star2" class="text-xl xs:text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="2">⭐</label>
             
             <input type="radio" name="calificacion" value="3" id="star3" class="hidden" />
-            <label for="star3" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="3">⭐</label>
+            <label for="star3" class="text-xl xs:text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="3">⭐</label>
             
             <input type="radio" name="calificacion" value="4" id="star4" class="hidden" />
-            <label for="star4" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="4">⭐</label>
+            <label for="star4" class="text-xl xs:text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="4">⭐</label>
             
             <input type="radio" name="calificacion" value="5" id="star5" class="hidden" />
-            <label for="star5" class="text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="5">⭐</label>
+            <label for="star5" class="text-xl xs:text-2xl cursor-pointer hover:scale-110 transition-transform duration-200 text-gray-300 hover:text-yellow-400" data-rating="5">⭐</label>
           </div>
         </div>
 
         <!-- Servicio utilizado -->
-        <div class="mb-6">
-          <label for="servicio" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+        <div class="mb-4 xs:mb-6">
+          <label for="servicio" class="block text-xs xs:text-sm font-semibold text-gray-700 mb-2 font-poppins">
             Servicio utilizado
           </label>
           <select 
             id="servicio" 
             name="servicio"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins"
+            class="w-full px-3 xs:px-4 py-2 xs:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins text-sm xs:text-base"
           >
             <option value="">Selecciona un servicio</option>
             <option value="maquillaje">Maquillaje profesional</option>
@@ -122,21 +122,21 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
         </div>
 
         <!-- Comentario -->
-        <div class="mb-6">
-          <label for="comentario" class="block text-sm font-semibold text-gray-700 mb-2 font-poppins">
+        <div class="mb-4 xs:mb-6">
+          <label for="comentario" class="block text-xs xs:text-sm font-semibold text-gray-700 mb-2 font-poppins">
             Tu experiencia *
           </label>
           <textarea 
             id="comentario" 
             name="comentario" 
-            rows="4" 
+            rows="3" 
             required
             minlength="10"
             maxlength="500"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins resize-none"
+            class="w-full px-3 xs:px-4 py-2 xs:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent transition-all duration-300 font-poppins resize-none text-sm xs:text-base"
             placeholder="Cuéntanos sobre tu experiencia en GlamBook... (mínimo 10 caracteres)"
           ></textarea>
-          <div class="flex justify-between text-sm text-gray-500 mt-1 font-poppins">
+          <div class="flex justify-between text-xs xs:text-sm text-gray-500 mt-1 font-poppins">
             <span>Mínimo 10 caracteres</span>
             <span id="char-count">0/500</span>
           </div>
@@ -147,15 +147,15 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
         <input type="hidden" name="user-agent" id="user-agent" />
 
         <!-- Checkbox de consentimiento -->
-        <div class="mb-6">
-          <label class="flex items-start gap-3 cursor-pointer">
+        <div class="mb-4 xs:mb-6">
+          <label class="flex items-start gap-2 xs:gap-3 cursor-pointer">
             <input 
               type="checkbox" 
               name="consentimiento" 
               required
-              class="mt-1 w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+              class="mt-0.5 xs:mt-1 w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500 flex-shrink-0"
             />
-            <span class="text-sm text-gray-600 font-poppins">
+            <span class="text-xs xs:text-sm text-gray-600 font-poppins leading-relaxed">
               Acepto que mi testimonio sea publicado en la página web de GlamBook y autorizo el uso de mis datos para este propósito. *
             </span>
           </label>
@@ -164,14 +164,15 @@ import TestimoniosDinamicos from '../TestimoniosDinamicos.astro';
         <!-- Botón de envío -->
         <button 
           type="submit"
-          class="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 font-poppins"
+          class="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-3 xs:py-4 px-4 xs:px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 font-poppins text-sm xs:text-base"
         >
-          Enviar testimonio ✨
+          <span class="xs:hidden">Enviar ✨</span>
+          <span class="hidden xs:inline">Enviar testimonio ✨</span>
         </button>
 
         <!-- Mensaje de estado -->
-        <div id="form-status" class="mt-4 text-center hidden">
-          <p class="text-green-600 font-poppins">¡Gracias por tu testimonio! Lo revisaremos pronto.</p>
+        <div id="form-status" class="mt-3 xs:mt-4 text-center hidden">
+          <p class="text-green-600 font-poppins text-sm xs:text-base">¡Gracias por tu testimonio! Lo revisaremos pronto.</p>
         </div>
       </form>
     </div>

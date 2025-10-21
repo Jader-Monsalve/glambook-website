@@ -2,97 +2,166 @@
 // CSS importado globalmente en Layout.astro
 ---
 
-<nav class="fixed top-0 left-0 right-0 flex justify-between items-center p-4 bg-white shadow-md lg:px-8 xl:px-12 z-50 backdrop-blur-sm">
-    <!-- LOGO CON TEXTO NORMAL -->
+<nav class="fixed top-0 left-0 right-0 flex justify-between items-center px-3 xs:px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-3 sm:py-4 bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-pink-100">
+    <!-- LOGO CON TEXTO NORMAL - Responsive -->
     <div class="flex items-center">
-        <a href="/" class="font-vibes text-2xl sm:text-3xl lg:text-5xl text-pink-500">
+        <a href="/" class="font-vibes text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-pink-500 hover:text-pink-600 transition-colors duration-300">
             GlamBook
         </a>
     </div>
 
-    <!-- MENÚ HAMBURGUESA (MÓVIL) -->
-    <button id="mobile-menu-btn" class="md:hidden text-gray-800 text-2xl focus:outline-none">
-        ☰
+    <!-- MENÚ HAMBURGUESA (MÓVIL) - Mejorado -->
+    <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-pink-500 text-2xl xs:text-3xl focus:outline-none transition-colors duration-300 p-2 hover:bg-pink-50 rounded-lg">
+        <span class="hamburger-icon">☰</span>
     </button>
 
-    <!-- MENÚ DESKTOP -->
-    <ul class="hidden md:flex gap-4 lg:gap-6 xl:gap-8 font-quicksand text-gray-800 text-base lg:text-lg">
-        <li><a href="/" class="hover:text-pink-500 transition">Inicio</a></li>
-        <li><a href="/about" class="hover:text-pink-500 transition">Servicios</a></li>
+    <!-- MENÚ DESKTOP - Mejorado -->
+    <ul class="hidden md:flex gap-3 lg:gap-6 xl:gap-8 font-quicksand text-gray-700 text-sm lg:text-base xl:text-lg items-center">
+        <li><a href="/" class="hover:text-pink-500 transition-colors duration-300 font-medium px-2 py-1 rounded hover:bg-pink-50">Inicio</a></li>
+        <li><a href="/about" class="hover:text-pink-500 transition-colors duration-300 font-medium px-2 py-1 rounded hover:bg-pink-50">Servicios</a></li>
         <li class="relative group">
-            <a href="/blog" class="hover:text-pink-500 transition flex items-center">
+            <a href="/blog" class="hover:text-pink-500 transition-colors duration-300 flex items-center font-medium px-2 py-1 rounded hover:bg-pink-50">
                 Blog 
-                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3 h-3 lg:w-4 lg:h-4 ml-1 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </a>
-            <!-- Dropdown Menu -->
-            <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                <div class="py-2">
-                    <a href="/blog" class="block px-4 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition">
-                        Todos los Artículos
+            <!-- Dropdown Menu - Mejorado -->
+            <div class="absolute top-full left-0 mt-2 w-52 lg:w-56 bg-white rounded-xl shadow-xl border border-pink-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 backdrop-blur-sm">
+                <div class="py-3">
+                    <a href="/blog" class="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition-colors duration-200 text-sm lg:text-base font-medium">
+                        📝 Todos los Artículos
                     </a>
-                    <a href="/cuidado-piel" class="block px-4 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition">
-                        Cuidado de la Piel
+                    <a href="/cuidado-piel" class="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition-colors duration-200 text-sm lg:text-base font-medium">
+                        🌿 Cuidado de la Piel
                     </a>
-                    <a href="/maquillaje-eventos" class="block px-4 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition">
-                        Maquillaje para Eventos
+                    <a href="/maquillaje-eventos" class="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition-colors duration-200 text-sm lg:text-base font-medium">
+                        💄 Maquillaje para Eventos
                     </a>
-                    <a href="/tendencia-uñas" class="block px-4 py-2 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition">
-                        Tendencias de Uñas
+                    <a href="/tendencia-uñas" class="block px-4 py-2.5 text-gray-700 hover:bg-pink-50 hover:text-pink-500 transition-colors duration-200 text-sm lg:text-base font-medium">
+                        💅 Tendencias de Uñas
                     </a>
                 </div>
             </div>
         </li>
-        <li><a href="/contact" class="hover:text-pink-500 transition">Contacto</a></li>
-        <li><a href="/login" class="hover:text-pink-500 transition">Login-admin</a></li>
+        <li><a href="/contact" class="hover:text-pink-500 transition-colors duration-300 font-medium px-2 py-1 rounded hover:bg-pink-50">Contacto</a></li>
+        <li><a href="/login" class="hover:text-pink-500 transition-colors duration-300 font-medium px-2 py-1 rounded hover:bg-pink-50 text-xs lg:text-sm">👑 Admin</a></li>
     </ul>
 
-    <!-- BOTÓN -->
+    <!-- BOTÓN CTA - Responsive -->
     <a
-        href="/"
-        class="hidden sm:block bg-pink-500 text-white px-3 py-2 sm:px-4 sm:py-2 lg:px-5 lg:py-3 rounded-xl text-sm sm:text-base lg:text-lg hover:bg-pink-600 transition"
+        href="/contact"
+        class="hidden sm:block bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-3 py-2 sm:px-4 sm:py-2 lg:px-6 lg:py-3 rounded-lg lg:rounded-xl text-xs sm:text-sm lg:text-base font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105"
     >
-        <span class="hidden sm:inline lg:hidden">Cita</span>
-        <span class="hidden lg:inline">Reservar cita</span>
+        <span class="hidden sm:inline lg:hidden">💄 Cita</span>
+        <span class="hidden lg:inline">✨ Reservar cita</span>
     </a>
 </nav>
 
-<!-- MENÚ MÓVIL -->
-<div id="mobile-menu" class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out md:hidden z-50">
-    <!-- Botón de cerrar -->
-    <button id="close-menu-btn" class="absolute top-4 right-4 text-gray-800 text-2xl focus:outline-none">
-        ✕
-    </button>
-    <ul class="flex flex-col p-4 pt-20 font-quicksand text-gray-800 text-lg">
-        <li class="py-2"><a href="/" class="hover:text-pink-500 transition">Inicio</a></li>
-        <li class="py-2"><a href="/about" class="hover:text-pink-500 transition">Servicios</a></li>
-        <li class="py-2">
-            <div class="group">
-                <button id="mobile-blog-toggle" class="hover:text-pink-500 transition w-full text-left flex items-center justify-between">
-                    Blog
-                    <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-                <div id="mobile-blog-submenu" class="ml-4 mt-2 hidden">
-                    <a href="/blog" class="block py-1 text-gray-600 hover:text-pink-500 transition">Todos los Artículos</a>
-                    <a href="/cuidado-piel" class="block py-1 text-gray-600 hover:text-pink-500 transition">Cuidado de la Piel</a>
-                    <a href="/maquillaje-eventos" class="block py-1 text-gray-600 hover:text-pink-500 transition">Maquillaje para Eventos</a>
-                    <a href="/tendencia-uñas" class="block py-1 text-gray-600 hover:text-pink-500 transition">Tendencias de Uñas</a>
-                </div>
-            </div>
-        </li>
-        <li class="py-2"><a href="/contact" class="hover:text-pink-500 transition">Contacto</a></li>
-        <li class="py-2"><a href="/login" class="hover:text-pink-500 transition">Login-admin</a></li>
-            <a
-                href="/"
-                class="bg-pink-500 text-white px-4 py-2 rounded-xl text-base hover:bg-pink-600 transition inline-block"
-            >
-                Reservar cita
-            </a>
-        </li>
-    </ul>
+<!-- MENÚ MÓVIL - Completamente rediseñado -->
+<div id="mobile-menu" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 opacity-0 invisible transition-all duration-300 md:hidden">
+    <div class="fixed top-0 right-0 h-full w-72 xs:w-80 bg-white/95 backdrop-blur-md shadow-2xl transform translate-x-full transition-transform duration-500 ease-out">
+        
+        <!-- Header del menú móvil -->
+        <div class="flex items-center justify-between p-4 xs:p-6 border-b border-pink-100 bg-gradient-to-r from-pink-50 to-rose-50">
+            <div class="font-vibes text-xl xs:text-2xl text-pink-500">GlamBook</div>
+            <button id="close-menu-btn" class="text-gray-600 hover:text-pink-500 text-2xl xs:text-3xl focus:outline-none transition-colors duration-300 p-2 hover:bg-pink-50 rounded-lg">
+                ✕
+            </button>
+        </div>
+
+        <!-- Contenido del menú -->
+        <div class="overflow-y-auto h-full pb-20">
+            <ul class="flex flex-col p-4 xs:p-6 font-quicksand space-y-1">
+                
+                <!-- Menú principal con iconos -->
+                <li>
+                    <a href="/" class="flex items-center py-3 px-4 text-gray-700 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-300 font-medium">
+                        <span class="text-lg mr-3">🏠</span>
+                        Inicio
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/about" class="flex items-center py-3 px-4 text-gray-700 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-300 font-medium">
+                        <span class="text-lg mr-3">✨</span>
+                        Servicios
+                    </a>
+                </li>
+                
+                <!-- Blog con submenu mejorado -->
+                <li>
+                    <button id="mobile-blog-toggle" class="w-full flex items-center justify-between py-3 px-4 text-gray-700 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-300 font-medium">
+                        <div class="flex items-center">
+                            <span class="text-lg mr-3">📝</span>
+                            Blog
+                        </div>
+                        <svg id="blog-arrow" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <div id="mobile-blog-submenu" class="ml-8 mt-1 space-y-1 hidden">
+                        <a href="/blog" class="flex items-center py-2 px-3 text-gray-600 hover:text-pink-500 hover:bg-pink-25 rounded-md transition-all duration-200 text-sm">
+                            <span class="text-sm mr-2">📚</span>
+                            Todos los Artículos
+                        </a>
+                        <a href="/cuidado-piel" class="flex items-center py-2 px-3 text-gray-600 hover:text-pink-500 hover:bg-pink-25 rounded-md transition-all duration-200 text-sm">
+                            <span class="text-sm mr-2">🌿</span>
+                            Cuidado de la Piel
+                        </a>
+                        <a href="/maquillaje-eventos" class="flex items-center py-2 px-3 text-gray-600 hover:text-pink-500 hover:bg-pink-25 rounded-md transition-all duration-200 text-sm">
+                            <span class="text-sm mr-2">💄</span>
+                            Maquillaje para Eventos
+                        </a>
+                        <a href="/tendencia-uñas" class="flex items-center py-2 px-3 text-gray-600 hover:text-pink-500 hover:bg-pink-25 rounded-md transition-all duration-200 text-sm">
+                            <span class="text-sm mr-2">💅</span>
+                            Tendencias de Uñas
+                        </a>
+                    </div>
+                </li>
+                
+                <li>
+                    <a href="/contact" class="flex items-center py-3 px-4 text-gray-700 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-300 font-medium">
+                        <span class="text-lg mr-3">💌</span>
+                        Contacto
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="/login" class="flex items-center py-3 px-4 text-gray-700 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-all duration-300 font-medium">
+                        <span class="text-lg mr-3">👑</span>
+                        Admin
+                    </a>
+                </li>
+                
+                <!-- Separador -->
+                <li class="my-4">
+                    <div class="border-t border-pink-100"></div>
+                </li>
+                
+                <!-- Botón CTA en móvil -->
+                <li class="px-2">
+                    <a
+                        href="/contact"
+                        class="flex items-center justify-center bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white py-4 px-6 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                        <span class="text-lg mr-2">✨</span>
+                        Reservar Cita Ahora
+                    </a>
+                </li>
+                
+                <!-- Información adicional -->
+                <li class="mt-6 px-2">
+                    <div class="bg-pink-50 rounded-xl p-4 text-center">
+                        <div class="text-sm text-gray-600 mb-2">¿Necesitas ayuda?</div>
+                        <div class="text-pink-500 font-semibold">📞 +57 300 699 7396</div>
+                    </div>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -103,39 +172,155 @@
         const mobileBlogToggle = document.getElementById('mobile-blog-toggle');
         const mobileBlogSubmenu = document.getElementById('mobile-blog-submenu');
 
-        mobileMenuBtn?.addEventListener('click', () => {
-            const isOpen = !mobileMenu?.classList.contains('translate-x-full');
-            if (isOpen) {
-                mobileMenu?.classList.add('translate-x-full');
-            } else {
-                mobileMenu?.classList.remove('translate-x-full');
+        // Función para abrir el menú móvil
+        const openMobileMenu = () => {
+            mobileMenu?.classList.remove('opacity-0', 'invisible');
+            const menuPanel = mobileMenu?.querySelector('.transform');
+            menuPanel?.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden'; // Prevenir scroll en el fondo
+        };
+
+        // Función para cerrar el menú móvil
+        const closeMobileMenu = () => {
+            const menuPanel = mobileMenu?.querySelector('.transform');
+            menuPanel?.classList.add('translate-x-full');
+            
+            setTimeout(() => {
+                mobileMenu?.classList.add('opacity-0', 'invisible');
+                document.body.style.overflow = ''; // Restaurar scroll
+            }, 300);
+        };
+
+        // Abrir menú móvil
+        mobileMenuBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            openMobileMenu();
+        });
+
+        // Cerrar menú móvil - botón X
+        closeMenuBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeMobileMenu();
+        });
+
+        // Cerrar menú móvil - clic en overlay
+        mobileMenu?.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                closeMobileMenu();
             }
         });
 
-        closeMenuBtn?.addEventListener('click', () => {
-            mobileMenu?.classList.add('translate-x-full');
-        });
-
-        // Toggle mobile blog submenu
-        mobileBlogToggle?.addEventListener('click', () => {
+        // Toggle del submenu de blog con animación mejorada
+        mobileBlogToggle?.addEventListener('click', (e) => {
+            e.preventDefault();
             const isHidden = mobileBlogSubmenu?.classList.contains('hidden');
             const arrow = mobileBlogToggle.querySelector('svg');
             
             if (isHidden) {
                 mobileBlogSubmenu?.classList.remove('hidden');
                 arrow?.classList.add('rotate-180');
+                // Animación de entrada suave
+                setTimeout(() => {
+                    mobileBlogSubmenu?.style.opacity = '1';
+                    mobileBlogSubmenu?.style.transform = 'translateY(0)';
+                }, 10);
             } else {
-                mobileBlogSubmenu?.classList.add('hidden');
+                mobileBlogSubmenu?.style.opacity = '0';
+                mobileBlogSubmenu?.style.transform = 'translateY(-10px)';
                 arrow?.classList.remove('rotate-180');
+                setTimeout(() => {
+                    mobileBlogSubmenu?.classList.add('hidden');
+                }, 200);
             }
         });
 
-        // Close menu when clicking on menu links (except blog toggle)
-        const menuLinks = mobileMenu?.querySelectorAll('a');
+        // Cerrar menú al hacer clic en enlaces (excepto toggle de blog)
+        const menuLinks = mobileMenu?.querySelectorAll('a:not(#mobile-blog-toggle)');
         menuLinks?.forEach(link => {
             link.addEventListener('click', () => {
-                mobileMenu?.classList.add('translate-x-full');
+                closeMobileMenu();
             });
         });
+
+        // Cerrar menú al presionar Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !mobileMenu?.classList.contains('opacity-0')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Mejorar accesibilidad
+        mobileMenuBtn?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openMobileMenu();
+            }
+        });
+
+        // Prevenir scroll en dispositivos táctiles cuando el menú está abierto
+        mobileMenu?.addEventListener('touchmove', (e) => {
+            const scrollableElement = e.target.closest('.overflow-y-auto');
+            if (!scrollableElement) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Inicializar estilos del submenu para animaciones
+        if (mobileBlogSubmenu) {
+            mobileBlogSubmenu.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+            mobileBlogSubmenu.style.opacity = '0';
+            mobileBlogSubmenu.style.transform = 'translateY(-10px)';
+        }
     });
+
+    // Añadir estilos CSS adicionales para mejorar las animaciones
+    const additionalStyles = document.createElement('style');
+    additionalStyles.textContent = `
+        /* Animaciones suaves para el menú móvil */
+        #mobile-menu {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        #mobile-menu .transform {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Efecto hover mejorado para el botón hamburguesa */
+        #mobile-menu-btn {
+            transition: all 0.2s ease;
+        }
+        
+        #mobile-menu-btn:hover {
+            background-color: rgba(147, 51, 234, 0.1);
+            transform: scale(1.05);
+        }
+        
+        /* Animaciones para los iconos del menú */
+        .nav-icon {
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+        
+        /* Mejor soporte para backdrop-blur en navegadores antiguos */
+        @supports not (backdrop-filter: blur(12px)) {
+            #mobile-menu {
+                background-color: rgba(0, 0, 0, 0.8) !important;
+            }
+            #mobile-menu > div {
+                background-color: rgba(255, 255, 255, 0.98) !important;
+            }
+        }
+        
+        /* Smooth scroll para toda la página */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Mejorar la visibilidad de los elementos de navegación */
+        .nav-link:focus {
+            outline: 2px solid #8B5CF6;
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+    `;
+    document.head.appendChild(additionalStyles);
 </script>

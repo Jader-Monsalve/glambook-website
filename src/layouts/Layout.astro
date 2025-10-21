@@ -14,9 +14,14 @@ const { title } = Astro.props;
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+		
+		<!-- Fuentes optimizadas con preload para mejor rendimiento -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+		
 		<meta name="generator" content={Astro.generator} />
 		
 		<!-- SEO Meta Tags -->
@@ -52,10 +57,78 @@ const { title } = Astro.props;
 </html>
 
 <style>
-	html,
-	body {
+	/* Optimizaciones responsive globales */
+	html {
 		margin: 0;
 		width: 100%;
 		height: 100%;
+		/* Smooth scroll para toda la página */
+		scroll-behavior: smooth;
+		/* Mejorar rendering de texto */
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+	
+	body {
+		margin: 0;
+		width: 100%;
+		min-height: 100vh;
+		/* Prevenir zoom horizontal en móviles */
+		overflow-x: hidden;
+		/* Configuración de fuentes responsive */
+		font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+		line-height: 1.6;
+		/* Mejorar el escalado de texto en iOS */
+		-webkit-text-size-adjust: 100%;
+		-ms-text-size-adjust: 100%;
+	}
+	
+	/* Optimizaciones para dispositivos táctiles */
+	@media (hover: none) and (pointer: coarse) {
+		/* Aumentar ligeramente el tamaño de elementos interactivos en móviles */
+		button, 
+		[role="button"], 
+		input[type="submit"], 
+		input[type="button"] {
+			min-height: 44px;
+			min-width: 44px;
+		}
+	}
+	
+	/* Optimizar imágenes para dispositivos de alta densidad */
+	img {
+		max-width: 100%;
+		height: auto;
+		/* Suavizar imágenes escaladas */
+		image-rendering: -webkit-optimize-contrast;
+		image-rendering: crisp-edges;
+	}
+	
+	/* Mejorar rendimiento de animaciones en móviles */
+	*, 
+	*::before, 
+	*::after {
+		/* Usar GPU para transformaciones */
+		transform: translateZ(0);
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+	}
+	
+	/* Focus styles mejorados para accesibilidad */
+	*:focus {
+		outline: 2px solid #ec4899;
+		outline-offset: 2px;
+	}
+	
+	/* Ocultar scrollbar horizontal pero mantener funcionalidad */
+	body::-webkit-scrollbar-x {
+		display: none;
+	}
+	
+	/* Estilos específicos para pantallas muy pequeñas */
+	@media (max-width: 320px) {
+		body {
+			font-size: 14px;
+		}
 	}
 </style>
