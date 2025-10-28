@@ -1,0 +1,1202 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+export const prerender = false;
+
+const title = "Configuración del Sistema - Admin GlamBook";
+---
+
+<AdminLayout title={title}>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-500 mx-auto mb-4"></div>
+      <p class="text-gray-600 font-poppins">Cargando configuración...</p>
+    </div>
+  </div>
+
+  <!-- Auth Check Script -->
+  <script type="module">
+    const isAuthenticated = localStorage.getItem('glambook_auth') === 'true';
+    if (!isAuthenticated) {
+      window.location.href = '/login?redirect=admin/configuracion';
+    } else {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+    }
+  </script>
+
+  <!-- Main Content -->
+  <div id="main-content" style="display: none;" class="min-h-screen">
+    <div class="mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins mb-2">⚙️ Configuración del Sistema</h1>
+          <p class="text-gray-600 font-poppins">Ajustes generales, notificaciones y preferencias administrativas</p>
+        </div>
+        
+        <div class="flex flex-wrap gap-2">
+          <button 
+            onclick="window.location.href='/admin'"
+            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins"
+          >
+            ← Dashboard
+          </button>
+          <button 
+            onclick="window.location.href='/admin/citas'"
+            class="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-poppins text-sm"
+          >
+            📅 Citas
+          </button>
+          <button 
+            onclick="window.location.href='/admin/usuarios'"
+            class="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm"
+          >
+            👥 Usuarios
+          </button>
+          <button 
+            onclick="window.location.href='/admin/testimonios'"
+            class="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors font-poppins text-sm"
+          >
+            💬 Testimonios
+          </button>
+          <button 
+            onclick="guardarTodaConfiguracion()"
+            class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins"
+          >
+            💾 Guardar Todo
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins mb-1">Configuración del Sistema</h1>
+          <p class="text-gray-600 font-poppins text-sm">Ajustes generales, notificaciones y preferencias administrativas</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="window.location.href='/admin'" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins text-sm min-w-[120px]">Dashboard</button>
+          <button onclick="window.location.href='/admin/citas'" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-poppins text-sm min-w-[120px]">Citas</button>
+          <button onclick="window.location.href='/admin/usuarios'" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm min-w-[120px]">Usuarios</button>
+          <button onclick="window.location.href='/admin/testimonios'" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors font-poppins text-sm min-w-[120px]">Testimonios</button>
+          <button onclick="guardarTodaConfiguracion()" class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins text-sm min-w-[120px]">Guardar Todo</button>
+        </div>
+      </div>
+    </div>
+    <!-- Tabs Navigation -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+      <div class="border-b border-gray-200">
+        <nav class="flex space-x-8 px-6" aria-label="Tabs">
+          <button 
+            onclick="cambiarTab('general')" 
+            id="tab-general"
+            class="tab-btn py-4 px-1 border-b-2 border-pink-500 text-pink-600 font-medium text-sm font-poppins"
+          >
+            🏢 General
+          </button>
+          <button 
+            onclick="cambiarTab('notificaciones')" 
+            id="tab-notificaciones"
+            class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
+          >
+            🔔 Notificaciones
+          </button>
+          <button 
+            onclick="cambiarTab('email')" 
+            id="tab-email"
+            class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
+          >
+            📧 Email
+          </button>
+          <button 
+            onclick="cambiarTab('seguridad')" 
+            id="tab-seguridad"
+            class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
+          >
+            🔒 Seguridad
+          </button>
+          <button 
+            onclick="cambiarTab('backup')" 
+            id="tab-backup"
+            class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
+          >
+            💾 Backup
+          </button>
+        </nav>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="p-6">
+        <!-- General Tab -->
+        <div id="content-general" class="tab-content">
+          <div class="space-y-8">
+            <!-- Información del Negocio -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">🏢 Información del Negocio</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Nombre del Negocio</label>
+                  <input 
+                    type="text" 
+                    id="config-nombre-negocio"
+                    value="GlamBook Beauty Studio"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Teléfono de Contacto</label>
+                  <input 
+                    type="tel" 
+                    id="config-telefono"
+                    value="+57 300 123 4567"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Email de Contacto</label>
+                  <input 
+                    type="email" 
+                    id="config-email-contacto"
+                    value="contacto@glambook.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Sitio Web</label>
+                  <input 
+                    type="url" 
+                    id="config-sitio-web"
+                    value="https://glambook.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Dirección Completa</label>
+                  <input 
+                    type="text" 
+                    id="config-direccion"
+                    value="Calle 123 #45-67, Bogotá, Colombia"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Descripción del Negocio</label>
+                  <textarea 
+                    id="config-descripcion"
+                    rows="3"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                    placeholder="Breve descripción de tu negocio..."
+                  >Salón de belleza especializado en servicios de uñas, maquillaje y cuidado personal con más de 5 años de experiencia.</textarea>
+                </div>
+              </div>
+              
+              <button 
+                onclick="guardarConfigGeneral()"
+                class="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-poppins font-semibold"
+              >
+                💾 Guardar Información General
+              </button>
+            </div>
+
+            <!-- Configuración de Servicios -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">💄 Configuración de Servicios</h3>
+              
+              <div id="servicios-config" class="space-y-4">
+                <!-- Se llenará dinámicamente -->
+              </div>
+              
+              <button 
+                onclick="agregarServicio()"
+                class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-poppins"
+              >
+                ➕ Agregar Servicio
+              </button>
+            </div>
+
+            <!-- Configuración de Horarios -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">⏰ Horarios Generales</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Duración por Defecto de Citas</label>
+                  <select 
+                    id="config-duracion-cita"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="30">30 minutos</option>
+                    <option value="45">45 minutos</option>
+                    <option value="60" selected>60 minutos</option>
+                    <option value="90">90 minutos</option>
+                    <option value="120">120 minutos</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Tiempo de Preparación</label>
+                  <select 
+                    id="config-tiempo-preparacion"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="0">Sin tiempo extra</option>
+                    <option value="15" selected>15 minutos</option>
+                    <option value="30">30 minutos</option>
+                    <option value="45">45 minutos</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Días de Anticipación para Citas</label>
+                  <select 
+                    id="config-dias-anticipacion"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="1">1 día</option>
+                    <option value="2">2 días</option>
+                    <option value="3" selected>3 días</option>
+                    <option value="7">1 semana</option>
+                    <option value="30">1 mes</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Máximo Días Futuro para Citas</label>
+                  <select 
+                    id="config-max-dias-futuro"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="30" selected>30 días</option>
+                    <option value="60">60 días</option>
+                    <option value="90">90 días</option>
+                    <option value="180">6 meses</option>
+                    <option value="365">1 año</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificaciones Tab -->
+        <div id="content-notificaciones" class="tab-content hidden">
+          <div class="space-y-8">
+            <!-- Email Notifications -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">📧 Notificaciones por Email</h3>
+              
+              <div class="space-y-6">
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg border">
+                  <div>
+                    <h4 class="font-medium text-gray-800 font-poppins">Nuevas Citas</h4>
+                    <p class="text-sm text-gray-600">Recibir email cuando se agenda una nueva cita</p>
+                  </div>
+                  <label class="flex items-center cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      id="notif-nuevas-citas"
+                      checked
+                      class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                    >
+                    <span class="ml-2 text-sm text-gray-600 font-poppins">Activado</span>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg border">
+                  <div>
+                    <h4 class="font-medium text-gray-800 font-poppins">Nuevos Testimonios</h4>
+                    <p class="text-sm text-gray-600">Recibir email cuando se envía un nuevo testimonio</p>
+                  </div>
+                  <label class="flex items-center cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      id="notif-testimonios"
+                      checked
+                      class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                    >
+                    <span class="ml-2 text-sm text-gray-600 font-poppins">Activado</span>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg border">
+                  <div>
+                    <h4 class="font-medium text-gray-800 font-poppins">Recordatorios de Citas</h4>
+                    <p class="text-sm text-gray-600">Enviar recordatorios automáticos a clientes</p>
+                  </div>
+                  <label class="flex items-center cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      id="notif-recordatorios"
+                      checked
+                      class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                    >
+                    <span class="ml-2 text-sm text-gray-600 font-poppins">Activado</span>
+                  </label>
+                </div>
+                
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg border">
+                  <div>
+                    <h4 class="font-medium text-gray-800 font-poppins">Resumen Diario</h4>
+                    <p class="text-sm text-gray-600">Resumen diario de actividad del negocio</p>
+                  </div>
+                  <label class="flex items-center cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      id="notif-resumen-diario"
+                      class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                    >
+                    <span class="ml-2 text-sm text-gray-600 font-poppins">Desactivado</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timing Configuration -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">⏰ Configuración de Tiempos</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Recordatorio 1 (días antes)</label>
+                  <select 
+                    id="config-recordatorio-1"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="1" selected>1 día antes</option>
+                    <option value="2">2 días antes</option>
+                    <option value="3">3 días antes</option>
+                    <option value="7">1 semana antes</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Recordatorio 2 (horas antes)</label>
+                  <select 
+                    id="config-recordatorio-2"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="1">1 hora antes</option>
+                    <option value="2" selected>2 horas antes</option>
+                    <option value="4">4 horas antes</option>
+                    <option value="24">24 horas antes</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Email de Admin para Notificaciones</label>
+                  <input 
+                    type="email" 
+                    id="config-admin-email"
+                    value="admin@glambook.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Zona Horaria</label>
+                  <select 
+                    id="config-timezone"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="America/Bogota" selected>Bogotá (UTC-5)</option>
+                    <option value="America/Mexico_City">Ciudad de México (UTC-6)</option>
+                    <option value="America/New_York">Nueva York (UTC-5)</option>
+                    <option value="Europe/Madrid">Madrid (UTC+1)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email Tab -->
+        <div id="content-email" class="tab-content hidden">
+          <div class="space-y-8">
+            <!-- SMTP Configuration -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">📧 Configuración SMTP</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Servidor SMTP</label>
+                  <input 
+                    type="text" 
+                    id="smtp-servidor"
+                    value="smtp.gmail.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Puerto</label>
+                  <input 
+                    type="number" 
+                    id="smtp-puerto"
+                    value="587"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Usuario SMTP</label>
+                  <input 
+                    type="email" 
+                    id="smtp-usuario"
+                    value="contacto@glambook.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Contraseña SMTP</label>
+                  <input 
+                    type="password" 
+                    id="smtp-password"
+                    placeholder="••••••••••••••••"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Encriptación</label>
+                  <select 
+                    id="smtp-encriptacion"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="tls" selected>TLS</option>
+                    <option value="ssl">SSL</option>
+                    <option value="none">Ninguna</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Nombre del Remitente</label>
+                  <input 
+                    type="text" 
+                    id="smtp-nombre"
+                    value="GlamBook Beauty Studio"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+              </div>
+              
+              <div class="mt-6 flex gap-4">
+                <button 
+                  onclick="probarConfiguracionEmail()"
+                  class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-poppins"
+                >
+                  📧 Enviar Email de Prueba
+                </button>
+                <button 
+                  onclick="guardarConfiguracionSMTP()"
+                  class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-poppins font-semibold"
+                >
+                  💾 Guardar Configuración SMTP
+                </button>
+              </div>
+            </div>
+
+            <!-- Email Templates -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">📝 Plantillas de Email</h3>
+              
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Confirmación de Cita</label>
+                  <textarea 
+                    id="template-confirmacion"
+                    rows="4"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins text-sm"
+                    placeholder="Hola [nombre], tu cita para [servicio] ha sido confirmada para el [fecha] a las [hora]..."
+                  >Hola [nombre], 
+
+Tu cita para [servicio] ha sido confirmada para el [fecha] a las [hora].
+
+Nos vemos en [direccion].
+
+¡Gracias por elegirnos!
+
+[nombreNegocio]</textarea>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Recordatorio de Cita</label>
+                  <textarea 
+                    id="template-recordatorio"
+                    rows="4"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins text-sm"
+                  >Hola [nombre],
+
+Te recordamos que tienes una cita programada para [servicio] mañana [fecha] a las [hora].
+
+Si necesitas reprogramar o cancelar, por favor contáctanos.
+
+¡Te esperamos!
+
+[nombreNegocio]</textarea>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Agradecimiento Post-Cita</label>
+                  <textarea 
+                    id="template-agradecimiento"
+                    rows="4"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins text-sm"
+                  >Hola [nombre],
+
+Esperamos que hayas disfrutado tu experiencia con nosotros.
+
+Si te gustó nuestro servicio, nos encantaría conocer tu opinión. Puedes dejar una reseña en [sitioWeb].
+
+¡Esperamos verte pronto!
+
+[nombreNegocio]</textarea>
+                </div>
+              </div>
+              
+              <button 
+                onclick="guardarPlantillasEmail()"
+                class="mt-6 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-poppins font-semibold"
+              >
+                💾 Guardar Plantillas
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seguridad Tab -->
+        <div id="content-seguridad" class="tab-content hidden">
+          <div class="space-y-8">
+            <!-- Password Policy -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">🔒 Políticas de Seguridad</h3>
+              
+              <div class="space-y-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Longitud Mínima de Contraseña</label>
+                  <select 
+                    id="config-min-password"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="6" selected>6 caracteres</option>
+                    <option value="8">8 caracteres</option>
+                    <option value="10">10 caracteres</option>
+                    <option value="12">12 caracteres</option>
+                  </select>
+                </div>
+                
+                <div class="flex items-center">
+                  <input 
+                    type="checkbox" 
+                    id="require-uppercase"
+                    class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                  >
+                  <label class="ml-2 text-sm text-gray-700 font-poppins">Requerir mayúsculas</label>
+                </div>
+                
+                <div class="flex items-center">
+                  <input 
+                    type="checkbox" 
+                    id="require-numbers"
+                    checked
+                    class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                  >
+                  <label class="ml-2 text-sm text-gray-700 font-poppins">Requerir números</label>
+                </div>
+                
+                <div class="flex items-center">
+                  <input 
+                    type="checkbox" 
+                    id="require-symbols"
+                    class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                  >
+                  <label class="ml-2 text-sm text-gray-700 font-poppins">Requerir símbolos especiales</label>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Tiempo de Sesión (minutos)</label>
+                  <select 
+                    id="config-session-timeout"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="30">30 minutos</option>
+                    <option value="60" selected>60 minutos</option>
+                    <option value="120">120 minutos</option>
+                    <option value="480">8 horas</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Access Logs -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">📊 Registro de Accesos</h3>
+              
+              <div id="access-logs" class="space-y-3 max-h-96 overflow-y-auto">
+                <!-- Se llenará dinámicamente -->
+                <div class="bg-white p-3 rounded-lg border text-sm">
+                  <div class="flex justify-between items-center">
+                    <span class="font-medium">admin@glambook.com</span>
+                    <span class="text-gray-500">Hoy 14:30</span>
+                  </div>
+                  <div class="text-gray-600">Acceso exitoso desde IP: 192.168.1.100</div>
+                </div>
+                
+                <div class="bg-white p-3 rounded-lg border text-sm">
+                  <div class="flex justify-between items-center">
+                    <span class="font-medium">usuario@email.com</span>
+                    <span class="text-gray-500">Ayer 09:15</span>
+                  </div>
+                  <div class="text-gray-600">Acceso exitoso desde IP: 192.168.1.101</div>
+                </div>
+              </div>
+              
+              <button 
+                onclick="exportarLogsAcceso()"
+                class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-poppins"
+              >
+                📊 Exportar Logs
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backup Tab -->
+        <div id="content-backup" class="tab-content hidden">
+          <div class="space-y-8">
+            <!-- Backup Configuration -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">💾 Configuración de Backups</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Frecuencia de Backup Automático</label>
+                  <select 
+                    id="backup-frecuencia"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="disabled">Desactivado</option>
+                    <option value="daily" selected>Diario</option>
+                    <option value="weekly">Semanal</option>
+                    <option value="monthly">Mensual</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Hora de Backup</label>
+                  <input 
+                    type="time" 
+                    id="backup-hora"
+                    value="02:00"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Retener Backups por (días)</label>
+                  <select 
+                    id="backup-retencion"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                    <option value="7">7 días</option>
+                    <option value="30" selected>30 días</option>
+                    <option value="90">90 días</option>
+                    <option value="365">1 año</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 font-poppins mb-2">Email para Notificaciones</label>
+                  <input 
+                    type="email" 
+                    id="backup-email"
+                    value="admin@glambook.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Manual Backup -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">📦 Backup Manual</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button 
+                  onclick="crearBackupCompleto()"
+                  class="p-6 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-center"
+                >
+                  <div class="text-3xl mb-2">💾</div>
+                  <div class="font-semibold font-poppins">Backup Completo</div>
+                  <div class="text-sm opacity-90">Todos los datos</div>
+                </button>
+                
+                <button 
+                  onclick="crearBackupCitas()"
+                  class="p-6 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-center"
+                >
+                  <div class="text-3xl mb-2">📅</div>
+                  <div class="font-semibold font-poppins">Solo Citas</div>
+                  <div class="text-sm opacity-90">Base de citas</div>
+                </button>
+                
+                <button 
+                  onclick="crearBackupUsuarios()"
+                  class="p-6 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors text-center"
+                >
+                  <div class="text-3xl mb-2">👥</div>
+                  <div class="font-semibold font-poppins">Solo Usuarios</div>
+                  <div class="text-sm opacity-90">Base de usuarios</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Backup History -->
+            <div class="bg-gray-50 rounded-xl p-6">
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">📋 Historial de Backups</h3>
+              
+              <div id="backup-history" class="space-y-3">
+                <!-- Se llenará dinámicamente -->
+                <div class="bg-white p-4 rounded-lg border flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-800">backup-completo-2024-10-21.zip</div>
+                    <div class="text-sm text-gray-600">Backup completo - 2.4 MB</div>
+                    <div class="text-xs text-gray-500">21 Octubre 2024, 02:00</div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+                      ⬇️ Descargar
+                    </button>
+                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                      🗑️ Eliminar
+                    </button>
+                  </div>
+                </div>
+                
+                <div class="bg-white p-4 rounded-lg border flex justify-between items-center">
+                  <div>
+                    <div class="font-medium text-gray-800">backup-completo-2024-10-20.zip</div>
+                    <div class="text-sm text-gray-600">Backup completo - 2.3 MB</div>
+                    <div class="text-xs text-gray-500">20 Octubre 2024, 02:00</div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+                      ⬇️ Descargar
+                    </button>
+                    <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                      🗑️ Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script>
+// Variables globales
+let tabActual = 'general';
+let configuracion: any = {
+  general: {},
+  notificaciones: {},
+  email: {},
+  seguridad: {},
+  backup: {},
+  plantillasEmail: {}
+};
+let servicios = [
+  { id: 1, nombre: 'Uñas Naturales', precio: 25000, duracion: 60, activo: true },
+  { id: 2, nombre: 'Uñas Acrílicas', precio: 35000, duracion: 90, activo: true },
+  { id: 3, nombre: 'Maquillaje', precio: 40000, duracion: 45, activo: true },
+  { id: 4, nombre: 'Peinados', precio: 30000, duracion: 60, activo: true },
+  { id: 5, nombre: 'Cejas', precio: 15000, duracion: 30, activo: true },
+  { id: 6, nombre: 'Pestañas', precio: 20000, duracion: 45, activo: true }
+];
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+  initializeConfiguracion();
+});
+
+async function initializeConfiguracion() {
+  try {
+    await cargarConfiguracion();
+    renderizarContenido();
+  } catch (error) {
+    console.error('Error inicializando configuración:', error);
+    mostrarError('Error al cargar la configuración');
+  }
+}
+
+async function cargarConfiguracion() {
+  try {
+    // Simular carga de configuración desde API o localStorage
+    const configGuardada = localStorage.getItem('glambook_config');
+    if (configGuardada) {
+      configuracion = JSON.parse(configGuardada);
+    }
+    
+    console.log('✅ Configuración cargada');
+  } catch (error) {
+    console.error('Error cargando configuración:', error);
+  }
+}
+
+// Tab Management
+function cambiarTab(tab: string) {
+  tabActual = tab;
+  
+  // Actualizar botones
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('border-pink-500', 'text-pink-600');
+    btn.classList.add('border-transparent', 'text-gray-500');
+  });
+  
+  const tabElement = document.getElementById(`tab-${tab}`);
+  if (tabElement) {
+    tabElement.classList.remove('border-transparent', 'text-gray-500');
+    tabElement.classList.add('border-pink-500', 'text-pink-600');
+  }
+  
+  // Mostrar contenido
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.add('hidden');
+  });
+  
+  const contentElement = document.getElementById(`content-${tab}`);
+  if (contentElement) {
+    contentElement.classList.remove('hidden');
+  }
+  
+  // Renderizar contenido específico
+  renderizarContenido();
+}
+
+function renderizarContenido() {
+  switch (tabActual) {
+    case 'general':
+      renderizarServicios();
+      break;
+    case 'backup':
+      // renderizarHistorialBackups();
+      break;
+  }
+}
+
+// Servicios Management
+function renderizarServicios() {
+  const container = document.getElementById('servicios-config');
+  if (!container) return;
+  
+  container.innerHTML = servicios.map(servicio => `
+    <div class="bg-white rounded-lg border p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <input 
+            type="checkbox" 
+            ${servicio.activo ? 'checked' : ''}
+            onchange="toggleServicio(${servicio.id})"
+            class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+          >
+          <input 
+            type="text" 
+            value="${servicio.nombre}"
+            onchange="actualizarServicio(${servicio.id}, 'nombre', this.value)"
+            class="font-medium text-gray-800 bg-transparent border-none focus:ring-2 focus:ring-pink-500 rounded px-2 font-poppins"
+          >
+        </div>
+        <button 
+          onclick="eliminarServicio(${servicio.id})"
+          class="text-red-500 hover:text-red-700 transition-colors"
+        >
+          🗑️
+        </button>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Precio (COP)</label>
+          <input 
+            type="number" 
+            value="${servicio.precio}"
+            onchange="actualizarServicio(${servicio.id}, 'precio', parseInt(this.value))"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm font-poppins"
+          >
+        </div>
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Duración (min)</label>
+          <input 
+            type="number" 
+            value="${servicio.duracion}"
+            onchange="actualizarServicio(${servicio.id}, 'duracion', parseInt(this.value))"
+            class="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm font-poppins"
+          >
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleServicio(id: number) {
+  const servicio = servicios.find(s => s.id === id);
+  if (servicio) {
+    servicio.activo = !servicio.activo;
+    guardarServicios();
+  }
+}
+
+function actualizarServicio(id: number, campo: string, valor: any) {
+  const servicio = servicios.find(s => s.id === id);
+  if (servicio) {
+    (servicio as any)[campo] = valor;
+    guardarServicios();
+  }
+}
+
+function eliminarServicio(id: number) {
+  if (confirm('¿Estás seguro de eliminar este servicio?')) {
+    servicios = servicios.filter(s => s.id !== id);
+    renderizarServicios();
+    guardarServicios();
+  }
+}
+
+function agregarServicio() {
+  const nuevoId = Math.max(...servicios.map(s => s.id)) + 1;
+  servicios.push({
+    id: nuevoId,
+    nombre: 'Nuevo Servicio',
+    precio: 25000,
+    duracion: 60,
+    activo: true
+  });
+  renderizarServicios();
+  guardarServicios();
+}
+
+function guardarServicios() {
+  // Aquí se guardarían en una API o localStorage
+  localStorage.setItem('glambook_servicios', JSON.stringify(servicios));
+  mostrarNotificacion('✅ Servicios actualizados', 'success');
+}
+
+// Configuración Functions
+async function guardarConfigGeneral() {
+  const configGeneral = {
+    nombreNegocio: (document.getElementById('config-nombre-negocio') as HTMLInputElement)?.value || '',
+    telefono: (document.getElementById('config-telefono') as HTMLInputElement)?.value || '',
+    emailContacto: (document.getElementById('config-email-contacto') as HTMLInputElement)?.value || '',
+    sitioWeb: (document.getElementById('config-sitio-web') as HTMLInputElement)?.value || '',
+    direccion: (document.getElementById('config-direccion') as HTMLInputElement)?.value || '',
+    descripcion: (document.getElementById('config-descripcion') as HTMLTextAreaElement)?.value || '',
+    duracionCita: (document.getElementById('config-duracion-cita') as HTMLSelectElement)?.value || '',
+    tiempoPreparacion: (document.getElementById('config-tiempo-preparacion') as HTMLSelectElement)?.value || '',
+    diasAnticipacion: (document.getElementById('config-dias-anticipacion') as HTMLSelectElement)?.value || '',
+    maxDiasFuturo: (document.getElementById('config-max-dias-futuro') as HTMLSelectElement)?.value || ''
+  };
+  
+  configuracion.general = configGeneral;
+  
+  try {
+    // Simular guardado en API
+    localStorage.setItem('glambook_config', JSON.stringify(configuracion));
+    mostrarNotificacion('✅ Configuración general guardada exitosamente', 'success');
+  } catch (error) {
+    mostrarNotificacion('❌ Error al guardar configuración', 'error');
+  }
+}
+
+async function guardarConfiguracionSMTP() {
+  const configSMTP = {
+    servidor: (document.getElementById('smtp-servidor') as HTMLInputElement)?.value || '',
+    puerto: (document.getElementById('smtp-puerto') as HTMLInputElement)?.value || '',
+    usuario: (document.getElementById('smtp-usuario') as HTMLInputElement)?.value || '',
+    password: (document.getElementById('smtp-password') as HTMLInputElement)?.value || '',
+    encriptacion: (document.getElementById('smtp-encriptacion') as HTMLSelectElement)?.value || '',
+    nombre: (document.getElementById('smtp-nombre') as HTMLInputElement)?.value || ''
+  };
+  
+  configuracion.email = configSMTP;
+  
+  try {
+    localStorage.setItem('glambook_config', JSON.stringify(configuracion));
+    mostrarNotificacion('✅ Configuración SMTP guardada exitosamente', 'success');
+  } catch (error) {
+    mostrarNotificacion('❌ Error al guardar configuración SMTP', 'error');
+  }
+}
+
+async function probarConfiguracionEmail() {
+  mostrarNotificacion('📧 Enviando email de prueba...', 'info');
+  
+  // Simular envío de email de prueba
+  setTimeout(() => {
+    mostrarNotificacion('✅ Email de prueba enviado exitosamente', 'success');
+  }, 2000);
+}
+
+async function guardarPlantillasEmail() {
+  const plantillas = {
+    confirmacion: (document.getElementById('template-confirmacion') as HTMLTextAreaElement)?.value || '',
+    recordatorio: (document.getElementById('template-recordatorio') as HTMLTextAreaElement)?.value || '',
+    agradecimiento: (document.getElementById('template-agradecimiento') as HTMLTextAreaElement)?.value || ''
+  };
+  
+  configuracion.plantillasEmail = plantillas;
+  
+  try {
+    localStorage.setItem('glambook_config', JSON.stringify(configuracion));
+    mostrarNotificacion('✅ Plantillas de email guardadas exitosamente', 'success');
+  } catch (error) {
+    mostrarNotificacion('❌ Error al guardar plantillas', 'error');
+  }
+}
+
+async function guardarTodaConfiguracion() {
+  try {
+    await Promise.all([
+      guardarConfigGeneral(),
+      guardarConfiguracionSMTP(),
+      guardarPlantillasEmail()
+    ]);
+    
+    mostrarNotificacion('✅ Toda la configuración ha sido guardada exitosamente', 'success');
+  } catch (error) {
+    mostrarNotificacion('❌ Error al guardar la configuración completa', 'error');
+  }
+}
+
+// Backup Functions
+async function crearBackupCompleto() {
+  mostrarNotificacion('💾 Creando backup completo...', 'info');
+  
+  // Simular creación de backup
+  setTimeout(() => {
+    const fecha = new Date().toISOString().split('T')[0];
+    mostrarNotificacion(`✅ Backup completo creado: backup-completo-${fecha}.zip`, 'success');
+  }, 3000);
+}
+
+async function crearBackupCitas() {
+  mostrarNotificacion('📅 Creando backup de citas...', 'info');
+  
+  setTimeout(() => {
+    const fecha = new Date().toISOString().split('T')[0];
+    mostrarNotificacion(`✅ Backup de citas creado: backup-citas-${fecha}.zip`, 'success');
+  }, 2000);
+}
+
+async function crearBackupUsuarios() {
+  mostrarNotificacion('👥 Creando backup de usuarios...', 'info');
+  
+  setTimeout(() => {
+    const fecha = new Date().toISOString().split('T')[0];
+    mostrarNotificacion(`✅ Backup de usuarios creado: backup-usuarios-${fecha}.zip`, 'success');
+  }, 2000);
+}
+
+function exportarLogsAcceso() {
+  // Simular exportación de logs
+  mostrarNotificacion('📊 Exportando logs de acceso...', 'info');
+  
+  setTimeout(() => {
+    mostrarNotificacion('✅ Logs exportados exitosamente', 'success');
+  }, 1500);
+}
+
+// Utility Functions
+function mostrarNotificacion(mensaje: string, tipo: 'success' | 'error' | 'warning' | 'info' = 'info') {
+  const notificacion = document.createElement('div');
+  notificacion.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg font-poppins max-w-sm transform transition-all duration-300 translate-x-full`;
+  
+  const colores = {
+    'success': 'bg-green-500 text-white',
+    'error': 'bg-red-500 text-white',
+    'warning': 'bg-yellow-500 text-white',
+    'info': 'bg-blue-500 text-white'
+  };
+  
+  notificacion.classList.add(...colores[tipo].split(' '));
+  notificacion.textContent = mensaje;
+  
+  document.body.appendChild(notificacion);
+  
+  setTimeout(() => notificacion.classList.remove('translate-x-full'), 100);
+  setTimeout(() => {
+    notificacion.classList.add('translate-x-full');
+    setTimeout(() => document.body.removeChild(notificacion), 300);
+  }, 3000);
+}
+
+function mostrarError(mensaje: string) {
+  console.error('Error:', mensaje);
+  mostrarNotificacion(mensaje, 'error');
+}
+
+// Hacer funciones disponibles globalmente
+(window as any).cambiarTab = cambiarTab;
+(window as any).toggleServicio = toggleServicio;
+(window as any).actualizarServicio = actualizarServicio;
+(window as any).eliminarServicio = eliminarServicio;
+(window as any).agregarServicio = agregarServicio;
+(window as any).guardarConfigGeneral = guardarConfigGeneral;
+(window as any).guardarConfiguracionSMTP = guardarConfiguracionSMTP;
+(window as any).probarConfiguracionEmail = probarConfiguracionEmail;
+(window as any).guardarPlantillasEmail = guardarPlantillasEmail;
+(window as any).guardarTodaConfiguracion = guardarTodaConfiguracion;
+(window as any).crearBackupCompleto = crearBackupCompleto;
+(window as any).crearBackupCitas = crearBackupCitas;
+(window as any).crearBackupUsuarios = crearBackupUsuarios;
+(window as any).exportarLogsAcceso = exportarLogsAcceso;
+</script>
+
+<style>
+  .tab-btn {
+    transition: all 0.3s ease;
+  }
+  
+  .tab-btn:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #ec4899;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #be185d;
+  }
+  
+  /* Animation for cards */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

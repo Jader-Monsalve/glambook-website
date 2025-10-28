@@ -1,0 +1,69 @@
+// Firebase Security Rules for Firestore
+// These rules should be applied in Firebase Console under Firestore Database > Rules
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Usuarios collection - permite lectura y escritura con autenticación
+    match /usuarios/{userId} {
+      // Permitir lectura si el usuario está autenticado
+      allow read: if request.auth != null;
+      
+      // Permitir escritura si:
+      // - Es el propio usuario modificando su perfil, O
+      // - Es un admin creando/actualizando usuarios
+      allow write: if request.auth != null && 
+        (request.auth.uid == userId || 
+         isAdmin(request.auth.uid));
+    }
+    
+    // Citas collection - acceso controlado
+    match /citas/{citaId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Testimonios collection - acceso controlado  
+    match /testimonios/{testimonioId} {
+      allow read, write: if request.auth != null;
+    }
+    
+    // Configuración del sistema - solo admins
+    match /configuracion/{configId} {
+      allow read, write: if request.auth != null && isAdmin(request.auth.uid);
+    }
+    
+    // Función helper para verificar si es admin
+    function isAdmin(userId) {
+      return exists(/databases/$(database)/documents/usuarios/$(userId)) &&
+             get(/databases/$(database)/documents/usuarios/$(userId)).data.rol == 'admin';
+    }
+  }
+}
+
+// Reglas más permisivas para desarrollo (temporal)
+// IMPORTANTE: Cambiar en producción por reglas más estrictas
+
+// Opción 1: Completamente abierto para desarrollo
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      // TEMPORAL: Permitir todo para desarrollo
+      allow read, write: if true;
+    }
+  }
+}
+
+// Opción 2: Permitir usuarios autenticados (incluye anónimos)
+/*
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      // Permitir cualquier usuario autenticado (incluye anónimos)
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+*/

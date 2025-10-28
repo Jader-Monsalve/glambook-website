@@ -2,25 +2,25 @@
 // Removido import problemático
 ---
 
-<section class="bg-gradient-to-br from-pink-400 via-pink-300 to-rose-300 min-h-screen flex items-center relative overflow-hidden">
+<section class="bg-gradient-to-br from-pink-400 via-pink-300 to-rose-300 min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center relative overflow-hidden">
   <!-- Elementos de fondo animados - Responsive -->
-  <div class="absolute inset-0 opacity-20">
-    <div class="absolute top-5 left-5 sm:top-10 sm:left-10 w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-white rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-10 right-10 sm:bottom-20 sm:right-20 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 bg-pink-200 rounded-full blur-xl sm:blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
-    <div class="absolute top-1/2 left-1/4 w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-rose-200 rounded-full blur-lg sm:blur-xl animate-pulse" style="animation-delay: 4s;"></div>
+  <div class="absolute inset-0 opacity-20 pointer-events-none">
+    <div class="absolute top-2 left-2 xs:top-4 xs:left-4 sm:top-10 sm:left-10 w-10 h-10 xs:w-16 xs:h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-white rounded-full blur-2xl sm:blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-4 right-4 xs:bottom-8 xs:right-8 sm:bottom-20 sm:right-20 w-16 h-16 xs:w-24 xs:h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 bg-pink-200 rounded-full blur-xl sm:blur-2xl animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute top-1/2 left-1/4 w-8 h-8 xs:w-12 xs:h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-rose-200 rounded-full blur-lg sm:blur-xl animate-pulse" style="animation-delay: 4s;"></div>
   </div>
 
-  <div class="container mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="flex flex-col lg:flex-row items-center min-h-screen py-4 xs:py-6 sm:py-8 lg:py-0 gap-4 lg:gap-8">
+  <div class="container mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 relative z-10 flex flex-col justify-center h-full">
+    <div class="flex flex-col items-center justify-center min-h-[60vh] sm:min-h-[70vh] py-8 xs:py-10 sm:py-12 gap-6 md:gap-8 lg:gap-12 w-full max-w-md mx-auto">
       
       <!-- Contenido de texto mejorado - Responsive -->
-      <div class="w-full lg:w-1/2 text-center lg:text-left py-4 xs:py-6 sm:py-8 lg:py-0 flex flex-col justify-center relative z-20 order-2 lg:order-1 px-2 sm:px-4 lg:px-0">
+  <div class="w-full text-center flex flex-col justify-center items-center relative z-20 px-1 xs:px-2 sm:px-4">
         <!-- Badge llamativo - Responsive -->
-        <div class="inline-flex items-center bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-3 xs:px-4 py-1.5 xs:py-2 mb-4 xs:mb-6 w-fit mx-auto lg:mx-0 hover:bg-white/30 transition-all duration-300 cursor-pointer">
+  <div class="inline-flex items-center bg-white/20 backdrop-blur-sm border border-white/30 rounded-full px-4 py-2 mb-4 w-fit mx-auto hover:bg-white/30 transition-all duration-300 cursor-pointer">
           <span class="text-white text-xs xs:text-sm font-medium">✨ Salón de Belleza Premium</span>
         </div>
 
-        <h1 class="font-poppins text-white text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight mb-4 xs:mb-6 relative">
+  <h1 class="font-poppins text-white text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4 xs:mb-6 relative">
           <span class="block bg-gradient-to-r from-white to-pink-100 bg-clip-text text-transparent hover:from-pink-100 hover:to-white transition-all duration-500 cursor-default">
             Reserva tu cita,
           </span>
@@ -32,64 +32,21 @@
           </span>
         </h1>
 
-        <p class="text-white/90 text-sm xs:text-base sm:text-lg font-light mb-6 xs:mb-8 max-w-full lg:max-w-lg leading-relaxed hover:text-white transition-colors duration-300 mx-auto lg:mx-0">
+  <p class="text-white/90 text-base xs:text-lg sm:text-xl font-light mb-6 xs:mb-8 max-w-full sm:max-w-md leading-relaxed hover:text-white transition-colors duration-300 mx-auto">
           Transforma tu belleza con nuestros servicios profesionales de 
           <span class="font-semibold text-pink-100 hover:text-white cursor-pointer transition-colors duration-300">maquillaje</span> y 
           <span class="font-semibold text-pink-100 hover:text-white cursor-pointer transition-colors duration-300">nail art</span>. 
           Experiencia de lujo que realza tu confianza.
         </p>
         
-        <div class="flex flex-col xs:flex-row gap-3 xs:gap-4 w-full max-w-md xs:max-w-none mx-auto lg:mx-0">
-          <a href="/contact" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-3 xs:py-4 px-6 xs:px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 xs:hover:-translate-y-2 hover:scale-105 w-full xs:w-auto text-center">
-            <span class="relative z-10 text-sm xs:text-base">Agendar ahora</span>
+        <div class="flex flex-col gap-4 w-full max-w-xs mx-auto mt-2">
+          <a href="/contact" class="group relative inline-flex items-center justify-center bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-3 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105 w-full text-center min-w-[140px]">
+            <span class="relative z-10 text-base">Agendar ahora</span>
             <div class="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div class="ml-2 text-lg xs:text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
-          </a>
-          
-          <a href="#galeria" class="group inline-flex items-center justify-center bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 hover:border-white/50 text-white font-medium py-3 xs:py-4 px-6 xs:px-8 rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 w-full xs:w-auto text-center">
-            <span class="text-sm xs:text-base">Ver galería</span>
-            <div class="ml-2 text-base xs:text-lg group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300">👀</div>
+            <div class="ml-2 text-xl group-hover:animate-bounce group-hover:scale-125 transition-transform duration-300">💄</div>
           </a>
         </div>
       </div>
-      
-      <!-- Área interactiva con elementos animados - Responsive -->
-      <div class="w-full lg:w-1/2 flex items-center justify-center lg:justify-end relative mb-6 xs:mb-8 lg:mb-0 order-1 lg:order-2 px-2 sm:px-4 lg:px-0">
-        <div class="relative w-full max-w-xs xs:max-w-sm sm:max-w-md lg:max-w-lg h-auto min-h-[280px] xs:min-h-[320px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px] flex items-center justify-center group">
-          
-          <!-- Contenedor principal interactivo - Responsive -->
-          <div class="relative bg-gradient-to-br from-white/10 to-pink-200/20 backdrop-blur-lg rounded-2xl xs:rounded-3xl p-4 xs:p-6 sm:p-8 lg:p-12 border border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 group-hover:from-white/20 group-hover:to-pink-200/30 w-full">
-            
-            <!-- Contenido central interactivo - Responsive -->
-            <div class="text-center text-white">
-              <!-- Iconos principales con hover - Responsive -->
-              <div class="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl mb-3 xs:mb-4 sm:mb-6 drop-shadow-lg hover:scale-110 transition-transform duration-300 cursor-pointer select-none">
-                <span class="inline-block hover:animate-bounce">💄</span>
-                <span class="inline-block hover:animate-spin ml-1 xs:ml-2 sm:ml-4" style="animation-duration: 2s;">✨</span>
-              </div>
-              
-              <!-- Texto elegante con efectos hover - Responsive -->
-              <div class="space-y-1 xs:space-y-2 sm:space-y-3 lg:space-y-4">
-                <div class="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl font-light opacity-90 hover:opacity-100 hover:scale-105 transition-all duration-300 cursor-default animate-float">Belleza</div>
-                <div class="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold bg-gradient-to-r from-white to-pink-100 bg-clip-text text-transparent hover:from-pink-100 hover:to-white transition-all duration-500 cursor-default">Profesional</div>
-                <div class="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-light opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-300 cursor-default animate-float">Cada día</div>
-              </div>
-              
-              <!-- Elementos de servicios interactivos - Responsive -->
-              <div class="mt-3 xs:mt-4 sm:mt-6 lg:mt-8 flex justify-center space-x-2 xs:space-x-3 sm:space-x-4 md:space-x-6 lg:space-x-8 text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-                <span class="hover:scale-125 hover:rotate-12 transition-transform duration-300 cursor-pointer select-none filter hover:drop-shadow-lg">💅</span>
-                <span class="hover:scale-125 hover:-rotate-12 transition-transform duration-300 cursor-pointer select-none filter hover:drop-shadow-lg">💎</span>
-                <span class="hover:scale-125 hover:rotate-12 transition-transform duration-300 cursor-pointer select-none filter hover:drop-shadow-lg">🌸</span>
-              </div>
-              
-              <!-- Botón de acción secundario - Responsive -->
-              <div class="mt-4 xs:mt-6 sm:mt-8">
-                <a href="/about" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/30 hover:border-white/50 text-white px-3 xs:px-4 sm:px-6 py-2 xs:py-2 sm:py-3 rounded-lg xs:rounded-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 font-medium text-xs xs:text-sm sm:text-base inline-block">
-                  Explorar servicios ✨
-                </a>
-              </div>
-            </div>
-            
             <!-- Efectos de partículas flotantes - Responsive -->
             <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl xs:rounded-3xl">
               <div class="absolute top-2 xs:top-4 right-2 xs:right-4 w-1.5 xs:w-2 h-1.5 xs:h-2 bg-white rounded-full animate-ping"></div>

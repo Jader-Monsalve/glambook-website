@@ -1,250 +1,206 @@
 import type { APIRoute } from 'astro';
+// @ts-ignore
+import UsuariosService from '../../services/usuariosService.js';
 
-// Simulación de base de datos de usuarios
-const usuariosData = [
-  {
-    id: '1',
-    email: 'admin@glambook.com',
-    nombre: 'Administrador Principal',
-    rol: 'admin',
-    fechaRegistro: '2024-01-15T10:00:00Z',
-    ultimoAcceso: '2024-01-20T14:30:00Z',
-    activo: true,
-    verificado: true
+export const prerender = false;
+
+interface Usuario {
+  id: string;
+  email: string;
+  nombre: string;
+  telefono: string;
+  rol: keyof typeof rolesConfig;
+  fechaRegistro: string;
+  ultimoAcceso: string | null;
+  activo: boolean;
+  verificado: boolean;
+  avatar: string;
+  citas: number;
+  testimonios: number;
+  permisos: string[];
+  notas?: string;
+  fechaCreacion?: string;
+}
+
+const rolesConfig = {
+  admin: {
+    nombre: 'Administrador',
+    color: 'red-500',
+    badge: 'bg-red-100 text-red-800',
+    permisos: ['gestionar_citas', 'gestionar_testimonios', 'gestionar_usuarios', 'configurar_sistema', 'ver_estadisticas']
   },
-  {
-    id: '2',
-    email: 'maria.garcia@gmail.com',
-    nombre: 'María García',
-    rol: 'cliente',
-    fechaRegistro: '2024-01-18T09:15:00Z',
-    ultimoAcceso: '2024-01-19T16:45:00Z',
-    activo: true,
-    verificado: true
+  manager: {
+    nombre: 'Manager',
+    color: 'purple-500',
+    badge: 'bg-purple-100 text-purple-800',
+    permisos: ['gestionar_citas', 'ver_estadisticas']
   },
-  {
-    id: '3',
-    email: 'carlos.rodriguez@outlook.com',
-    nombre: 'Carlos Rodríguez',
-    rol: 'cliente',
-    fechaRegistro: '2024-01-20T11:30:00Z',
-    ultimoAcceso: '2024-01-20T18:20:00Z',
-    activo: true,
-    verificado: false
-  },
-  {
-    id: '4',
-    email: 'ana.martinez@yahoo.com',
-    nombre: 'Ana Martínez',
-    rol: 'cliente',
-    fechaRegistro: '2024-01-22T14:45:00Z',
-    ultimoAcceso: '2024-01-22T19:10:00Z',
-    activo: true,
-    verificado: true
-  },
-  {
-    id: '5',
-    email: 'moderador@glambook.com',
-    nombre: 'Moderador del Sistema',
-    rol: 'admin',
-    fechaRegistro: '2024-01-16T08:00:00Z',
-    ultimoAcceso: '2024-01-21T12:15:00Z',
-    activo: true,
-    verificado: true
-  },
-  {
-    id: '6',
-    email: 'lucia.fernandez@gmail.com',
-    nombre: 'Lucía Fernández',
-    rol: 'cliente',
-    fechaRegistro: '2024-01-21T16:20:00Z',
-    ultimoAcceso: null,
-    activo: false,
-    verificado: false
+  cliente: {
+    nombre: 'Cliente',
+    color: 'blue-500',
+    badge: 'bg-blue-100 text-blue-800',
+    permisos: ['reservar_citas', 'enviar_testimonios']
   }
-];
+};
+
+const corsHeaders = {
+  'Content-Type': 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
 export const GET: APIRoute = async ({ request }) => {
-  console.log('GET /api/usuarios - Solicitud recibida');
+  console.log('📥 GET /api/usuarios - Solicitud recibida');
   
   try {
     const url = new URL(request.url);
-    const action = url.searchParams.get('action');
+    const action = url.searchParams.get('action') || 'listar';
     
-    if (action === 'stats') {
-      const total = usuariosData.length;
-      const admins = usuariosData.filter(u => u.rol === 'admin').length;
-      const clientes = usuariosData.filter(u => u.rol === 'cliente').length;
-      const activos = usuariosData.filter(u => u.activo).length;
-      const verificados = usuariosData.filter(u => u.verificado).length;
-      
-      const stats = {
-        total,
-        admins,
-        clientes,
-        activos,
-        verificados,
-        inactivos: total - activos,
-        noVerificados: total - verificados
-      };
-      
-      console.log('Estadísticas de usuarios:', stats);
-      return new Response(JSON.stringify(stats), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
+    switch (action) {
+      case 'stats':
+        console.log('📊 Obteniendo estadísticas desde Firebase...');
+        const stats = await UsuariosService.obtenerEstadisticas();
+        
+        console.log('📊 Estadísticas de usuarios:', stats);
+        return new Response(JSON.stringify({
+          success: true,
+          data: { estadisticas: stats },
+          message: 'Estadísticas obtenidas correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+        
+      case 'listar':
+      default:
+        console.log('📋 Obteniendo usuarios desde Firebase...');
+        const usuarios = await UsuariosService.obtenerUsuarios();
+        
+        console.log(`📋 Enviando ${usuarios.length} usuarios`);
+        return new Response(JSON.stringify({
+          success: true,
+          data: usuarios,
+          message: 'Usuarios obtenidos correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
     }
     
-    // Retornar todos los usuarios por defecto
-    console.log(`Enviando ${usuariosData.length} usuarios`);
-    return new Response(JSON.stringify(usuariosData), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-    
   } catch (error) {
-    console.error('Error en GET /api/usuarios:', error);
+    console.error('❌ Error en GET /api/usuarios:', error);
     return new Response(JSON.stringify({ 
-      error: 'Error interno del servidor',
-      message: error instanceof Error ? error.message : 'Error desconocido'
+      success: false,
+      message: 'Error interno del servidor',
+      error: error instanceof Error ? error.message : 'Error desconocido'
     }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+      headers: corsHeaders
     });
   }
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  console.log('POST /api/usuarios - Solicitud recibida');
+  console.log('📥 POST /api/usuarios - Solicitud recibida');
   
   try {
     const body = await request.json();
-    console.log('Datos recibidos:', body);
+    console.log('📝 Datos recibidos:', body);
     
     const { action, id, ...userData } = body;
     
     switch (action) {
-      case 'cambiar-rol':
-        const usuarioIndex = usuariosData.findIndex(u => u.id === id);
-        if (usuarioIndex === -1) {
-          return new Response(JSON.stringify({ error: 'Usuario no encontrado' }), {
-            status: 404,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            }
-          });
-        }
-        
-        const nuevoRol = userData.rol;
-        if (!['admin', 'cliente'].includes(nuevoRol)) {
-          return new Response(JSON.stringify({ error: 'Rol inválido' }), {
+      case 'crear':
+        // Crear nuevo usuario
+        if (!userData.nombre || !userData.email || !userData.password) {
+          return new Response(JSON.stringify({
+            success: false,
+            message: 'Faltan campos obligatorios'
+          }), {
             status: 400,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            }
+            headers: corsHeaders
           });
         }
         
-        usuariosData[usuarioIndex].rol = nuevoRol;
-        console.log(`Rol de usuario ${id} cambiado a ${nuevoRol}`);
+        const nuevoUsuario = await UsuariosService.crearUsuario(userData);
         
-        return new Response(JSON.stringify({ 
-          success: true, 
-          message: 'Rol actualizado correctamente',
-          usuario: usuariosData[usuarioIndex]
+        return new Response(JSON.stringify({
+          success: true,
+          data: nuevoUsuario,
+          message: 'Usuario creado exitosamente'
+        }), {
+          status: 201,
+          headers: corsHeaders
+        });
+        
+      case 'actualizar':
+        // Actualizar usuario existente
+        const usuarioActualizado = await UsuariosService.actualizarUsuario(id, userData);
+        
+        return new Response(JSON.stringify({
+          success: true,
+          data: usuarioActualizado,
+          message: 'Usuario actualizado exitosamente'
         }), {
           status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
+          headers: corsHeaders
         });
         
       case 'cambiar-estado':
-        const usuarioEstadoIndex = usuariosData.findIndex(u => u.id === id);
-        if (usuarioEstadoIndex === -1) {
-          return new Response(JSON.stringify({ error: 'Usuario no encontrado' }), {
-            status: 404,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            }
-          });
-        }
+        const usuarioEstadoActualizado = await UsuariosService.cambiarEstado(id, userData.activo);
         
-        usuariosData[usuarioEstadoIndex].activo = userData.activo;
-        console.log(`Estado de usuario ${id} cambiado a ${userData.activo ? 'activo' : 'inactivo'}`);
-        
-        return new Response(JSON.stringify({ 
-          success: true, 
-          message: 'Estado actualizado correctamente',
-          usuario: usuariosData[usuarioEstadoIndex]
+        return new Response(JSON.stringify({
+          success: true,
+          data: usuarioEstadoActualizado,
+          message: 'Estado actualizado correctamente'
         }), {
           status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
+          headers: corsHeaders
         });
         
       case 'eliminar':
-        const usuarioEliminarIndex = usuariosData.findIndex(u => u.id === id);
-        if (usuarioEliminarIndex === -1) {
-          return new Response(JSON.stringify({ error: 'Usuario no encontrado' }), {
-            status: 404,
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            }
-          });
-        }
+        const usuarioEliminado = await UsuariosService.eliminarUsuario(id);
         
-        const usuarioEliminado = usuariosData.splice(usuarioEliminarIndex, 1)[0];
-        console.log(`Usuario ${id} eliminado:`, usuarioEliminado);
-        
-        return new Response(JSON.stringify({ 
-          success: true, 
+        return new Response(JSON.stringify({
+          success: true,
+          data: usuarioEliminado,
           message: 'Usuario eliminado correctamente'
         }), {
           status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
+          headers: corsHeaders
+        });
+        
+      case 'reset-password':
+        await UsuariosService.resetearPassword(userData.email);
+        
+        return new Response(JSON.stringify({
+          success: true,
+          message: 'Email de reset de contraseña enviado'
+        }), {
+          status: 200,
+          headers: corsHeaders
         });
         
       default:
-        return new Response(JSON.stringify({ error: 'Acción no válida' }), {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Acción no válida'
+        }), {
           status: 400,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
+          headers: corsHeaders
         });
     }
     
   } catch (error) {
-    console.error('Error en POST /api/usuarios:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Error interno del servidor',
-      message: error instanceof Error ? error.message : 'Error desconocido'
+    console.error('❌ Error en POST /api/usuarios:', error);
+    return new Response(JSON.stringify({
+      success: false,
+      message: error instanceof Error ? error.message : 'Error interno del servidor',
+      error: error instanceof Error ? error.message : 'Error desconocido'
     }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+      headers: corsHeaders
     });
   }
 };

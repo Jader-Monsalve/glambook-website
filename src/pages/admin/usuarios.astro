@@ -1,0 +1,1176 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import AdminUsersManager from '../../components/AdminUsersManager.astro';
+export const prerender = false;
+const title = "Gestión de Usuarios - Admin GlamBook";
+---
+
+<AdminLayout title={title}>
+  <AdminUsersManager />
+</AdminLayout>
+          <div class="flex gap-4 pt-4">
+            <button 
+              type="button"
+              id="btn-cerrar-editar-usuario"
+              class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-poppins"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="submit"
+              class="flex-1 px-6 py-3 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins font-semibold"
+            >
+              💾 Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+// ...existing HTML...
+ </AdminLayout>
+
+<script>
+// Variables globales
+let usuariosData: any[] = [];
+let usuariosFiltrados: any[] = [];
+let usuariosSeleccionados: string[] = [];
+let filtroActual = 'todos';
+let rolFiltro = '';
+let busquedaActual = '';
+let paginaActual = 1;
+let itemsPorPagina = 24;
+let usuarioEditando: any = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  initializeFirebaseAndUsers();
+});
+
+async function initializeFirebaseAndUsers() {
+  try {
+    console.log('🔥 Inicializando Firebase y usuarios...');
+    
+    // Importar servicios necesarios
+    const { default: UsuariosService, inicializarDatosEjemplo } = await import('../../services/usuariosService.js');
+    const { default: FirebaseDiagnostic } = await import('../../utils/firebaseDiagnostic.js');
+    const { default: FirebaseDevBypass } = await import('../../utils/firebaseDevBypass.js');
+    
+    // IMPORTANTE: Asegurar autenticación antes de cualquier operación
+    console.log('🔐 Iniciando autenticación automática...');
+    try {
+      await FirebaseDevBypass.ensureAuthenticated();
+      console.log('✅ Autenticación completada');
+    } catch (authError) {
+      console.error('❌ Error de autenticación:', authError);
+      // Continuar con el flujo normal para mostrar el diagnóstico
+    }
+    
+    // Ejecutar diagnóstico de Firebase
+    console.log('🔍 Ejecutando diagnóstico de Firebase...');
+    const diagnostic = await FirebaseDiagnostic.runDiagnostic();
+    
+    // Verificar si hay errores críticos
+    // @ts-ignore - Filtro de diagnóstico interno
+    const criticalErrors = (diagnostic.tests || []).filter((test) => {
+      return test?.status === 'error' && 
+        test?.name && 
+        ['Firebase Initialization', 'Firestore Connection'].includes(test.name);
+    });
+    
+    if (criticalErrors.length > 0) {
+      console.error('❌ Errores críticos detectados en Firebase:', criticalErrors);
+      
+      // Mostrar modal de diagnóstico
+      mostrarModalDiagnostico(diagnostic);
+      
+      // Intentar cargar datos de fallback
+      await initializeUsuariosFallback();
+      return;
+    }
+    
+    // Si no hay errores críticos, proceder normalmente
+    try {
+      // Inicializar admin principal con retry
+      await UsuariosService.inicializarAdminPrincipal();
+      
+      // Inicializar datos de ejemplo si no existen
+      await inicializarDatosEjemplo();
+      
+      // Cargar usuarios
+      await initializeUsuarios();
+      
+      console.log('✅ Firebase y usuarios inicializados correctamente');
+    } catch (serviceError) {
+      console.warn('⚠️ Error en servicios, usando fallback:', serviceError);
+      await initializeUsuariosFallback();
+    }
+    
+  } catch (error) {
+    console.error('❌ Error crítico inicializando Firebase:', error);
+    await initializeUsuariosFallback();
+  }
+}
+
+// Función de fallback cuando Firebase no está disponible
+async function initializeUsuariosFallback() {
+  try {
+    console.log('🔄 Inicializando con datos de fallback...');
+    
+    const { default: UsuariosService } = await import('../../services/usuariosService.js');
+    
+    // Usar datos de fallback
+    usuariosData = UsuariosService.obtenerUsuariosFallback();
+    
+    renderUsuarios();
+    actualizarEstadisticas();
+    
+    // Mostrar advertencia
+    mostrarError('⚠️ Modo offline - usando datos locales. Verifique su conexión.');
+    
+  } catch (error) {
+    console.error('❌ Error en fallback:', error);
+    mostrarError('Error crítico - no se pueden cargar los datos');
+  }
+}
+
+async function initializeUsuarios() {
+  try {
+    await cargarUsuarios();
+    renderUsuarios();
+    actualizarEstadisticas();
+  } catch (error) {
+    console.error('Error inicializando usuarios:', error);
+    mostrarError('Error al cargar los datos de usuarios');
+  }
+}
+
+// Cargar usuarios desde la API
+async function cargarUsuarios() {
+  try {
+    const response = await fetch('/api/usuarios?action=listar');
+    const result = await response.json();
+    
+    if (result.success) {
+      usuariosData = result.data || [];
+      usuariosFiltrados = [...usuariosData];
+      console.log(`✅ ${usuariosData.length} usuarios cargados`);
+    } else {
+      throw new Error(result.message || 'Error al cargar usuarios');
+    }
+  } catch (error) {
+    console.error('Error cargando usuarios:', error);
+    usuariosData = [];
+    usuariosFiltrados = [];
+    throw error;
+  }
+}
+
+// Actualizar estadísticas
+function actualizarEstadisticas() {
+  const total = usuariosData.length;
+  const activos = usuariosData.filter(u => u.activo).length;
+  const administradores = usuariosData.filter(u => u.rol === 'admin').length;
+  const inactivos = usuariosData.filter(u => !u.activo).length;
+
+  const totalElement = document.getElementById('total-usuarios');
+  const activosElement = document.getElementById('activos-usuarios');
+  const adminElement = document.getElementById('admin-usuarios');
+  const inactivosElement = document.getElementById('inactivos-usuarios');
+  
+  if (totalElement) totalElement.textContent = total.toString();
+  if (activosElement) activosElement.textContent = activos.toString();
+  if (adminElement) adminElement.textContent = administradores.toString();
+  if (inactivosElement) inactivosElement.textContent = inactivos.toString();
+}
+
+// Filtrar usuarios
+function filtrarUsuarios(filtro: string) {
+  filtroActual = filtro;
+  rolFiltro = '';
+  
+  // Actualizar botones de filtro
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.classList.remove('bg-pink-500', 'text-white');
+    btn.classList.add('bg-gray-200', 'text-gray-700');
+  });
+  
+  const activeBtn = document.getElementById(`filtro-${filtro}`);
+  if (activeBtn) {
+    activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+    activeBtn.classList.add('bg-pink-500', 'text-white');
+  }
+  
+  aplicarFiltros();
+}
+
+function filtrarPorRol(rol: string) {
+  rolFiltro = rol;
+  filtroActual = '';
+  
+  // Actualizar botones de filtro
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.classList.remove('bg-pink-500', 'text-white');
+    btn.classList.add('bg-gray-200', 'text-gray-700');
+  });
+  
+  const activeBtn = document.getElementById(`filtro-${rol}`);
+  if (activeBtn) {
+    activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+    activeBtn.classList.add('bg-pink-500', 'text-white');
+  }
+  
+  aplicarFiltros();
+}
+
+function buscarUsuarios() {
+  busquedaActual = (document.getElementById('search-usuarios') as HTMLInputElement)?.value.toLowerCase() || '';
+  aplicarFiltros();
+}
+
+function aplicarFiltros() {
+  usuariosFiltrados = usuariosData.filter(usuario => {
+    // Filtro por estado
+    if (filtroActual === 'activos' && !usuario.activo) return false;
+    if (filtroActual === 'inactivos' && usuario.activo) return false;
+    
+    // Filtro por rol
+    if (rolFiltro && usuario.rol !== rolFiltro) return false;
+    
+    // Filtro por búsqueda
+    if (busquedaActual) {
+      const searchText = `${usuario.nombre} ${usuario.email} ${usuario.id}`.toLowerCase();
+      if (!searchText.includes(busquedaActual)) return false;
+    }
+    
+    return true;
+  });
+  
+  paginaActual = 1;
+  renderUsuarios();
+}
+
+// Renderizar usuarios
+function renderUsuarios() {
+  const container = document.getElementById('usuarios-lista');
+  const loading = document.getElementById('usuarios-loading');
+  const content = document.getElementById('usuarios-content');
+  const empty = document.getElementById('usuarios-empty');
+  
+  if (!container) return;
+  
+  if (loading) (loading as HTMLElement).style.display = 'none';
+  
+  if (usuariosFiltrados.length === 0) {
+    if (content) (content as HTMLElement).style.display = 'none';
+    if (empty) (empty as HTMLElement).style.display = 'block';
+    return;
+  }
+  
+  if (empty) (empty as HTMLElement).style.display = 'none';
+  if (content) (content as HTMLElement).style.display = 'block';
+  
+  // Calcular paginación
+  const totalItems = usuariosFiltrados.length;
+  const totalPages = Math.ceil(totalItems / itemsPorPagina);
+  const startIndex = (paginaActual - 1) * itemsPorPagina;
+  const endIndex = Math.min(startIndex + itemsPorPagina, totalItems);
+  const usuariosPagina = usuariosFiltrados.slice(startIndex, endIndex);
+  // Renderizar usuarios en cards
+  
+  container.innerHTML = usuariosPagina.map(usuario => `
+    <div class="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div class="p-4 sm:p-6">
+        <!-- Header con selección -->
+        <div class="flex items-start justify-between mb-3 sm:mb-4">
+          <div class="flex items-center gap-2 sm:gap-3">
+            <input 
+              type="checkbox" 
+              id="select-${usuario.id}"
+              onchange="toggleSeleccion('${usuario.id}')"
+              class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+            >
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r ${getRolGradient(usuario.rol)} rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg">
+              ${usuario.nombre.charAt(0).toUpperCase()}
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-1">
+            <span class="px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-semibold ${getRolClases(usuario.rol)}">
+              ${getRolTexto(usuario.rol)}
+            </span>
+            <span class="px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full text-xs font-semibold ${getEstadoClases(usuario.activo)}">
+              ${getEstadoTexto(usuario.activo)}
+            </span>
+          </div>
+        </div>
+        
+        <!-- Información del usuario -->
+        <div class="mb-3 sm:mb-4">
+          <h4 class="font-semibold text-gray-800 font-poppins text-base sm:text-lg mb-1">${usuario.nombre}</h4>
+          <p class="text-gray-600 text-xs sm:text-sm mb-2 truncate">${usuario.email}</p>
+          <p class="text-gray-500 text-xs">ID: ${usuario.id}</p>
+        </div>
+        
+        <!-- Metadata -->
+        <div class="space-y-1.5 sm:space-y-2 mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600">
+          ${usuario.telefono ? `
+            <div class="flex items-center gap-2">
+              <span>📞</span>
+              <span class="truncate">${usuario.telefono}</span>
+            </div>
+          ` : ''}
+          <div class="flex items-center gap-2">
+            <span>📅</span>
+            <span class="text-xs">Creado: ${formatearFecha(usuario.fechaCreacion || new Date().toISOString())}</span>
+          </div>
+          ${usuario.ultimoAcceso ? `
+            <div class="flex items-center gap-2">
+              <span>🔗</span>
+              <span class="text-xs">Último acceso: ${formatearFecha(usuario.ultimoAcceso)}</span>
+            </div>
+          ` : ''}
+          ${usuario.notas ? `
+            <div class="flex items-start gap-2">
+              <span>📝</span>
+              <span class="italic text-xs leading-tight">${usuario.notas.substring(0, 60)}${usuario.notas.length > 60 ? '...' : ''}</span>
+            </div>
+          ` : ''}
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-1 sm:gap-2 pt-3 sm:pt-4 border-t border-gray-100">
+          ${getAccionesUsuario(usuario)}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  
+  // Actualizar paginación
+  actualizarPaginacion(totalItems, totalPages);
+}
+
+// Funciones auxiliares
+function getRolGradient(rol: string) {
+  return rol === 'admin' ? 'from-purple-500 to-pink-500' : 'from-blue-500 to-cyan-500';
+}
+
+function getRolClases(rol: string) {
+  return rol === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800';
+}
+
+function getRolTexto(rol: string) {
+  return rol === 'admin' ? '👑 Admin' : '👤 Cliente';
+}
+
+function getEstadoClases(activo: boolean) {
+  return activo ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+}
+
+function getEstadoTexto(activo: boolean) {
+  return activo ? '✅ Activo' : '🔒 Inactivo';
+}
+
+function formatearFecha(fecha: string) {
+  return new Date(fecha).toLocaleDateString('es-ES', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  });
+}
+
+function getAccionesUsuario(usuario: any) {
+  let acciones = '';
+  
+  // No permitir editar/eliminar el usuario admin principal
+  if (usuario.email === 'admin@glambook.com') {
+    acciones += `
+      <span class="px-2 py-1 sm:px-3 sm:py-2 bg-gray-100 text-gray-500 rounded-lg text-xs sm:text-sm font-poppins cursor-not-allowed whitespace-nowrap">
+        🛡️ <span class="hidden sm:inline">Usuario protegido</span><span class="sm:hidden">Protegido</span>
+      </span>
+    `;
+  } else {
+    acciones += `
+      <button class="px-2 py-1 sm:px-3 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap editar-btn" data-id="${usuario.id}">
+        ✏️ <span class="hidden sm:inline">Editar</span>
+      </button>
+    `;
+    if (usuario.activo) {
+      acciones += `
+        <button class="px-2 py-1 sm:px-3 sm:py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap desactivar-btn" data-id="${usuario.id}">
+          🔒 <span class="hidden lg:inline">Desactivar</span>
+        </button>
+      `;
+    } else {
+      acciones += `
+        <button class="px-2 py-1 sm:px-3 sm:py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap activar-btn" data-id="${usuario.id}">
+          ✅ <span class="hidden lg:inline">Activar</span>
+        </button>
+      `;
+    }
+    acciones += `
+      <button class="px-2 py-1 sm:px-3 sm:py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap eliminar-btn" data-id="${usuario.id}">
+        🗑️ <span class="hidden lg:inline">Eliminar</span>
+      </button>
+    `;
+  }
+  acciones += `
+    <button class="px-2 py-1 sm:px-3 sm:py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap reset-btn" data-id="${usuario.id}">
+      🔑 <span class="hidden xl:inline">Reset</span>
+    </button>
+  `;
+  
+  return acciones;
+}
+
+// Acciones de usuario
+async function cambiarEstadoUsuario(id: string, nuevoEstado: boolean) {
+  try {
+    const response = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        action: 'cambiar-estado',
+        id: id, // Mantener como string original de Firebase
+        activo: nuevoEstado
+      })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      mostrarNotificacion(`✅ Usuario ${nuevoEstado ? 'activado' : 'desactivado'} exitosamente`, 'success');
+      await cargarUsuarios();
+      aplicarFiltros();
+      actualizarEstadisticas();
+    } else {
+      mostrarNotificacion('❌ Error al cambiar estado del usuario', 'error');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    mostrarNotificacion('❌ Error de conexión', 'error');
+  }
+}
+
+async function eliminarUsuario(id: string) {
+  if (confirm('¿Está seguro de eliminar este usuario? Esta acción no se puede deshacer.')) {
+    try {
+      const response = await fetch('/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'eliminar',
+          id: id // Mantener como string original de Firebase
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        mostrarNotificacion('✅ Usuario eliminado exitosamente', 'success');
+        await cargarUsuarios();
+        aplicarFiltros();
+        actualizarEstadisticas();
+      } else {
+        mostrarNotificacion('❌ Error al eliminar usuario', 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      mostrarNotificacion('❌ Error de conexión', 'error');
+    }
+  }
+}
+
+// Selección múltiple
+function toggleSeleccion(id: string) {
+  const checkbox = document.getElementById(`select-${id}`) as HTMLInputElement;
+  if (!checkbox) return;
+
+  // Actualizar el array de seleccionados
+  if (checkbox.checked) {
+    if (!usuariosSeleccionados.includes(id)) {
+      usuariosSeleccionados.push(id);
+    }
+  } else {
+    usuariosSeleccionados = usuariosSeleccionados.filter(uid => uid !== id);
+  }
+
+  // Actualizar botones de selección masiva si existe la función
+  if (typeof actualizarBotonesSeleccion === 'function') {
+    actualizarBotonesSeleccion();
+  }
+}
+
+function editarUsuario(id: string) {
+  const usuario = usuariosData.find(u => u.id == id);
+  if (!usuario) return;
+  
+  const editarId = document.getElementById('editar-id') as HTMLInputElement;
+  const editarNombre = document.getElementById('editar-nombre') as HTMLInputElement;
+  const editarEmail = document.getElementById('editar-email') as HTMLInputElement;
+  const editarRol = document.getElementById('editar-rol') as HTMLSelectElement;
+  const editarActivo = document.getElementById('editar-activo') as HTMLSelectElement;
+  const editarTelefono = document.getElementById('editar-telefono') as HTMLInputElement;
+  const editarNotas = document.getElementById('editar-notas') as HTMLTextAreaElement;
+  
+  if (editarId) editarId.value = usuario.id.toString();
+  if (editarNombre) editarNombre.value = usuario.nombre;
+  if (editarEmail) editarEmail.value = usuario.email;
+  if (editarRol) editarRol.value = usuario.rol;
+  if (editarActivo) editarActivo.value = usuario.activo.toString();
+  if (editarTelefono) editarTelefono.value = usuario.telefono || '';
+  if (editarNotas) editarNotas.value = usuario.notas || '';
+  
+  // Abrir el modal de edición de usuario
+  abrirModalEditarUsuario();
+}
+
+// Define la función abrirModalEditarUsuario si no existe
+function abrirModalEditarUsuario() {
+  // Aquí puedes agregar la lógica para mostrar el modal de edición de usuario
+  // Por ejemplo: document.getElementById('modal-editar-usuario').style.display = 'block';
+}
+
+// Form handlers
+const formNuevoUsuario = document.getElementById('form-nuevo-usuario');
+if (formNuevoUsuario) {
+  formNuevoUsuario.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const passwordElement = document.getElementById('nuevo-password') as HTMLInputElement;
+    const passwordConfirmElement = document.getElementById('nuevo-password-confirm') as HTMLInputElement;
+    
+    const password = passwordElement?.value || '';
+    const passwordConfirm = passwordConfirmElement?.value || '';
+  
+    if (password !== passwordConfirm) {
+      mostrarNotificacion('❌ Las contraseñas no coinciden', 'error');
+      return;
+    }
+    
+    const formData = {
+      action: 'crear',
+      nombre: (document.getElementById('nuevo-nombre') as HTMLInputElement)?.value || '',
+      email: (document.getElementById('nuevo-email') as HTMLInputElement)?.value || '',
+      password: password,
+      rol: (document.getElementById('nuevo-rol') as HTMLSelectElement)?.value || '',
+      activo: (document.getElementById('nuevo-activo') as HTMLSelectElement)?.value === 'true',
+      telefono: (document.getElementById('nuevo-telefono') as HTMLInputElement)?.value || '',
+      notas: (document.getElementById('nuevo-notas') as HTMLTextAreaElement)?.value || ''
+    };  try {
+    const response = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      mostrarNotificacion('✅ Usuario creado exitosamente', 'success');
+      cerrarModalNuevoUsuario();
+      await cargarUsuarios();
+      aplicarFiltros();
+      actualizarEstadisticas();
+    } else {
+      mostrarNotificacion(`❌ Error: ${result.message}`, 'error');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    mostrarNotificacion('❌ Error de conexión', 'error');
+  }
+  });
+}
+
+const formEditarUsuario = document.getElementById('form-editar-usuario');
+if (formEditarUsuario) {
+  formEditarUsuario.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const cambiarPasswordElement = document.getElementById('cambiar-password-check') as HTMLInputElement;
+    const cambiarPassword = cambiarPasswordElement?.checked || false;
+    
+    if (cambiarPassword) {
+      const passwordElement = document.getElementById('editar-password') as HTMLInputElement;
+      const passwordConfirmElement = document.getElementById('editar-password-confirm') as HTMLInputElement;
+      
+      const password = passwordElement?.value || '';
+      const passwordConfirm = passwordConfirmElement?.value || '';
+    
+      if (password !== passwordConfirm) {
+        mostrarNotificacion('❌ Las contraseñas no coinciden', 'error');
+        return;
+      }
+    }
+    
+    const formData: any = {
+      action: 'actualizar',
+      id: parseInt((document.getElementById('editar-id') as HTMLInputElement)?.value || '0'),
+      nombre: (document.getElementById('editar-nombre') as HTMLInputElement)?.value || '',
+      email: (document.getElementById('editar-email') as HTMLInputElement)?.value || '',
+      rol: (document.getElementById('editar-rol') as HTMLSelectElement)?.value || '',
+      activo: (document.getElementById('editar-activo') as HTMLSelectElement)?.value === 'true',
+      telefono: (document.getElementById('editar-telefono') as HTMLInputElement)?.value || '',
+      notas: (document.getElementById('editar-notas') as HTMLTextAreaElement)?.value || ''
+    };
+    
+    if (cambiarPassword) {
+      const passwordElement = document.getElementById('editar-password') as HTMLInputElement;
+      formData.password = passwordElement?.value || '';
+    }
+  
+  try {
+    const response = await fetch('/api/usuarios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      mostrarNotificacion('✅ Usuario actualizado exitosamente', 'success');
+      cerrarModalEditarUsuario();
+      await cargarUsuarios();
+      aplicarFiltros();
+      actualizarEstadisticas();
+    } else {
+      mostrarNotificacion(`❌ Error: ${result.message}`, 'error');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    mostrarNotificacion('❌ Error de conexión', 'error');
+  }
+  });
+}
+
+// Paginación
+function actualizarPaginacion(totalItems: number, totalPages: number) {
+  const showingFrom = document.getElementById('showing-from');
+  const showingTo = document.getElementById('showing-to');
+  const totalItemsSpan = document.getElementById('total-items');
+  const showingFromMobile = document.getElementById('showing-from-mobile');
+  const showingToMobile = document.getElementById('showing-to-mobile');
+  const totalItemsMobile = document.getElementById('total-items-mobile');
+  const btnAnterior = document.getElementById('btn-anterior');
+  const btnSiguiente = document.getElementById('btn-siguiente');
+  const paginasNumeros = document.getElementById('paginas-numeros');
+  
+  const startIndex = (paginaActual - 1) * itemsPorPagina + 1;
+  const endIndex = Math.min(paginaActual * itemsPorPagina, totalItems);
+  
+  const startValue = (totalItems > 0 ? startIndex : 0).toString();
+  const endValue = endIndex.toString();
+  const totalValue = totalItems.toString();
+  
+  if (showingFrom) showingFrom.textContent = startValue;
+  if (showingTo) showingTo.textContent = endValue;
+  if (totalItemsSpan) totalItemsSpan.textContent = totalValue;
+  if (showingFromMobile) showingFromMobile.textContent = startValue;
+  if (showingToMobile) showingToMobile.textContent = endValue;
+  if (totalItemsMobile) totalItemsMobile.textContent = totalValue;
+  
+  if (btnAnterior) (btnAnterior as HTMLButtonElement).disabled = paginaActual <= 1;
+  if (btnSiguiente) (btnSiguiente as HTMLButtonElement).disabled = paginaActual >= totalPages;
+  
+  // Generar números de página
+  if (paginasNumeros) {
+    const maxVisible = window.innerWidth < 640 ? 3 : 5;
+    let startPage = Math.max(1, paginaActual - Math.floor(maxVisible / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+    
+    if (endPage - startPage + 1 < maxVisible) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+    
+    let paginasHTML = '';
+    
+    for (let i = startPage; i <= endPage; i++) {
+      paginasHTML += `
+        <button 
+          class="px-2 py-1 sm:px-3 border rounded-lg font-poppins text-xs sm:text-sm transition-colors btn-ir-pagina ${i === paginaActual ? 'bg-pink-500 text-white border-pink-500' : 'hover:bg-gray-50'}"
+          data-pagina="${i}"
+        >
+          ${i}
+        </button>
+      `;
+    }
+    
+    paginasNumeros.innerHTML = paginasHTML;
+  }
+}
+
+function paginaAnterior() {
+  if (paginaActual > 1) {
+    paginaActual--;
+    renderUsuarios();
+  }
+}
+
+function paginaSiguiente() {
+  const totalPages = Math.ceil(usuariosFiltrados.length / itemsPorPagina);
+  if (paginaActual < totalPages) {
+    paginaActual++;
+    renderUsuarios();
+  }
+}
+
+function irAPagina(pagina: number) {
+  paginaActual = pagina;
+  renderUsuarios();
+}
+
+function cambiarItemsPorPagina() {
+  const select = document.getElementById('items-per-page') as HTMLSelectElement;
+  if (select) {
+    itemsPorPagina = parseInt(select.value);
+    paginaActual = 1;
+    renderUsuarios();
+  }
+}
+
+// Exportar usuarios
+function exportarUsuarios() {
+  const data = usuariosFiltrados.map((u: any) => ({
+    ID: u.id,
+    Nombre: u.nombre,
+    Email: u.email,
+    Rol: u.rol,
+    Estado: u.activo ? 'Activo' : 'Inactivo',
+    Teléfono: u.telefono || 'N/A',
+    'Fecha Creación': u.fechaCreacion || 'N/A',
+    'Último Acceso': u.ultimoAcceso || 'Nunca',
+    Notas: u.notas || 'N/A'
+  }));
+  
+  const csv = convertToCSV(data);
+  downloadCSV(csv, 'usuarios-export.csv');
+  
+  mostrarNotificacion('📊 Usuarios exportados exitosamente', 'success');
+}
+
+function convertToCSV(data: any[]) {
+  if (!data.length) return '';
+  
+  const headers = Object.keys(data[0]);
+  const csvContent = [
+    headers.join(','),
+    ...data.map((row: any) => headers.map(header => `"${row[header]}"`).join(','))
+  ].join('\n');
+  
+  return csvContent;
+}
+
+function downloadCSV(csv: string, filename: string) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Funciones utilitarias
+function mostrarNotificacion(mensaje: string, tipo: string = 'info') {
+  const notificacion = document.createElement('div');
+  notificacion.className = 'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg font-poppins max-w-sm transform transition-all duration-300 translate-x-full';
+  
+  const colores: { [key: string]: string } = {
+    'success': 'bg-green-500 text-white',
+    'error': 'bg-red-500 text-white',
+    'warning': 'bg-yellow-500 text-white',
+    'info': 'bg-blue-500 text-white'
+  };
+  
+  notificacion.classList.add(...colores[tipo].split(' '));
+  notificacion.textContent = mensaje;
+  
+  document.body.appendChild(notificacion);
+  
+  setTimeout(() => notificacion.classList.remove('translate-x-full'), 100);
+  setTimeout(() => {
+    notificacion.classList.add('translate-x-full');
+    setTimeout(() => document.body.removeChild(notificacion), 300);
+  }, 3000);
+}
+
+function mostrarError(mensaje) {
+  const container = document.getElementById('usuarios-container');
+  if (container) {
+    container.innerHTML = '';
+    const div = document.createElement('div');
+    div.className = 'text-center py-12';
+    div.innerHTML = `
+      <div class="text-6xl mb-4 text-red-500">❌</div>
+      <h3 class="text-xl font-semibold text-gray-800 font-poppins mb-2">Error</h3>
+      <p class="text-gray-600 font-poppins" id="mensaje-error"></p>
+      <button id="btn-reintentar" class="mt-4 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins">🔄 Reintentar</button>
+    `;
+    container.appendChild(div);
+    document.getElementById('mensaje-error').textContent = mensaje;
+    document.getElementById('btn-reintentar').addEventListener('click', () => {
+      location.reload();
+    });
+  }
+}
+
+function mostrarModalDiagnostico(diagnostic) {
+  // @ts-ignore - Función de diagnóstico interna
+  // Generar reporte básico
+  const tests = diagnostic?.tests || [];
+  
+  let errorMessages = tests
+    .filter((test) => test?.status === 'error')
+    .map((test) => `• ${test.name}: ${test.message}`)
+    .join('\n');
+
+  // Definir errorMessages y warningMessages para evitar errores de compilación
+  // Todo el código JS debe estar aquí, y el HTML debe estar limpio de interpolaciones JS.
+  // El modal y notificaciones se crean y manipulan solo desde JS.
+}
+
+// Acciones múltiples
+
+// Extiende la interfaz Window para incluir las propiedades usadas
+interface Usuario {
+  id: string;
+  nombre: string;
+  email: string;
+  rol: string;
+  activo: boolean;
+  telefono?: string;
+  notas?: string;
+  fechaCreacion?: string;
+  ultimoAcceso?: string;
+}
+interface Window {
+  usuariosSeleccionados: string[];
+  usuariosData: Usuario[];
+  usuariosFiltrados: Usuario[];
+  filtroActual: string;
+  rolFiltro: string;
+  busquedaActual: string;
+  paginaActual: number;
+  itemsPorPagina: number;
+  usuarioEditando: Usuario | null;
+  mostrarNotificacion: (msg: string, tipo?: string) => void;
+  cargarUsuarios: () => Promise<void>;
+  aplicarFiltros: () => void;
+  actualizarEstadisticas: () => void;
+  actualizarBotonesSeleccion: () => void;
+  cambiarEstadoUsuario: (id: string, nuevoEstado: boolean) => Promise<void>;
+  eliminarUsuario: (id: string) => Promise<void>;
+  resetearPassword: (id: string) => Promise<void>;
+  editarUsuario: (id: string) => void;
+  toggleSeleccion: (id: string) => void;
+  activarSeleccionados: () => Promise<void>;
+  desactivarSeleccionados: () => Promise<void>;
+  exportarUsuarios: () => void;
+  paginaAnterior: () => void;
+  paginaSiguiente: () => void;
+  irAPagina: (pagina: number) => void;
+  cambiarItemsPorPagina: () => void;
+  abrirModalNuevoUsuario: () => void;
+  cerrarModalNuevoUsuario: () => void;
+  cerrarModalEditarUsuario: () => void;
+  toggleCambiarPassword: () => void;
+  filtrarUsuarios: (filtro: string) => void;
+  filtrarPorRol: (rol: string) => void;
+  buscarUsuarios: () => void;
+}
+
+async function activarSeleccionados(): Promise<void> {
+  if ((window as any).usuariosSeleccionados.length === 0) return;
+  if (window.confirm('¿Está seguro de activar ' + (window as any).usuariosSeleccionados.length + ' usuarios seleccionados?')) {
+    try {
+      for (const id of (window as any).usuariosSeleccionados) {
+        await fetch('/api/usuarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            action: 'cambiar-estado',
+            id: id,
+            activo: true
+          })
+        });
+      }
+      (window as any).mostrarNotificacion('✅ ' + (window as any).usuariosSeleccionados.length + ' usuarios activados', 'success');
+      (window as any).usuariosSeleccionados = [];
+      await (window as any).cargarUsuarios();
+      (window as any).aplicarFiltros();
+      (window as any).actualizarEstadisticas();
+      (window as any).actualizarBotonesSeleccion();
+    } catch (error) {
+      (window as any).mostrarNotificacion('❌ Error al activar usuarios', 'error');
+    }
+  }
+}
+
+async function desactivarSeleccionados(): Promise<void> {
+  if ((window as any).usuariosSeleccionados.length === 0) return;
+  const adminPrincipal = (window as any).usuariosData.find((u: Usuario) => u.email === 'admin@glambook.com');
+  if (adminPrincipal && (window as any).usuariosSeleccionados.includes(adminPrincipal.id)) {
+    (window as any).mostrarNotificacion('❌ No se puede desactivar el usuario administrador principal', 'error');
+    return;
+  }
+  if (window.confirm('¿Está seguro de desactivar ' + (window as any).usuariosSeleccionados.length + ' usuarios seleccionados?')) {
+    try {
+      for (const id of (window as any).usuariosSeleccionados) {
+        await fetch('/api/usuarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            action: 'cambiar-estado',
+            id: id,
+            activo: false
+          })
+        });
+      }
+      (window as any).mostrarNotificacion('🔒 ' + (window as any).usuariosSeleccionados.length + ' usuarios desactivados', 'success');
+      (window as any).usuariosSeleccionados = [];
+      await (window as any).cargarUsuarios();
+      (window as any).aplicarFiltros();
+      (window as any).actualizarEstadisticas();
+      (window as any).actualizarBotonesSeleccion();
+    } catch (error) {
+      (window as any).mostrarNotificacion('❌ Error al desactivar usuarios', 'error');
+    }
+  }
+}
+
+async function resetearPassword(id: string): Promise<void> {
+  const usuario = (window as any).usuariosData.find((u: Usuario) => u.id == id);
+  if (!usuario) {
+    (window as any).mostrarNotificacion('❌ Usuario no encontrado', 'error');
+    return;
+  }
+  if (window.confirm('¿Está seguro de resetear la contraseña de ' + usuario.nombre + '? Se enviará un email de recuperación.')) {
+    try {
+      const response = await fetch('/api/usuarios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'reset-password',
+          email: usuario.email
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        (window as any).mostrarNotificacion('🔑 Email de recuperación enviado exitosamente', 'success');
+      } else {
+        (window as any).mostrarNotificacion('❌ Error: ' + result.message, 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      (window as any).mostrarNotificacion('❌ Error de conexión', 'error');
+    }
+  }
+}
+// Asociar eventos a los botones de acción después del renderizado
+function asociarEventosUsuarios() {
+  // Editar usuario
+  document.querySelectorAll('.editar-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = btn.getAttribute('data-id');
+      if (id) editarUsuario(id);
+    });
+  });
+  // Activar usuario
+  document.querySelectorAll('.activar-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = btn.getAttribute('data-id');
+      if (id) cambiarEstadoUsuario(id, true);
+    });
+  });
+  // Desactivar usuario
+  document.querySelectorAll('.desactivar-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = btn.getAttribute('data-id');
+      if (id) cambiarEstadoUsuario(id, false);
+    });
+  });
+  // Eliminar usuario
+  document.querySelectorAll('.eliminar-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = btn.getAttribute('data-id');
+      if (id) eliminarUsuario(id);
+    });
+  });
+  // Resetear password
+  document.querySelectorAll('.reset-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = btn.getAttribute('data-id');
+      if (id) resetearPassword(id);
+    });
+  });
+}
+
+
+
+// Exponer todas las funciones y variables necesarias a window (para uso global en listeners y acciones)
+(window as any).usuariosData = (window as any).usuariosData || [];
+(window as any).usuariosFiltrados = (window as any).usuariosFiltrados || [];
+(window as any).usuariosSeleccionados = (window as any).usuariosSeleccionados || [];
+(window as any).filtroActual = (window as any).filtroActual || 'todos';
+(window as any).rolFiltro = (window as any).rolFiltro || '';
+(window as any).busquedaActual = (window as any).busquedaActual || '';
+(window as any).paginaActual = (window as any).paginaActual || 1;
+(window as any).itemsPorPagina = (window as any).itemsPorPagina || 24;
+(window as any).usuarioEditando = (window as any).usuarioEditando || null;
+
+(window as any).cambiarEstadoUsuario = cambiarEstadoUsuario;
+(window as any).eliminarUsuario = eliminarUsuario;
+(window as any).resetearPassword = resetearPassword;
+(window as any).editarUsuario = editarUsuario;
+(window as any).toggleSeleccion = toggleSeleccion;
+(window as any).activarSeleccionados = activarSeleccionados;
+(window as any).desactivarSeleccionados = desactivarSeleccionados;
+(window as any).exportarUsuarios = exportarUsuarios;
+(window as any).paginaAnterior = paginaAnterior;
+(window as any).paginaSiguiente = paginaSiguiente;
+(window as any).irAPagina = irAPagina;
+(window as any).cambiarItemsPorPagina = cambiarItemsPorPagina;
+(window as any).mostrarNotificacion = mostrarNotificacion;
+(window as any).abrirModalNuevoUsuario = abrirModalNuevoUsuario;
+(window as any).cerrarModalNuevoUsuario = cerrarModalNuevoUsuario;
+(window as any).cerrarModalEditarUsuario = cerrarModalEditarUsuario;
+(window as any).toggleCambiarPassword = toggleCambiarPassword;
+(window as any).filtrarUsuarios = filtrarUsuarios;
+(window as any).filtrarPorRol = filtrarPorRol;
+(window as any).buscarUsuarios = buscarUsuarios;
+(window as any).cargarUsuarios = cargarUsuarios;
+(window as any).aplicarFiltros = aplicarFiltros;
+(window as any).actualizarEstadisticas = actualizarEstadisticas;
+(window as any).actualizarBotonesSeleccion = actualizarBotonesSeleccion;
+
+// Llamar a la función después de renderizar los usuarios
+setTimeout(asociarEventosUsuarios, 0);
+
+
+
+// Variables globales y funciones expuestas a window (solo aquí, usando (window as any))
+(window as any).usuariosData = (window as any).usuariosData || [];
+(window as any).usuariosFiltrados = (window as any).usuariosFiltrados || [];
+(window as any).usuariosSeleccionados = (window as any).usuariosSeleccionados || [];
+(window as any).filtroActual = (window as any).filtroActual || 'todos';
+(window as any).rolFiltro = (window as any).rolFiltro || '';
+(window as any).busquedaActual = (window as any).busquedaActual || '';
+(window as any).paginaActual = (window as any).paginaActual || 1;
+(window as any).itemsPorPagina = (window as any).itemsPorPagina || 24;
+(window as any).usuarioEditando = (window as any).usuarioEditando || null;
+
+if (typeof (window as any).abrirModalNuevoUsuario !== 'function') (window as any).abrirModalNuevoUsuario = function(){};
+if (typeof (window as any).cerrarModalNuevoUsuario !== 'function') (window as any).cerrarModalNuevoUsuario = function(){};
+if (typeof (window as any).cerrarModalEditarUsuario !== 'function') (window as any).cerrarModalEditarUsuario = function(){};
+if (typeof (window as any).toggleCambiarPassword !== 'function') (window as any).toggleCambiarPassword = function(){};
+if (typeof (window as any).actualizarEstadisticas !== 'function') (window as any).actualizarEstadisticas = function(){};
+if (typeof (window as any).aplicarFiltros !== 'function') (window as any).aplicarFiltros = function(){};
+if (typeof (window as any).cargarUsuarios !== 'function') (window as any).cargarUsuarios = function(){};
+if (typeof (window as any).actualizarBotonesSeleccion !== 'function') (window as any).actualizarBotonesSeleccion = function(){};
+
+if (typeof cambiarEstadoUsuario === 'function') (window as any).cambiarEstadoUsuario = cambiarEstadoUsuario;
+if (typeof eliminarUsuario === 'function') (window as any).eliminarUsuario = eliminarUsuario;
+if (typeof resetearPassword === 'function') (window as any).resetearPassword = resetearPassword;
+if (typeof editarUsuario === 'function') (window as any).editarUsuario = editarUsuario;
+if (typeof toggleSeleccion === 'function') (window as any).toggleSeleccion = toggleSeleccion;
+if (typeof activarSeleccionados === 'function') (window as any).activarSeleccionados = activarSeleccionados;
+if (typeof desactivarSeleccionados === 'function') (window as any).desactivarSeleccionados = desactivarSeleccionados;
+if (typeof exportarUsuarios === 'function') (window as any).exportarUsuarios = exportarUsuarios;
+if (typeof paginaAnterior === 'function') (window as any).paginaAnterior = paginaAnterior;
+if (typeof paginaSiguiente === 'function') (window as any).paginaSiguiente = paginaSiguiente;
+if (typeof irAPagina === 'function') (window as any).irAPagina = irAPagina;
+if (typeof cambiarItemsPorPagina === 'function') (window as any).cambiarItemsPorPagina = cambiarItemsPorPagina;
+if (typeof mostrarNotificacion === 'function') (window as any).mostrarNotificacion = mostrarNotificacion;
+if (typeof filtrarUsuarios === 'function') (window as any).filtrarUsuarios = filtrarUsuarios;
+if (typeof filtrarPorRol === 'function') (window as any).filtrarPorRol = filtrarPorRol;
+if (typeof buscarUsuarios === 'function') (window as any).buscarUsuarios = buscarUsuarios;
+
+// Listeners de botones y filtros (solo una vez)
+document.addEventListener('DOMContentLoaded', () => {
+  // Botones de usuario
+  document.querySelectorAll('.editar-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      if (id) (window as any).editarUsuario(id);
+    });
+  });
+  document.querySelectorAll('.activar-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      if (id) (window as any).cambiarEstadoUsuario(id, true);
+    });
+  });
+  document.querySelectorAll('.desactivar-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      if (id) (window as any).cambiarEstadoUsuario(id, false);
+    });
+  });
+  document.querySelectorAll('.eliminar-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      if (id) (window as any).eliminarUsuario(id);
+    });
+  });
+  document.querySelectorAll('.reset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-id');
+      if (id) (window as any).resetearPassword(id);
+    });
+  });
+  // Botones de paginación
+  document.querySelectorAll('.btn-ir-pagina').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const pagina = btn.getAttribute('data-pagina');
+      if (pagina) (window as any).irAPagina(Number(pagina));
+    });
+  });
+  // Botones de navegación y filtros
+  const nuevoUsuarioBtn = document.getElementById('btn-nuevo-usuario');
+  if (nuevoUsuarioBtn) nuevoUsuarioBtn.addEventListener('click', () => (window as any).abrirModalNuevoUsuario());
+  const nuevoUsuarioBtn2 = document.getElementById('btn-nuevo-usuario2');
+  if (nuevoUsuarioBtn2) nuevoUsuarioBtn2.addEventListener('click', () => (window as any).abrirModalNuevoUsuario());
+  const filtroTodos = document.getElementById('filtro-todos');
+  if (filtroTodos) filtroTodos.addEventListener('click', () => (window as any).filtrarUsuarios('todos'));
+  const filtroActivos = document.getElementById('filtro-activos');
+  if (filtroActivos) filtroActivos.addEventListener('click', () => (window as any).filtrarUsuarios('activos'));
+  const filtroInactivos = document.getElementById('filtro-inactivos');
+  if (filtroInactivos) filtroInactivos.addEventListener('click', () => (window as any).filtrarUsuarios('inactivos'));
+  const filtroAdmin = document.getElementById('filtro-admin');
+  if (filtroAdmin) filtroAdmin.addEventListener('click', () => (window as any).filtrarPorRol('admin'));
+  const filtroCliente = document.getElementById('filtro-cliente');
+  if (filtroCliente) filtroCliente.addEventListener('click', () => (window as any).filtrarPorRol('cliente'));
+  // Buscar usuarios
+  const btnBuscar = document.getElementById('btn-buscar');
+  if (btnBuscar) btnBuscar.addEventListener('click', () => (window as any).buscarUsuarios());
+  // Acciones masivas
+  const btnActivar = document.getElementById('btn-activar-multiples');
+  if (btnActivar) btnActivar.addEventListener('click', () => (window as any).activarSeleccionados());
+  const btnDesactivar = document.getElementById('btn-desactivar-multiples');
+  if (btnDesactivar) btnDesactivar.addEventListener('click', () => (window as any).desactivarSeleccionados());
+  const btnExportar = document.getElementById('btn-exportar');
+  if (btnExportar) btnExportar.addEventListener('click', () => (window as any).exportarUsuarios());
+  // Paginación
+  const btnAnterior = document.getElementById('btn-anterior');
+  if (btnAnterior) btnAnterior.addEventListener('click', () => (window as any).paginaAnterior());
+  const btnSiguiente = document.getElementById('btn-siguiente');
+  if (btnSiguiente) btnSiguiente.addEventListener('click', () => (window as any).paginaSiguiente());
+  // Cerrar modales
+  const btnCerrarNuevoUsuario = document.getElementById('btn-cerrar-nuevo-usuario');
+  if (btnCerrarNuevoUsuario) btnCerrarNuevoUsuario.addEventListener('click', () => (window as any).cerrarModalNuevoUsuario());
+  const btnCerrarEditarUsuario = document.getElementById('btn-cerrar-editar-usuario');
+  if (btnCerrarEditarUsuario) btnCerrarEditarUsuario.addEventListener('click', () => (window as any).cerrarModalEditarUsuario());
+  // Navegación principal
+  const dashboardBtn = document.getElementById('btn-dashboard');
+  if (dashboardBtn) dashboardBtn.addEventListener('click', () => window.location.href = '/admin');
+  const citasBtn = document.getElementById('btn-citas');
+  if (citasBtn) citasBtn.addEventListener('click', () => window.location.href = '/admin/citas');
+});
+
+// Definir funciones vacías para modales y utilidades si no existen (por si no están definidas en el scope global)
+function abrirModalNuevoUsuario() {}
+function cerrarModalNuevoUsuario() {}
+function cerrarModalEditarUsuario() {}
+function toggleCambiarPassword() {}
+function actualizarBotonesSeleccion() {}

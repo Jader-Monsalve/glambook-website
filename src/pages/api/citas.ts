@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { enviarRecordatorioCita, type CitaEmail } from '../../utils/emailService.ts';
 
 // Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
@@ -15,7 +16,9 @@ const citasData = [
     hora: "10:00",
     mensaje: "Para evento especial, necesito maquillaje elegante",
     estado: "confirmada",
-    fechaCreacion: "2025-10-18"
+    fechaCreacion: "2025-10-18",
+    recordatorioEnviado: false,
+    fechaRecordatorio: ""
   },
   {
     id: 2,
@@ -27,7 +30,9 @@ const citasData = [
     hora: "14:00",
     mensaje: "Primera vez, quiero diseño francés",
     estado: "pendiente",
-    fechaCreacion: "2025-10-18"
+    fechaCreacion: "2025-10-18",
+    recordatorioEnviado: false,
+    fechaRecordatorio: ""
   },
   {
     id: 3,
@@ -39,7 +44,9 @@ const citasData = [
     hora: "09:00",
     mensaje: "Microblading, tengo cita previa consultada",
     estado: "confirmada",
-    fechaCreacion: "2025-10-19"
+    fechaCreacion: "2025-10-19",
+    recordatorioEnviado: false,
+    fechaRecordatorio: ""
   },
   {
     id: 4,
@@ -51,7 +58,9 @@ const citasData = [
     hora: "15:00",
     mensaje: "Extensiones de pestañas volumen ruso",
     estado: "pendiente",
-    fechaCreacion: "2025-10-20"
+    fechaCreacion: "2025-10-20",
+    recordatorioEnviado: false,
+    fechaRecordatorio: ""
   },
   {
     id: 5,
@@ -63,7 +72,9 @@ const citasData = [
     hora: "16:00",
     mensaje: "Maquillaje para graduación",
     estado: "completada",
-    fechaCreacion: "2025-10-17"
+    fechaCreacion: "2025-10-17",
+    recordatorioEnviado: true,
+    fechaRecordatorio: "2025-10-28T08:00:00.000Z"
   },
   {
     id: 6,
@@ -75,7 +86,9 @@ const citasData = [
     hora: "11:00",
     mensaje: "Diseño con flores, tengo referencia",
     estado: "cancelada",
-    fechaCreacion: "2025-10-19"
+    fechaCreacion: "2025-10-19",
+    recordatorioEnviado: false,
+    fechaRecordatorio: ""
   }
 ];
 
@@ -222,6 +235,39 @@ export const GET: APIRoute = async ({ url }) => {
           headers: corsHeaders
         });
 
+      case 'confirmadas':
+        const citasConfirmadas = citasData.filter(cita => cita.estado === 'confirmada');
+        return new Response(JSON.stringify({
+          success: true,
+          data: citasConfirmadas,
+          message: 'Citas confirmadas obtenidas correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      case 'completadas':
+        const citasCompletadas = citasData.filter(cita => cita.estado === 'completada');
+        return new Response(JSON.stringify({
+          success: true,
+          data: citasCompletadas,
+          message: 'Citas completadas obtenidas correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      case 'canceladas':
+        const citasCanceladas = citasData.filter(cita => cita.estado === 'cancelada');
+        return new Response(JSON.stringify({
+          success: true,
+          data: citasCanceladas,
+          message: 'Citas canceladas obtenidas correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
       default:
         return new Response(JSON.stringify({
           success: true,
@@ -291,7 +337,9 @@ export const POST: APIRoute = async ({ request }) => {
         hora,
         mensaje: mensaje?.trim() || '',
         estado: 'pendiente',
-        fechaCreacion: new Date().toISOString().split('T')[0]
+        fechaCreacion: new Date().toISOString().split('T')[0],
+        recordatorioEnviado: false,
+        fechaRecordatorio: ""
       };
 
       // En una implementación real, aquí guardaríamos en base de datos
@@ -386,6 +434,174 @@ export const POST: APIRoute = async ({ request }) => {
         status: 200,
         headers: corsHeaders
       });
+    }
+
+    if (action === 'enviar-recordatorio') {
+      if (!id) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'ID de la cita requerido'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      const citaIndex = citasData.findIndex(cita => cita.id == id);
+      
+      if (citaIndex === -1) {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Cita no encontrada'
+        }), {
+          status: 404,
+          headers: corsHeaders
+        });
+      }
+
+      const cita = citasData[citaIndex];
+
+      // Verificar que la cita esté confirmada
+      if (cita.estado !== 'confirmada') {
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Solo se pueden enviar recordatorios a citas confirmadas'
+        }), {
+          status: 400,
+          headers: corsHeaders
+        });
+      }
+
+      try {
+        // Enviar recordatorio usando el servicio de email
+        console.log(`📧 Enviando recordatorio a: ${cita.email} para cita del ${cita.fecha} a las ${cita.hora}`);
+        
+        const citaEmail: CitaEmail = {
+          id: cita.id.toString(),
+          nombre: cita.nombre,
+          email: cita.email,
+          telefono: cita.telefono,
+          servicio: cita.servicio,
+          fecha: cita.fecha,
+          hora: cita.hora,
+          mensaje: cita.mensaje
+        };
+
+        const emailEnviado = await enviarRecordatorioCita(citaEmail);
+        
+        if (!emailEnviado) {
+          throw new Error('Error al enviar email de recordatorio');
+        }
+        
+        // Marcar recordatorio como enviado
+        citasData[citaIndex] = {
+          ...cita,
+          recordatorioEnviado: true,
+          fechaRecordatorio: new Date().toISOString()
+        };
+
+        return new Response(JSON.stringify({
+          success: true,
+          data: citasData[citaIndex],
+          message: 'Recordatorio enviado exitosamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      } catch (error) {
+        console.error('❌ Error enviando recordatorio:', error);
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Error al enviar recordatorio: ' + (error instanceof Error ? error.message : 'Error desconocido')
+        }), {
+          status: 500,
+          headers: corsHeaders
+        });
+      }
+    }
+
+    if (action === 'recordatorios-pendientes') {
+      // Obtener citas confirmadas para mañana que no tienen recordatorio enviado
+      const mañana = new Date();
+      mañana.setDate(mañana.getDate() + 1);
+      const fechaMañana = mañana.toISOString().split('T')[0];
+
+      const citasParaRecordatorio = citasData.filter(cita => 
+        cita.fecha === fechaMañana && 
+        cita.estado === 'confirmada' && 
+        !cita.recordatorioEnviado
+      );
+
+      try {
+        let enviados = 0;
+        const errores = [];
+        
+        for (const cita of citasParaRecordatorio) {
+          try {
+            // Enviar recordatorio usando el servicio de email
+            console.log(`📧 Enviando recordatorio masivo a: ${cita.email}`);
+            
+            const citaEmail: CitaEmail = {
+              id: cita.id.toString(),
+              nombre: cita.nombre,
+              email: cita.email,
+              telefono: cita.telefono,
+              servicio: cita.servicio,
+              fecha: cita.fecha,
+              hora: cita.hora,
+              mensaje: cita.mensaje
+            };
+
+            const emailEnviado = await enviarRecordatorioCita(citaEmail);
+            
+            if (emailEnviado) {
+              // Marcar como enviado
+              const citaIndex = citasData.findIndex(c => c.id === cita.id);
+              if (citaIndex !== -1) {
+                citasData[citaIndex] = {
+                  ...citasData[citaIndex],
+                  recordatorioEnviado: true,
+                  fechaRecordatorio: new Date().toISOString()
+                };
+                enviados++;
+              }
+            } else {
+              errores.push(`Error enviando a ${cita.email}`);
+            }
+          } catch (error) {
+            console.error(`❌ Error enviando recordatorio a ${cita.email}:`, error);
+            errores.push(`Error enviando a ${cita.email}: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+          }
+        }
+
+        const mensaje = errores.length > 0 
+          ? `${enviados} recordatorios enviados exitosamente. Errores: ${errores.join(', ')}`
+          : `${enviados} recordatorios enviados exitosamente`;
+
+        return new Response(JSON.stringify({
+          success: errores.length === 0 || enviados > 0,
+          data: {
+            total: citasParaRecordatorio.length,
+            enviados: enviados,
+            errores: errores
+          },
+          message: mensaje
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+
+      } catch (error) {
+        console.error('❌ Error en recordatorios masivos:', error);
+        return new Response(JSON.stringify({
+          success: false,
+          message: 'Error al enviar recordatorios: ' + (error instanceof Error ? error.message : 'Error desconocido')
+        }), {
+          status: 500,
+          headers: corsHeaders
+        });
+      }
     }
 
     return new Response(JSON.stringify({

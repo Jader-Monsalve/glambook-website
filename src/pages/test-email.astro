@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+if (Astro.request.method === 'POST') {
+  try {
+    console.log('🧪 Iniciando prueba de email...');
+    
+    // Importar dinámicamente para evitar problemas de SSR
+    const { enviarRecordatorioCita } = await import('../utils/emailService.ts');
+    
+    const citaPrueba = {
+      id: 'TEST123',
+      nombre: 'Usuario de Prueba',
+      email: 'jadermonsalve9@gmail.com', // Tu propio email para la prueba
+      telefono: '+57 300 123 4567',
+      servicio: 'Maquillaje',
+      fecha: '2025-10-22',
+      hora: '10:00',
+      mensaje: 'Esta es una prueba de recordatorio'
+    };
+    
+    console.log('📧 Enviando email de prueba a:', citaPrueba.email);
+    
+    const resultado = await enviarRecordatorioCita(citaPrueba);
+    
+    if (resultado) {
+      console.log('✅ Email enviado exitosamente');
+      return new Response(JSON.stringify({
+        success: true,
+        message: 'Email enviado exitosamente!'
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } else {
+      console.log('❌ Error al enviar email');
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'Error al enviar email'
+      }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Error en test de email:', error);
+    return new Response(JSON.stringify({
+      success: false,
+      message: 'Error: ' + (error instanceof Error ? error.message : 'Error desconocido'),
+      error: error
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+---
+
+<Layout title="Test Email Service">
+  <main class="container mx-auto p-8">
+    <h1 class="text-3xl font-bold mb-8">🧪 Test del Servicio de Email</h1>
+    
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+      <h2 class="text-xl font-semibold mb-4">Prueba de Recordatorio de Cita</h2>
+      
+      <p class="mb-4 text-gray-600">
+        Esta página enviará un email de prueba de recordatorio a tu propia dirección de correo 
+        (jadermonsalve9@gmail.com) para verificar que el servicio está funcionando.
+      </p>
+      
+      <form method="POST" class="space-y-4">
+        <button 
+          type="submit"
+          class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          📧 Enviar Email de Prueba
+        </button>
+      </form>
+      
+      <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <h3 class="font-semibold text-yellow-800">⚠️ Nota importante:</h3>
+        <p class="text-yellow-700 text-sm mt-1">
+          Revisa tu bandeja de entrada y también la carpeta de spam por si el email llegó ahí.
+          El email se enviará desde jadermonsalve9@gmail.com.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Manejar respuesta del formulario
+    document.querySelector('form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const button = (e.target as HTMLFormElement)?.querySelector('button');
+      const originalText = button?.textContent || '';
+      
+      if (button) {
+        button.textContent = '📤 Enviando...';
+        button.disabled = true;
+      }
+      
+      try {
+        const response = await fetch(window.location.href, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          }
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('✅ Email enviado exitosamente! Revisa tu bandeja de entrada.');
+        } else {
+          alert('❌ Error al enviar email: ' + result.message);
+        }
+        
+      } catch (error) {
+        alert('❌ Error: ' + (error instanceof Error ? error.message : 'Error desconocido'));
+      } finally {
+        if (button) {
+          button.textContent = originalText;
+          button.disabled = false;
+        }
+      }
+    });
+  </script>
+</Layout>

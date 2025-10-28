@@ -1,6 +1,10 @@
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
-import type { User } from 'firebase/auth';
-import { auth } from './firebase';
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
+import type { User, Auth } from 'firebase/auth';
+import { auth } from '../firebase.js';
+
+// @ts-ignore - Importación de Firebase auth
+// Type assertion para evitar errores de tipo implícito
+const firebaseAuth = auth as Auth;
 
 export interface AuthUser {
   uid: string;
@@ -46,12 +50,12 @@ export class AuthService {
   // Iniciar sesión con email y contraseña
   static async signIn(email: string, password: string): Promise<AuthUser> {
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
       const user = userCredential.user;
       
       // Verificar si el usuario es administrador
       if (!this.isAdmin(user.email)) {
-        await signOut(auth);
+        await signOut(firebaseAuth);
         throw new Error('No tienes permisos de administrador');
       }
       
@@ -68,7 +72,7 @@ export class AuthService {
   // Cerrar sesión
   static async signOut(): Promise<void> {
     try {
-      await signOut(auth);
+      await signOut(firebaseAuth);
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
       throw error;
@@ -92,7 +96,7 @@ export class AuthService {
   // Obtener usuario actual
   static getCurrentUser(): Promise<AuthUser | null> {
     return new Promise((resolve) => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
+      const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
         unsubscribe();
         if (user && this.isAdmin(user.email)) {
           resolve({
@@ -109,7 +113,7 @@ export class AuthService {
   
   // Escuchar cambios en el estado de autenticación
   static onAuthStateChanged(callback: (user: AuthUser | null) => void) {
-    return onAuthStateChanged(auth, (user) => {
+    return onAuthStateChanged(firebaseAuth, (user) => {
       if (user && this.isAdmin(user.email)) {
         callback({
           uid: user.uid,
@@ -125,8 +129,7 @@ export class AuthService {
   // Enviar email para resetear contraseña
   static async sendPasswordReset(email: string): Promise<void> {
     try {
-      const { sendPasswordResetEmail } = await import('firebase/auth');
-      await sendPasswordResetEmail(auth, email);
+      await sendPasswordResetEmail(firebaseAuth, email);
     } catch (error: any) {
       throw new Error(this.getErrorMessage(error.code));
     }
@@ -136,7 +139,7 @@ export class AuthService {
   static async changePassword(newPassword: string): Promise<void> {
     try {
       const { updatePassword } = await import('firebase/auth');
-      const user = auth.currentUser;
+      const user = firebaseAuth.currentUser;
       
       if (!user) {
         throw new Error('No hay usuario autenticado');

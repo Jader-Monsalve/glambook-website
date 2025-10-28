@@ -1,63 +1,78 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import LoginForm from "../components/LoginForm.astro";
+import Layout from '../layouts/Layout.astro';
+import LoginForm from '../components/LoginForm.astro';
 
-// Configurar como server-rendered para que funcionen las APIs
-export const prerender = false;
+const title = "Acceso Administrador - GlamBook";
 ---
 
-<Layout title="Acceso de Administrador - GlamBook">
-  <main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-purple-50 py-12 px-4">
-    <div class="w-full max-w-md">
-      <!-- Componente de login -->
+<Layout title={title}>
+  <!-- Spacer para el navbar fixed -->
+  <div class="h-16 sm:h-20 lg:h-24"></div>
+  
+  <section class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-12 px-4 flex items-center justify-center relative overflow-hidden">
+    
+    <!-- Efectos de fondo -->
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+      <div class="absolute top-40 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
+      <div class="absolute bottom-10 left-1/2 w-72 h-72 bg-indigo-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
+    </div>
+    
+    <!-- Grid pattern -->
+    <div class="absolute inset-0 opacity-10">
+      <svg width="60" height="60" viewBox="0 0 60 60" class="w-full h-full">
+        <g fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M60 0H0v60h60z"/>
+          <path d="M30 0v60M0 30h60"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="relative z-10 w-full max-w-md">
+      
+      <!-- Logo y título -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-2xl mb-6 shadow-2xl">
+          <span class="text-3xl">👑</span>
+        </div>
+        <h1 class="text-4xl lg:text-5xl font-bold text-white mb-2 font-poppins">
+          Admin Panel
+        </h1>
+        <p class="text-gray-300 text-lg font-poppins">
+          Acceso exclusivo para administradores
+        </p>
+        
+        <!-- Decoración -->
+        <div class="flex items-center justify-center mt-4 space-x-2">
+          <div class="w-12 h-0.5 bg-gradient-to-r from-transparent to-pink-400"></div>
+          <div class="w-2 h-2 bg-pink-400 rounded-full"></div>
+          <div class="w-12 h-0.5 bg-gradient-to-l from-transparent to-pink-400"></div>
+        </div>
+      </div>
+
+      <!-- Formulario de Login -->
       <LoginForm />
       
-      <!-- Información de contacto y ayuda -->
-      <div class="mt-8 text-center space-y-4">
-        <!-- Enlace de ayuda -->
-        <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
-          <h3 class="text-sm font-semibold text-gray-800 mb-2 font-poppins">¿Problemas para acceder?</h3>
-          <p class="text-xs text-gray-600 mb-3 font-poppins">
-            Si no puedes iniciar sesión o necesitas ayuda con tu cuenta de administrador
-          </p>
-          <a 
-            href="mailto:jadermonsalve9@gmail.com?subject=Problema%20de%20acceso%20-%20Panel%20Admin%20GlamBook&body=Hola,%20tengo%20problemas%20para%20acceder%20al%20panel%20de%20administración.%0A%0AMi%20email%20de%20administrador:%20%0ADescripción%20del%20problema:%20"
-            class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-poppins transition-colors duration-300"
-          >
-            📧 Contactar Soporte
+      <!-- Enlaces adicionales -->
+      <div class="text-center mt-8 space-y-4">
+        <div class="flex items-center justify-center space-x-4 text-gray-400">
+          <div class="h-px bg-gray-600 flex-1"></div>
+          <span class="px-4 text-sm font-poppins">¿Necesitas ayuda?</span>
+          <div class="h-px bg-gray-600 flex-1"></div>
+        </div>
+        
+        <div class="space-y-2">
+          <a href="/contact" 
+             class="block text-gray-300 hover:text-pink-400 text-sm font-poppins transition-colors duration-300">
+            📧 Contactar soporte técnico
           </a>
-        </div>
-
-        <!-- Información adicional -->
-        <div class="text-center">
-          <p class="text-xs text-gray-500 font-poppins">
-            Solo administradores autorizados pueden acceder a este panel
-          </p>
-          <div class="mt-3 flex justify-center items-center gap-4 text-xs text-gray-400">
-            <span>🔒 Acceso Seguro</span>
-            <span>•</span>
-            <span>🛡️ Protegido por Firebase</span>
-          </div>
-        </div>
-
-        <!-- Link para volver al sitio principal -->
-        <div class="pt-4 border-t border-gray-200">
-          <a 
-            href="/"
-            class="inline-flex items-center gap-2 text-gray-600 hover:text-pink-600 text-sm font-poppins transition-colors duration-300"
-          >
-            ← Volver al sitio principal
+          <a href="/" 
+             class="block text-gray-300 hover:text-pink-400 text-sm font-poppins transition-colors duration-300">
+            🏠 Volver al inicio
           </a>
         </div>
       </div>
-    </div>
-  </main>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-    
-    .font-poppins {
-      font-family: 'Poppins', sans-serif;
-    }
-  </style>
+    </div>
+  </section>
 </Layout>

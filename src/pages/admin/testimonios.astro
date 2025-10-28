@@ -1,0 +1,814 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+export const prerender = false;
+const title = "Gestión de Testimonios - Admin GlamBook";
+---
+
+<AdminLayout title={title}>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-500 mx-auto mb-4"></div>
+      <p class="text-gray-600 font-poppins">Cargando testimonios...</p>
+    </div>
+  </div>
+
+  <!-- Auth Check Script -->
+  <script type="module">
+    const isAuthenticated = localStorage.getItem('glambook_auth') === 'true';
+    if (!isAuthenticated) {
+      window.location.href = '/login?redirect=admin/testimonios';
+    } else {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+    }
+  </script>
+
+  <!-- Main Content -->
+  <div id="main-content" style="display: none;" class="min-h-screen">
+  <!-- Header -->
+    <div class="mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <div class="flex items-center gap-3 mb-2">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins">💬 Gestión de Testimonios</h1>
+            <div id="indicador-tiempo-real" class="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-poppins">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              En tiempo real
+            </div>
+          </div>
+          <p class="text-gray-600 font-poppins">
+            Administra las reseñas y opiniones de tus clientes
+            <span id="ultima-actualizacion" class="text-xs text-gray-500 ml-2"></span>
+          </p>
+        </div>
+        
+        <div class="flex flex-wrap gap-2">
+          <button 
+            onclick="window.location.href='/admin'"
+            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins"
+          >
+            ← Dashboard
+          </button>
+          <button 
+            onclick="window.location.href='/admin/citas'"
+            class="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-poppins text-sm"
+          >
+            📅 Citas
+          </button>
+          <button 
+            onclick="window.location.href='/admin/usuarios'"
+            class="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm"
+          >
+            👥 Usuarios
+          </button>
+          <button 
+            onclick="exportarTestimonios()"
+            class="px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors font-poppins"
+          >
+            📊 Exportar CSV
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-blue-50 rounded-lg">
+            <span class="text-2xl">💬</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Total Testimonios</p>
+            <p class="text-2xl font-bold text-blue-800 font-poppins" id="total-testimonios">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-yellow-50 rounded-lg">
+            <span class="text-2xl">⏳</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Pendientes</p>
+            <p class="text-2xl font-bold text-yellow-800 font-poppins" id="pendientes-testimonios">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-green-50 rounded-lg">
+            <span class="text-2xl">✅</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Aprobados</p>
+            <p class="text-2xl font-bold text-green-800 font-poppins" id="aprobados-testimonios">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-purple-50 rounded-lg">
+            <span class="text-2xl">⭐</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Promedio Rating</p>
+            <p class="text-2xl font-bold text-purple-800 font-poppins" id="promedio-rating">0.0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 p-6">
+      <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filtrarTestimonios('todos')" id="filtro-todos" class="filtro-btn px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins text-sm">
+            Todos
+          </button>
+          <button onclick="filtrarTestimonios('pendientes')" id="filtro-pendientes" class="filtro-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-poppins text-sm">
+            Pendientes
+          </button>
+          <button onclick="filtrarTestimonios('aprobados')" id="filtro-aprobados" class="filtro-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-poppins text-sm">
+            Aprobados
+          </button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+          <div class="relative flex-1 lg:w-64">
+            <input 
+              type="text" 
+              id="search-testimonios"
+              placeholder="Buscar por nombre, email o mensaje..."
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins text-sm"
+              onkeyup="buscarTestimonios()"
+            >
+            <span class="absolute right-3 top-2.5 text-gray-400">🔍</span>
+          </div>
+          
+          <select 
+            id="rating-filter"
+            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins text-sm"
+            onchange="filtrarPorRating()"
+          >
+            <option value="0">Todas las estrellas</option>
+            <option value="5">⭐⭐⭐⭐⭐ (5 estrellas)</option>
+            <option value="4">⭐⭐⭐⭐ (4+ estrellas)</option>
+            <option value="3">⭐⭐⭐ (3+ estrellas)</option>
+            <option value="2">⭐⭐ (2+ estrellas)</option>
+            <option value="1">⭐ (1+ estrellas)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testimonios Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+      <!-- Loading state -->
+      <div id="testimonios-loading" class="text-center py-12">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500 mx-auto mb-4"></div>
+        <p class="text-gray-600 font-poppins">Cargando testimonios...</p>
+      </div>
+
+      <!-- Table content -->
+      <div id="testimonios-content" class="hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-poppins">Cliente</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-poppins">Rating</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-poppins">Mensaje</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-poppins">Estado</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-poppins">Fecha</th>
+                <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider font-poppins">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="testimonios-tbody" class="bg-white divide-y divide-gray-200">
+              <!-- Se llenará dinámicamente -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="border-t border-gray-200 px-6 py-4">
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+              <label class="text-sm text-gray-600 font-poppins">Elementos por página:</label>
+              <select 
+                id="items-por-pagina"
+                class="px-3 py-1 border border-gray-300 rounded-lg font-poppins text-sm"
+                onchange="cambiarItemsPorPagina()"
+              >
+                <option value="10">10</option>
+                <option value="25" selected>25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="paginaAnterior()" id="btn-anterior" class="px-3 py-1 border rounded-lg hover:bg-gray-50 font-poppins text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                ← Anterior
+              </button>
+              <div id="paginas-numeros" class="flex gap-1">
+                <!-- Se llenará dinámicamente -->
+              </div>
+              <button onclick="paginaSiguiente()" id="btn-siguiente" class="px-3 py-1 border rounded-lg hover:bg-gray-50 font-poppins text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                Siguiente →
+              </button>
+            </div>
+            
+            <div class="text-sm text-gray-600 font-poppins">
+              Mostrando <span id="showing-from">0</span>-<span id="showing-to">0</span> de <span id="total-items">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="testimonios-empty" class="hidden text-center py-12">
+        <div class="text-6xl mb-4">💬</div>
+        <h3 class="text-xl font-semibold text-gray-800 font-poppins mb-2">No hay testimonios</h3>
+        <p class="text-gray-600 font-poppins">Los testimonios aparecerán aquí cuando los clientes los envíen</p>
+      </div>
+    </div>
+  </div>
+</AdminLayout>
+
+<script>
+// Variables globales
+let testimoniosData: any[] = [];
+let testimoniosFiltrados: any[] = [];
+let testimoniosSeleccionados: string[] = [];
+let filtroActual = 'todos';
+let busquedaActual = '';
+let paginaActual = 1;
+let itemsPorPagina = 25;
+let ratingFiltro = 0;
+
+// Variables para actualización en tiempo real
+let actualizacionInterval: number | null = null;
+let lastUpdateTime: number = Date.now();
+
+// Inicialización
+document.addEventListener('DOMContentLoaded', function() {
+  initializeTestimonios();
+  // Configurar actualizaciones automáticas cada 10 segundos
+  startAutoUpdate();
+});
+
+async function initializeTestimonios() {
+  try {
+    await cargarTestimonios();
+    renderTestimonios();
+    actualizarEstadisticas();
+    lastUpdateTime = Date.now();
+  } catch (error) {
+    console.error('Error inicializando testimonios:', error);
+    mostrarError('Error al cargar los datos');
+  }
+}
+
+// Función para iniciar actualización automática
+function startAutoUpdate() {
+  if (actualizacionInterval) {
+    clearInterval(actualizacionInterval);
+  }
+  
+  actualizacionInterval = window.setInterval(async () => {
+    try {
+      console.log('🔄 Actualizando testimonios automáticamente...');
+      const previousCount = testimoniosData.length;
+      
+      await cargarTestimonios();
+      aplicarFiltros();
+      renderTestimonios();
+      actualizarEstadisticas();
+      
+      // Mostrar notificación solo si hay cambios
+      if (testimoniosData.length !== previousCount) {
+        mostrarNotificacion('✨ Testimonios actualizados', 'success');
+      }
+      
+      lastUpdateTime = Date.now();
+      actualizarIndicadorTiempoReal();
+      
+    } catch (error) {
+      console.error('Error en actualización automática:', error);
+    }
+  }, 10000); // Actualizar cada 10 segundos
+}
+
+// Función para detener actualizaciones automáticas
+function stopAutoUpdate() {
+  if (actualizacionInterval) {
+    clearInterval(actualizacionInterval);
+    actualizacionInterval = null;
+  }
+}
+
+// Función para actualizar el indicador de tiempo real
+function actualizarIndicadorTiempoReal() {
+  const indicador = document.getElementById('ultima-actualizacion');
+  if (indicador) {
+    const ahora = new Date(lastUpdateTime);
+    const tiempo = ahora.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    indicador.textContent = `(Última actualización: ${tiempo})`;
+  }
+}
+
+// Cargar testimonios desde la API
+async function cargarTestimonios() {
+  try {
+    // Cargar testimonios aprobados y pendientes
+    const [responsePendientes, responseAprobados] = await Promise.all([
+      fetch('/api/testimonios?action=pendientes'),
+      fetch('/api/testimonios?action=aprobados')
+    ]);
+    
+    const resultPendientes = await responsePendientes.json();
+    const resultAprobados = await responseAprobados.json();
+    
+    if (resultPendientes.success && resultAprobados.success) {
+      // Mapear propiedades para compatibilidad con el panel admin
+      const mapTestimonio = (t: any) => ({
+        ...t,
+        mensaje: t.comentario || t.mensaje,
+        rating: t.calificacion || t.rating
+      });
+      
+      const pendientes = resultPendientes.data.map((t: any) => ({ 
+        ...mapTestimonio(t), 
+        aprobado: false 
+      }));
+      const aprobados = resultAprobados.data.map((t: any) => ({ 
+        ...mapTestimonio(t), 
+        aprobado: true 
+      }));
+      
+      testimoniosData = [...pendientes, ...aprobados];
+      testimoniosFiltrados = [...testimoniosData];
+      console.log(`✅ ${testimoniosData.length} testimonios cargados (${pendientes.length} pendientes, ${aprobados.length} aprobados)`);
+    } else {
+      throw new Error('Error al cargar testimonios');
+    }
+  } catch (error) {
+    console.error('Error cargando testimonios:', error);
+    testimoniosData = [];
+    testimoniosFiltrados = [];
+    throw error;
+  }
+}
+
+// Actualizar estadísticas
+function actualizarEstadisticas() {
+  const total = testimoniosData.length;
+  const pendientes = testimoniosData.filter(t => !t.aprobado).length;
+  const aprobados = testimoniosData.filter(t => t.aprobado).length;
+  const promedioRating = total > 0 ? (testimoniosData.reduce((sum, t) => sum + t.rating, 0) / total).toFixed(1) : '0.0';
+
+  const totalEl = document.getElementById('total-testimonios');
+  const pendientesEl = document.getElementById('pendientes-testimonios');
+  const aprobadosEl = document.getElementById('aprobados-testimonios');
+  const promedioEl = document.getElementById('promedio-rating');
+
+  if (totalEl) totalEl.textContent = total.toString();
+  if (pendientesEl) pendientesEl.textContent = pendientes.toString();
+  if (aprobadosEl) aprobadosEl.textContent = aprobados.toString();
+  if (promedioEl) promedioEl.textContent = promedioRating;
+}
+
+// Filtrar testimonios
+function filtrarTestimonios(filtro: string) {
+  filtroActual = filtro;
+  ratingFiltro = 0;
+  paginaActual = 1;
+  
+  // Actualizar botones de filtro
+  document.querySelectorAll('.filtro-btn').forEach(btn => {
+    btn.classList.remove('bg-pink-500', 'text-white');
+    btn.classList.add('bg-gray-200', 'text-gray-700');
+  });
+  
+  const activeBtn = document.getElementById(`filtro-${filtro}`);
+  if (activeBtn) {
+    activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+    activeBtn.classList.add('bg-pink-500', 'text-white');
+  }
+
+  // Reiniciar filtros de rating
+  const ratingSelect = document.getElementById('rating-filter') as HTMLSelectElement;
+  if (ratingSelect) ratingSelect.value = '0';
+  
+  aplicarFiltros();
+  renderTestimonios();
+}
+
+// Buscar testimonios
+function buscarTestimonios() {
+  const searchInput = document.getElementById('search-testimonios') as HTMLInputElement;
+  busquedaActual = searchInput?.value.toLowerCase() || '';
+  paginaActual = 1;
+  aplicarFiltros();
+  renderTestimonios();
+}
+
+// Filtrar por rating
+function filtrarPorRating() {
+  const ratingSelect = document.getElementById('rating-filter') as HTMLSelectElement;
+  ratingFiltro = parseInt(ratingSelect?.value || '0');
+  paginaActual = 1;
+  aplicarFiltros();
+  renderTestimonios();
+}
+
+// Aplicar todos los filtros
+function aplicarFiltros() {
+  testimoniosFiltrados = testimoniosData.filter(testimonio => {
+    // Filtro por estado
+    let pasaFiltroEstado = true;
+    if (filtroActual === 'pendientes') {
+      pasaFiltroEstado = !testimonio.aprobado;
+    } else if (filtroActual === 'aprobados') {
+      pasaFiltroEstado = testimonio.aprobado;
+    }
+
+    // Filtro por búsqueda
+    let pasaFiltroBusqueda = true;
+    if (busquedaActual) {
+      const textoCompleto = `${testimonio.nombre} ${testimonio.email} ${testimonio.mensaje}`.toLowerCase();
+      pasaFiltroBusqueda = textoCompleto.includes(busquedaActual);
+    }
+
+    // Filtro por rating
+    let pasaFiltroRating = true;
+    if (ratingFiltro > 0) {
+      pasaFiltroRating = testimonio.rating >= ratingFiltro;
+    }
+
+    return pasaFiltroEstado && pasaFiltroBusqueda && pasaFiltroRating;
+  });
+}
+
+// Renderizar testimonios
+function renderTestimonios() {
+  const loading = document.getElementById('testimonios-loading');
+  const content = document.getElementById('testimonios-content');
+  const empty = document.getElementById('testimonios-empty');
+  const tbody = document.getElementById('testimonios-tbody');
+
+  loading?.classList.add('hidden');
+
+  if (testimoniosFiltrados.length === 0) {
+    content?.classList.add('hidden');
+    empty?.classList.remove('hidden');
+    return;
+  }
+
+  empty?.classList.add('hidden');
+  content?.classList.remove('hidden');
+
+  const totalItems = testimoniosFiltrados.length;
+  const totalPages = Math.ceil(totalItems / itemsPorPagina);
+  const startIndex = (paginaActual - 1) * itemsPorPagina;
+  const endIndex = Math.min(startIndex + itemsPorPagina, totalItems);
+  const testimoniosPagina = testimoniosFiltrados.slice(startIndex, endIndex);
+
+  if (tbody) {
+    tbody.innerHTML = testimoniosPagina.map(testimonio => `
+      <tr class="hover:bg-gray-50">
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="flex items-center">
+            <div class="flex-shrink-0 h-10 w-10">
+              <div class="h-10 w-10 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center text-white font-semibold font-poppins">
+                ${testimonio.nombre.charAt(0).toUpperCase()}
+              </div>
+            </div>
+            <div class="ml-4">
+              <div class="text-sm font-medium text-gray-900 font-poppins">${testimonio.nombre}</div>
+              <div class="text-sm text-gray-500 font-poppins">${testimonio.email}</div>
+            </div>
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="flex items-center">
+            <span class="text-lg">${'⭐'.repeat(testimonio.rating)}</span>
+            <span class="ml-2 text-sm font-medium text-gray-900 font-poppins">${testimonio.rating}/5</span>
+          </div>
+        </td>
+        <td class="px-6 py-4">
+          <div class="text-sm text-gray-900 font-poppins max-w-xs truncate" title="${testimonio.mensaje}">
+            ${testimonio.mensaje}
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium font-poppins ${getEstadoClases(testimonio.aprobado)}">
+            ${getEstadoTexto(testimonio.aprobado)}
+          </span>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-poppins">
+          ${formatearFecha(testimonio.fecha)}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+          <div class="flex gap-2">
+            ${getAccionesTestimonio(testimonio)}
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  actualizarPaginacion(totalItems, totalPages);
+  actualizarInfoPaginacion(startIndex + 1, endIndex, totalItems);
+}
+
+// Funciones auxiliares
+function getEstadoClases(aprobado: boolean) {
+  return aprobado ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+}
+
+function getEstadoTexto(aprobado: boolean) {
+  return aprobado ? '✅ Aprobado' : '⏳ Pendiente';
+}
+
+function formatearFecha(fecha: string) {
+  return new Date(fecha).toLocaleDateString('es-ES', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric' 
+  });
+}
+
+function getAccionesTestimonio(testimonio: any) {
+  let acciones = '';
+  
+  if (!testimonio.aprobado) {
+    acciones += `
+      <button onclick="aprobarTestimonio('${testimonio.id}')" class="text-green-600 hover:text-green-900 font-poppins text-sm" title="Aprobar testimonio">
+        ✅ Aprobar
+      </button>
+      <button onclick="rechazarTestimonio('${testimonio.id}')" class="text-yellow-600 hover:text-yellow-900 font-poppins text-sm ml-2" title="Rechazar testimonio">
+        ❌ Rechazar
+      </button>
+    `;
+  }
+  
+  acciones += `
+    <button onclick="eliminarTestimonio('${testimonio.id}')" class="text-red-600 hover:text-red-900 font-poppins text-sm ml-3" title="Eliminar testimonio">
+      🗑️ Eliminar
+    </button>
+  `;
+  
+  return acciones;
+}
+
+// Acciones de testimonios
+async function aprobarTestimonio(id: string) {
+  if (!confirm('¿Estás seguro de aprobar este testimonio?')) return;
+
+  try {
+    // Mostrar estado de carga
+    mostrarNotificacion('⏳ Aprobando testimonio...', 'info');
+    
+    const response = await fetch('/api/testimonios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'aprobar', id })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      mostrarNotificacion('✅ Testimonio aprobado y ahora visible públicamente', 'success');
+      // Actualización inmediata
+      await cargarTestimonios();
+      aplicarFiltros();
+      renderTestimonios();
+      actualizarEstadisticas();
+      actualizarIndicadorTiempoReal();
+    } else {
+      mostrarNotificacion('❌ Error al aprobar testimonio', 'error');
+    }
+  } catch (error) {
+    mostrarNotificacion('❌ Error de conexión', 'error');
+  }
+}
+
+async function rechazarTestimonio(id: string) {
+  if (!confirm('¿Estás seguro de rechazar este testimonio? Será eliminado de los pendientes.')) return;
+
+  try {
+    mostrarNotificacion('⏳ Rechazando testimonio...', 'info');
+    
+    const response = await fetch('/api/testimonios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'rechazar', id })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      mostrarNotificacion('✅ Testimonio rechazado y removido de pendientes', 'success');
+      // Actualización inmediata
+      await cargarTestimonios();
+      aplicarFiltros();
+      renderTestimonios();
+      actualizarEstadisticas();
+      actualizarIndicadorTiempoReal();
+    } else {
+      mostrarNotificacion('❌ Error al rechazar testimonio', 'error');
+    }
+  } catch (error) {
+    mostrarNotificacion('❌ Error de conexión', 'error');
+  }
+}
+
+async function eliminarTestimonio(id: string) {
+  if (!confirm('¿Estás seguro de eliminar este testimonio? Esta acción no se puede deshacer.')) return;
+
+  try {
+    mostrarNotificacion('⏳ Eliminando testimonio...', 'info');
+    
+    const response = await fetch('/api/testimonios', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'eliminar', id })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      mostrarNotificacion('✅ Testimonio eliminado permanentemente', 'success');
+      // Actualización inmediata
+      await cargarTestimonios();
+      aplicarFiltros();
+      renderTestimonios();
+      actualizarEstadisticas();
+      actualizarIndicadorTiempoReal();
+    } else {
+      mostrarNotificacion('❌ Error al eliminar testimonio', 'error');
+    }
+  } catch (error) {
+    mostrarNotificacion('❌ Error de conexión', 'error');
+  }
+}
+
+// Paginación
+function paginaAnterior() {
+  if (paginaActual > 1) {
+    paginaActual--;
+    renderTestimonios();
+  }
+}
+
+function paginaSiguiente() {
+  const totalPages = Math.ceil(testimoniosFiltrados.length / itemsPorPagina);
+  if (paginaActual < totalPages) {
+    paginaActual++;
+    renderTestimonios();
+  }
+}
+
+function irAPagina(pagina: number) {
+  paginaActual = pagina;
+  renderTestimonios();
+}
+
+function cambiarItemsPorPagina() {
+  const select = document.getElementById('items-por-pagina') as HTMLSelectElement;
+  itemsPorPagina = parseInt(select?.value || '25');
+  paginaActual = 1;
+  renderTestimonios();
+}
+
+function actualizarPaginacion(totalItems: number, totalPages: number) {
+  const btnAnterior = document.getElementById('btn-anterior') as HTMLButtonElement;
+  const btnSiguiente = document.getElementById('btn-siguiente') as HTMLButtonElement;
+  const paginasNumeros = document.getElementById('paginas-numeros');
+
+  if (btnAnterior) btnAnterior.disabled = paginaActual === 1;
+  if (btnSiguiente) btnSiguiente.disabled = paginaActual === totalPages || totalPages === 0;
+
+  if (paginasNumeros) {
+    let paginasHTML = '';
+    const maxPaginas = 5;
+    let inicio = Math.max(1, paginaActual - Math.floor(maxPaginas / 2));
+    let fin = Math.min(totalPages, inicio + maxPaginas - 1);
+
+    if (fin - inicio + 1 < maxPaginas) {
+      inicio = Math.max(1, fin - maxPaginas + 1);
+    }
+
+    for (let i = inicio; i <= fin; i++) {
+      const esActual = i === paginaActual;
+      paginasHTML += `
+        <button 
+          onclick="irAPagina(${i})" 
+          class="px-3 py-1 border rounded-lg font-poppins text-sm ${esActual ? 'bg-pink-500 text-white' : 'hover:bg-gray-50'}"
+        >
+          ${i}
+        </button>
+      `;
+    }
+    paginasNumeros.innerHTML = paginasHTML;
+  }
+}
+
+function actualizarInfoPaginacion(desde: number, hasta: number, total: number) {
+  const fromEl = document.getElementById('showing-from');
+  const toEl = document.getElementById('showing-to');
+  const totalEl = document.getElementById('total-items');
+
+  if (fromEl) fromEl.textContent = desde.toString();
+  if (toEl) toEl.textContent = hasta.toString();
+  if (totalEl) totalEl.textContent = total.toString();
+}
+
+// Notificaciones
+function mostrarNotificacion(mensaje: string, tipo: 'success' | 'error' | 'warning' | 'info' = 'info') {
+  const colores = {
+    success: 'bg-green-500',
+    error: 'bg-red-500',
+    warning: 'bg-yellow-500',
+    info: 'bg-blue-500'
+  };
+
+  const notificacion = document.createElement('div');
+  notificacion.className = `fixed top-4 right-4 ${colores[tipo]} text-white px-6 py-4 rounded-lg shadow-lg z-50 font-poppins text-sm max-w-sm`;
+  notificacion.textContent = mensaje;
+
+  document.body.appendChild(notificacion);
+
+  setTimeout(() => {
+    notificacion.remove();
+  }, 4000);
+}
+
+function mostrarError(mensaje: string) {
+  mostrarNotificacion(mensaje, 'error');
+}
+
+// Export functions
+function exportarTestimonios() {
+  const data = testimoniosFiltrados.map((t: any) => ({
+    Nombre: t.nombre,
+    Email: t.email,
+    Rating: t.rating,
+    Mensaje: t.mensaje,
+    Estado: t.aprobado ? 'Aprobado' : 'Pendiente',
+    Fecha: formatearFecha(t.fecha)
+  }));
+
+  const csv = convertToCSV(data);
+  const filename = `testimonios_${new Date().toISOString().split('T')[0]}.csv`;
+  downloadCSV(csv, filename);
+}
+
+function convertToCSV(data: any[]) {
+  if (data.length === 0) return '';
+
+  const headers = Object.keys(data[0]).join(',');
+  const rows = data.map(row => 
+    Object.values(row).map(value => 
+      typeof value === 'string' && value.includes(',') 
+        ? `"${value}"` 
+        : value
+    ).join(',')
+  );
+
+  return [headers, ...rows].join('\n');
+}
+
+function downloadCSV(csv: string, filename: string) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+  link.setAttribute('href', url);
+  link.setAttribute('download', filename);
+  link.style.visibility = 'hidden';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Hacer las funciones disponibles globalmente
+(window as any).filtrarTestimonios = filtrarTestimonios;
+(window as any).aprobarTestimonio = aprobarTestimonio;
+(window as any).rechazarTestimonio = rechazarTestimonio;
+(window as any).eliminarTestimonio = eliminarTestimonio;
+(window as any).exportarTestimonios = exportarTestimonios;
+(window as any).buscarTestimonios = buscarTestimonios;
+(window as any).paginaAnterior = paginaAnterior;
+(window as any).paginaSiguiente = paginaSiguiente;
+(window as any).irAPagina = irAPagina;
+(window as any).cambiarItemsPorPagina = cambiarItemsPorPagina;
+(window as any).startAutoUpdate = startAutoUpdate;
+(window as any).stopAutoUpdate = stopAutoUpdate;
+</script>

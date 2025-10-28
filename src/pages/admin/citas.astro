@@ -1,0 +1,1651 @@
+﻿---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+export const prerender = false;
+
+const title = "GestiÃ⏳n de Citas - Admin GlamBook";
+---
+
+<AdminLayout title={title}>
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-pink-500 mx-auto mb-4"></div>
+      <p class="text-gray-600 font-poppins">Cargando citas...</p>
+    </div>
+  </div>
+
+  <!-- Auth Check Script -->
+  <script type="module">
+    const isAuthenticated = localStorage.getItem('glambook_auth') === 'true';
+    if (!isAuthenticated) {
+      window.location.href = '/login?redirect=admin/citas';
+    } else {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+    }
+  </script>
+
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins mb-1">Gestión de Citas</h1>
+          <p class="text-gray-600 font-poppins text-sm">Administra las citas y el calendario de disponibilidad</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="window.location.href='/admin'" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins text-sm min-w-[120px]">← Dashboard</button>
+          <button onclick="window.location.href='/admin/usuarios'" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm min-w-[120px]">Usuarios</button>
+          <button onclick="window.location.href='/admin/testimonios'" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors font-poppins text-sm min-w-[120px]">Testimonios</button>
+          <button onclick="enviarRecordatoriosMasivos()" class="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors font-poppins text-sm min-w-[120px]">Recordatorios</button>
+          <button onclick="abrirModalNuevaCita()" class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins text-sm min-w-[120px]">Nueva Cita</button>
+        </div>
+      </div>
+    </div>
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-blue-50 rounded-lg">
+            <span class="text-2xl">📅</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Total Citas</p>
+            <p class="text-2xl font-bold text-blue-800 font-poppins" id="total-citas">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-green-50 rounded-lg">
+            <span class="text-2xl">✅</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Confirmadas</p>
+            <p class="text-2xl font-bold text-green-800 font-poppins" id="confirmadas-citas">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-yellow-50 rounded-lg">
+            <span class="text-2xl">⏳</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Pendientes</p>
+            <p class="text-2xl font-bold text-yellow-800 font-poppins" id="pendientes-citas">0</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div class="flex items-center">
+          <div class="p-3 bg-purple-50 rounded-lg">
+            <span class="text-2xl">📊</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600 font-poppins">Esta Semana</p>
+            <p class="text-2xl font-bold text-purple-800 font-poppins" id="semana-citas">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vista de PestaÃ±as -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8">
+      <!-- Tabs Header -->
+      <div class="border-b border-gray-200">
+        <nav class="flex overflow-x-auto px-4 sm:px-6 space-x-4 sm:space-x-8 scrollbar-hide" aria-label="Tabs">
+          <button 
+            onclick="cambiarTab('lista')" 
+            id="tab-lista"
+            class="tab-btn py-3 sm:py-4 px-3 sm:px-1 border-b-2 border-pink-500 text-pink-600 font-medium text-sm font-poppins whitespace-nowrap flex-shrink-0"
+          >
+            📋 Lista de Citas
+          </button>
+          <button 
+            onclick="cambiarTab('calendario')" 
+            id="tab-calendario"
+            class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
+          >
+            📅 Calendario
+          </button>
+          <button 
+            onclick="cambiarTab('disponibilidad')" 
+            id="tab-disponibilidad"
+            class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
+          >
+            ° Disponibilidad
+          </button>
+        </nav>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="p-6">
+        <!-- Lista Tab -->
+        <div id="content-lista" class="tab-content">
+          <!-- Filters and Search -->
+          <div class="mb-6">
+            <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+              <!-- Filtros con Contadores -->
+              <div class="flex flex-wrap gap-2 w-full sm:w-auto overflow-x-auto pb-2">
+                <button onclick="filtrarCitas('todas')" id="filtro-todas" class="filtro-btn bg-pink-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm flex items-center gap-1 sm:gap-2 whitespace-nowrap">
+                   Todas
+                  <span id="count-todas" class="bg-white bg-opacity-20 px-1.5 py-0.5 rounded-full text-xs">0</span>
+                </button>
+                <button onclick="filtrarCitas('pendiente')" id="filtro-pendientes" class="filtro-btn bg-yellow-100 text-yellow-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-yellow-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
+                  ⏳ Pendientes
+                  <span id="count-pendientes" class="bg-yellow-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
+                </button>
+                <button onclick="filtrarCitas('confirmada')" id="filtro-confirmadas" class="filtro-btn bg-green-100 text-green-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-green-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
+                  ✅ Confirmadas
+                  <span id="count-confirmadas" class="bg-green-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
+                </button>
+                <button onclick="filtrarCitas('completada')" id="filtro-completadas" class="filtro-btn bg-blue-100 text-blue-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-blue-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
+                   Completadas
+                  <span id="count-completadas" class="bg-blue-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
+                </button>
+                <button onclick="filtrarCitas('cancelada')" id="filtro-canceladas" class="filtro-btn bg-red-100 text-red-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-red-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
+                  ⚠️ Canceladas
+                  <span id="count-canceladas" class="bg-red-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
+                </button>
+              </div>
+
+              <!-- Buscador -->
+              <div class="flex gap-1 sm:gap-2 w-full lg:w-auto">
+                <input 
+                  type="text" 
+                  id="search-citas"
+                  placeholder="Buscar citas..."
+                  class="flex-1 lg:w-80 px-3 py-1.5 sm:px-4 sm:py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                >
+                <button 
+                  onclick="buscarCitas()"
+                  class="px-2.5 py-1.5 sm:px-4 sm:py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors text-sm"
+                >
+                  🔍
+                </button>
+                <button 
+                  onclick="refrescarCitas()"
+                  class="px-2.5 py-1.5 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                  title="Refrescar citas"
+                >
+                  🔄
+                </button>
+                                  </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de Citas -->
+          <div id="citas-lista-container">
+            <div id="citas-loading" class="text-center py-12">
+              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto mb-4"></div>
+              <p class="text-gray-500 font-poppins">Cargando citas...</p>
+            </div>
+            
+            <div id="citas-lista" class="hidden space-y-4">
+              <!-- Se llenará dinámicamente -->
+            </div>
+
+            <div id="citas-empty" class="hidden text-center py-12">
+              <div class="text-6xl mb-4">📅</div>
+              <h3 class="text-xl font-semibold text-gray-800 font-poppins mb-2">No hay citas</h3>
+              <p class="text-gray-600 font-poppins">Las citas aparecerán aquí cuando se programen</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendario Tab -->
+        <div id="content-calendario" class="tab-content hidden">
+          <!-- Header del Calendario -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+            <div class="flex items-center gap-2 sm:gap-4">
+              <h2 class="text-lg sm:text-xl font-semibold text-gray-800 font-poppins" id="calendario-mes-año">
+                Octubre 2025
+              </h2>
+              <div class="flex gap-1 sm:gap-2">
+                <button 
+                  onclick="cambiarMes(-1)" 
+                  class="p-1.5 sm:p-2 text-gray-600 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors"
+                  title="Mes anterior"
+                >
+                  ◀️
+                </button>
+                <button 
+                  onclick="cambiarMes(1)" 
+                  class="p-1.5 sm:p-2 text-gray-600 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-colors"
+                  title="Mes siguiente"
+                >
+                  ▶️
+                </button>
+                <button 
+                  onclick="irAHoy()" 
+                  class="px-2 py-1 sm:px-3 text-xs sm:text-sm bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                >
+                  Hoy
+                </button>
+              </div>
+            </div>
+            
+            <!-- Leyenda -->
+            <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                <span class="text-gray-600">Pendientes</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                <span class="text-gray-600">Confirmadas</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-blue-400 rounded-full"></div>
+                <span class="text-gray-600">Completadas</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                <span class="text-gray-600">Canceladas</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calendario Grid -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Días de la semana -->
+            <div class="grid grid-cols-7 bg-gray-50 border-b">
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700 border-r">Dom</div>
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700 border-r">Lun</div>
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700 border-r">Mar</div>
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700 border-r">Mié</div>
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700 border-r">Jue</div>
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700 border-r">Vie</div>
+              <div class="p-2 sm:p-4 text-center text-xs sm:text-sm font-medium text-gray-700">Sáb</div>
+            </div>
+            
+            <!-- Días del mes -->
+            <div id="calendario-dias" class="grid grid-cols-7">
+              <!-- Se llenará dinámicamente con JavaScript -->
+            </div>
+          </div>
+
+          <!-- Panel de detalles del día seleccionado -->
+          <div id="calendario-detalles" class="hidden mt-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <!-- Header del panel -->
+              <div class="bg-gradient-to-r from-pink-500 to-purple-600 p-3 sm:p-4 text-white">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-base sm:text-lg font-semibold font-poppins" id="detalles-fecha">
+                    <!-- Se llenará dinámicamente -->
+                  </h3>
+                  <button 
+                    onclick="cerrarDetallesDia()"
+                    class="text-white hover:bg-white hover:bg-opacity-20 rounded-full p-1 transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <p class="text-pink-100 text-xs sm:text-sm mt-1" id="detalles-resumen">
+                  <!-- Se llenará dinámicamente -->
+                </p>
+              </div>
+              
+              <!-- Contenido del panel -->
+              <div class="p-4 sm:p-6">
+                <div id="detalles-citas" class="space-y-3 sm:space-y-4">
+                  <!-- Se llenará dinámicamente -->
+                </div>
+                
+                <!-- Botón para agregar nueva cita en este día -->
+                <div class="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
+                  <button 
+                    onclick="abrirModalNuevaCitaEnFecha()"
+                    class="w-full bg-pink-500 text-white py-2 px-4 rounded-lg hover:bg-pink-600 transition-colors font-poppins flex items-center justify-center gap-2 text-sm sm:text-base"
+                  >
+                    ➕ <span class="hidden sm:inline">Agregar Cita en Esta Fecha</span><span class="sm:hidden">Nueva Cita</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Disponibilidad Tab -->
+        <div id="content-disponibilidad" class="tab-content hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Horarios de Trabajo -->
+            <div>
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">° Horarios de Trabajo</h3>
+              <div id="horarios-container">
+                <!-- Se llenará dinámicamente -->
+              </div>
+              <button 
+                onclick="guardarHorarios()"
+                class="mt-4 w-full px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins"
+              >
+                 Guardar Horarios
+              </button>
+            </div>
+
+            <!-- Fechas Bloqueadas -->
+            <div>
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 font-poppins"> Fechas Bloqueadas</h3>
+                <button 
+                  onclick="abrirModalBloquearFecha()"
+                  class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-poppins text-sm"
+                >
+                  ž• Bloquear Fecha
+                </button>
+              </div>
+              <div id="fechas-bloqueadas-container">
+                <!-- Se llenará dinámicamente -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+  <!-- Modal Nueva Cita -->
+  <div id="modal-nueva-cita" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center p-4" style="display: none;">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-800 font-poppins">ž• Nueva Cita</h2>
+          <button onclick="cerrarModalNuevaCita()" class="text-gray-500 hover:text-gray-700 text-2xl">Ã—</button>
+        </div>
+
+        <form id="form-nueva-cita" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Nombre</label>
+              <input type="text" id="nueva-nombre" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Email</label>
+              <input type="email" id="nueva-email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Teléfono</label>
+              <input type="tel" id="nueva-telefono" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Servicio</label>
+              <select id="nueva-servicio" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+                <option value="">Seleccionar servicio</option>
+                <option value="maquillaje-social">Maquillaje Social</option>
+                <option value="maquillaje-novia">Maquillaje de Novia</option>
+                <option value="maquillaje-fiesta">Maquillaje de Fiesta</option>
+                <option value="uÃ±as-gel">UÃ±as de Gel</option>
+                <option value="uÃ±as-acrilico">UÃ±as de AcrÃ­lico</option>
+                <option value="manicure">Manicure</option>
+                <option value="pedicure">Pedicure</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Fecha</label>
+              <input type="date" id="nueva-fecha" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Hora</label>
+              <select id="nueva-hora" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+                <option value="">Seleccionar hora</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="11:00">11:00</option>
+                <option value="12:00">12:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="17:00">17:00</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Notas adicionales</label>
+            <textarea id="nueva-notas" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"></textarea>
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button type="button" onclick="cerrarModalNuevaCita()" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-poppins">
+              Cancelar
+            </button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins">
+              ž• Crear Cita
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Bloquear Fecha -->
+  <div id="modal-bloquear-fecha" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center p-4" style="display: none;">
+    <div class="bg-white rounded-xl max-w-md w-full">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold text-gray-800 font-poppins"> Bloquear Fecha</h2>
+          <button onclick="cerrarModalBloquearFecha()" class="text-gray-500 hover:text-gray-700 text-2xl">Ã—</button>
+        </div>
+
+        <form id="form-bloquear-fecha" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Fecha a bloquear</label>
+            <input type="date" id="bloquear-fecha" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 font-poppins mb-1">Motivo</label>
+            <input type="text" id="bloquear-motivo" required placeholder="Ej: DÃ­a libre, evento personal..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins">
+          </div>
+
+          <div class="flex gap-3 pt-4">
+            <button type="button" onclick="cerrarModalBloquearFecha()" class="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-poppins">
+              Cancelar
+            </button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-poppins">
+               Bloquear
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Variables globales
+    let citas: any[] = [];
+    let fechasBloqueadas: any[] = [];
+    let fechaSeleccionada: string = '';
+    let mesActual: Date = new Date();
+    let filtroActual: string = 'todas';
+
+    // Funciones auxiliares
+    function getServicioNombre(servicio: string): string {
+      const servicios: { [key: string]: string } = {
+        'maquillaje-social': 'Maquillaje Social',
+        'maquillaje-novia': 'Maquillaje de Novia',
+        'maquillaje-fiesta': 'Maquillaje de Fiesta',
+        'uÃ±as-gel': 'UÃ±as de Gel',
+        'uÃ±as-acrilico': 'UÃ±as de AcrÃ­lico',
+        'manicure': 'Manicure',
+        'pedicure': 'Pedicure'
+      };
+      return servicios[servicio] || servicio;
+    }
+
+    function getEstadoTexto(estado: string): string {
+      const estados: { [key: string]: string } = {
+        'pendiente': 'Pendiente',
+        'confirmada': 'Confirmada',
+        'completada': 'Completada',
+        'cancelada': 'Cancelada'
+      };
+      return estados[estado] || estado;
+    }
+
+    function getEstadoClases(estado: string): string {
+      const clases: { [key: string]: string } = {
+        'pendiente': 'bg-yellow-100 text-yellow-800',
+        'confirmada': 'bg-green-100 text-green-800',
+        'completada': 'bg-blue-100 text-blue-800',
+        'cancelada': 'bg-red-100 text-red-800'
+      };
+      return clases[estado] || 'bg-gray-100 text-gray-800';
+    }
+
+    function formatearFecha(fecha: string): string {
+      return new Date(fecha).toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
+
+    // Funciones del calendario
+    function renderizarCalendario() {
+      const container = document.getElementById('calendario-dias');
+      const headerMesAño = document.getElementById('calendario-mes-año');
+      
+      if (!container || !headerMesAño) return;
+
+      // Actualizar header
+      headerMesAño.textContent = mesActual.toLocaleDateString('es-ES', {
+        month: 'long',
+        year: 'numeric'
+      });
+
+      // Limpiar contenido previo
+      container.innerHTML = '';
+
+      // Obtener primer día del mes y cuántos días tiene
+      const primerDia = new Date(mesActual.getFullYear(), mesActual.getMonth(), 1);
+      const ultimoDia = new Date(mesActual.getFullYear(), mesActual.getMonth() + 1, 0);
+      const diaInicio = primerDia.getDay(); // 0 = domingo
+      const diasEnMes = ultimoDia.getDate();
+
+      // Agregar días vacíos del mes anterior
+      for (let i = 0; i < diaInicio; i++) {
+        const divVacio = document.createElement('div');
+        divVacio.className = 'h-24 border-b border-r bg-gray-50';
+        container.appendChild(divVacio);
+      }
+
+      // Agregar días del mes actual
+      for (let dia = 1; dia <= diasEnMes; dia++) {
+        const fechaCompleta = `${mesActual.getFullYear()}-${String(mesActual.getMonth() + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        const citasDelDia = citas.filter(cita => cita.fecha === fechaCompleta);
+        
+        const divDia = document.createElement('div');
+        divDia.className = 'h-24 border-b border-r p-2 cursor-pointer hover:bg-gray-50 transition-colors relative';
+        
+        // Número del día
+        const numeroDia = document.createElement('div');
+        numeroDia.className = 'text-sm font-medium text-gray-700';
+        numeroDia.textContent = dia.toString();
+        
+        // Marcar día actual
+        const hoy = new Date();
+        if (mesActual.getFullYear() === hoy.getFullYear() && 
+            mesActual.getMonth() === hoy.getMonth() && 
+            dia === hoy.getDate()) {
+          numeroDia.className += ' bg-pink-500 text-white rounded-full w-6 h-6 flex items-center justify-center';
+        }
+        
+        divDia.appendChild(numeroDia);
+
+        // Agregar indicadores de citas
+        if (citasDelDia.length > 0) {
+          const indicadoresContainer = document.createElement('div');
+          indicadoresContainer.className = 'absolute bottom-1 left-1 right-1 flex flex-wrap gap-1';
+          
+          // Contar citas por estado
+          const estadoCount = {
+            pendiente: citasDelDia.filter(c => c.estado === 'pendiente').length,
+            confirmada: citasDelDia.filter(c => c.estado === 'confirmada').length,
+            completada: citasDelDia.filter(c => c.estado === 'completada').length,
+            cancelada: citasDelDia.filter(c => c.estado === 'cancelada').length
+          };
+
+          // Mostrar indicadores
+          Object.entries(estadoCount).forEach(([estado, count]) => {
+            if (count > 0) {
+              const indicador = document.createElement('div');
+              indicador.className = 'w-2 h-2 rounded-full';
+              
+              const colores = {
+                pendiente: 'bg-yellow-400',
+                confirmada: 'bg-green-400', 
+                completada: 'bg-blue-400',
+                cancelada: 'bg-red-400'
+              };
+              
+              indicador.className += ' ' + colores[estado as keyof typeof colores];
+              indicador.title = `${count} cita(s) ${estado}(s)`;
+              indicadoresContainer.appendChild(indicador);
+            }
+          });
+          
+          divDia.appendChild(indicadoresContainer);
+        }
+
+        // Agregar click handler
+        divDia.onclick = () => mostrarDetallesDia(fechaCompleta);
+        
+        container.appendChild(divDia);
+      }
+
+      // Completar la grilla con días del siguiente mes si es necesario
+      const diasRestantes = 42 - (diaInicio + diasEnMes); // 6 filas × 7 días = 42
+      for (let i = 0; i < diasRestantes; i++) {
+        const divVacio = document.createElement('div');
+        divVacio.className = 'h-24 border-b border-r bg-gray-50';
+        container.appendChild(divVacio);
+      }
+    }
+
+    function cambiarMes(direccion: number) {
+      mesActual.setMonth(mesActual.getMonth() + direccion);
+      renderizarCalendario();
+    }
+
+    function irAHoy() {
+      mesActual = new Date();
+      renderizarCalendario();
+    }
+
+    function mostrarDetallesDia(fecha: string) {
+      const citasDelDia = citas.filter(cita => cita.fecha === fecha);
+      const detallesContainer = document.getElementById('calendario-detalles');
+      const detallesFecha = document.getElementById('detalles-fecha');
+      const detallesCitas = document.getElementById('detalles-citas');
+      const detallesResumen = document.getElementById('detalles-resumen');
+      
+      if (!detallesContainer || !detallesFecha || !detallesCitas || !detallesResumen) return;
+
+      // Guardar fecha seleccionada para el modal de nueva cita
+      fechaSeleccionada = fecha;
+
+      // Mostrar fecha seleccionada
+      detallesFecha.textContent = formatearFecha(fecha);
+      
+      // Mostrar resumen
+      if (citasDelDia.length === 0) {
+        detallesResumen.textContent = 'No hay citas programadas para este día';
+        detallesCitas.innerHTML = `
+          <div class="text-center py-8">
+            <div class="text-6xl mb-4">📅</div>
+            <p class="text-gray-500 font-poppins">No hay citas programadas para este día</p>
+            <p class="text-gray-400 text-sm mt-2">Puedes agregar una nueva cita usando el botón de abajo</p>
+          </div>
+        `;
+      } else {
+        // Crear resumen por estado
+        const estadoCount = {
+          pendiente: citasDelDia.filter(c => c.estado === 'pendiente').length,
+          confirmada: citasDelDia.filter(c => c.estado === 'confirmada').length,
+          completada: citasDelDia.filter(c => c.estado === 'completada').length,
+          cancelada: citasDelDia.filter(c => c.estado === 'cancelada').length
+        };
+        
+        const resumenTexto = Object.entries(estadoCount)
+          .filter(([_, count]) => count > 0)
+          .map(([estado, count]) => `${count} ${getEstadoTexto(estado)}`)
+          .join(' • ');
+        
+        detallesResumen.textContent = `${citasDelDia.length} cita(s) programada(s) - ${resumenTexto}`;
+        
+        // Ordenar citas por hora
+        const citasOrdenadas = citasDelDia.sort((a, b) => a.hora.localeCompare(b.hora));
+        
+        detallesCitas.innerHTML = citasOrdenadas.map((cita, index) => `
+          <div class="bg-white rounded-lg p-5 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 ${getBorderColor(cita.estado)} border-l-4">
+            <div class="flex justify-between items-start mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                  ${cita.nombre.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h4 class="font-semibold text-gray-800 font-poppins text-lg">${cita.nombre}</h4>
+                  <p class="text-sm text-gray-500">Cita #${cita.id}</p>
+                </div>
+              </div>
+              <span class="text-xs px-3 py-1 rounded-full ${getEstadoClases(cita.estado)} font-medium">
+                ${getEstadoTexto(cita.estado)}
+              </span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <span class="w-5 text-center">🕒</span>
+                  <span class="font-medium">${cita.hora}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <span class="w-5 text-center">💅</span>
+                  <span>${getServicioNombre(cita.servicio)}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <span class="w-5 text-center">📧</span>
+                  <span>${cita.email}</span>
+                </div>
+              </div>
+              
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <span class="w-5 text-center">📱</span>
+                  <span>${cita.telefono}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                  <span class="w-5 text-center">📅</span>
+                  <span>Creada: ${new Date(cita.fechaCreacion).toLocaleDateString('es-ES')}</span>
+                </div>
+                ${cita.recordatorioEnviado ? `
+                <div class="flex items-center gap-2 text-sm text-green-600">
+                  <span class="w-5 text-center">✅</span>
+                  <span>Recordatorio enviado</span>
+                </div>
+                ` : ''}
+              </div>
+            </div>
+            
+            ${cita.mensaje ? `
+            <div class="bg-gray-50 p-3 rounded-lg mb-4">
+              <div class="flex items-start gap-2 text-sm">
+                <span class="w-5 text-center text-gray-500 mt-0.5">💬</span>
+                <span class="text-gray-700 italic">"${cita.mensaje}"</span>
+              </div>
+            </div>
+            ` : ''}
+            
+            <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
+              ${cita.estado === 'pendiente' ? `
+                <button onclick="cambiarEstadoCita(${cita.id}, 'confirmada')" 
+                        class="px-3 py-1 bg-green-500 text-white text-xs rounded-lg hover:bg-green-600 transition-colors">
+                  ✅ Confirmar
+                </button>
+              ` : ''}
+              
+              ${cita.estado === 'confirmada' ? `
+                <button onclick="cambiarEstadoCita(${cita.id}, 'completada')" 
+                        class="px-3 py-1 bg-blue-500 text-white text-xs rounded-lg hover:bg-blue-600 transition-colors">
+                  ✅ Completar
+                </button>
+              ` : ''}
+              
+              <button onclick="eliminarCita(${cita.id})" 
+                      class="px-3 py-1 bg-red-500 text-white text-xs rounded-lg hover:bg-red-600 transition-colors">
+                🗑️ Eliminar
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+      
+      // Mostrar el panel de detalles con animación
+      detallesContainer.classList.remove('hidden');
+      
+      // Scroll suave hacia el panel
+      setTimeout(() => {
+        detallesContainer.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+
+    function getBorderColor(estado: string): string {
+      const colores = {
+        'pendiente': 'border-yellow-400',
+        'confirmada': 'border-green-400',
+        'completada': 'border-blue-400', 
+        'cancelada': 'border-red-400'
+      };
+      return colores[estado as keyof typeof colores] || 'border-gray-400';
+    }
+
+    function cerrarDetallesDia() {
+      const detallesContainer = document.getElementById('calendario-detalles');
+      if (detallesContainer) {
+        detallesContainer.classList.add('hidden');
+      }
+    }
+
+    function abrirModalNuevaCitaEnFecha() {
+      // Prellenar la fecha en el modal
+      const fechaInput = document.getElementById('nueva-fecha') as HTMLInputElement;
+      if (fechaInput && fechaSeleccionada) {
+        fechaInput.value = fechaSeleccionada;
+      }
+      
+      // Abrir el modal de nueva cita
+      abrirModalNuevaCita();
+      
+      // Cerrar el panel de detalles
+      cerrarDetallesDia();
+    }
+
+    // Funciones de notificaciÃ⏳n
+    function mostrarNotificacion(mensaje: string, tipo: string = 'info') {
+      const notificacion = document.createElement('div');
+      notificacion.className = 'fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg font-poppins max-w-sm transform transition-all duration-300 translate-x-full';
+      
+      const colores: { [key: string]: string } = {
+        'success': 'bg-green-500 text-white',
+        'error': 'bg-red-500 text-white',
+        'warning': 'bg-yellow-500 text-white',
+        'info': 'bg-blue-500 text-white'
+      };
+      
+      notificacion.classList.add(...colores[tipo].split(' '));
+      notificacion.textContent = mensaje;
+      
+      document.body.appendChild(notificacion);
+      
+      setTimeout(() => notificacion.classList.remove('translate-x-full'), 100);
+      setTimeout(() => {
+        notificacion.classList.add('translate-x-full');
+        setTimeout(() => document.body.removeChild(notificacion), 300);
+      }, 3000);
+    }
+
+    // Funciones de carga de datos
+    async function cargarCitas() {
+      try {
+        console.log('🔄 Cargando citas...');
+        const response = await fetch('/api/citas?action=todas');
+        const data = await response.json();
+        console.log('📥 Respuesta API:', data);
+        if (data.success) {
+          citas = data.data || [];
+          console.log('📋 Citas cargadas:', citas.length);
+          const estadosCitas = {
+            pendientes: citas.filter(c => c.estado === 'pendiente').length,
+            confirmadas: citas.filter(c => c.estado === 'confirmada').length,
+            completadas: citas.filter(c => c.estado === 'completada').length,
+            canceladas: citas.filter(c => c.estado === 'cancelada').length,
+          };
+          console.log('📊 Estados:', estadosCitas);
+          renderizarContenido();
+          actualizarEstadisticas();
+          renderizarCalendario();
+        } else {
+          console.error('❌ Error en respuesta API:', data.message);
+          alert('Error en API: ' + data.message);
+        }
+      } catch (error) {
+        console.error('❌ Error cargando citas:', error);
+        alert('Error: ' + (error instanceof Error ? error.message : 'Error desconocido'));
+        mostrarNotificacion('Error cargando citas', 'error');
+      }
+    }
+
+    async function cargarFechasBloqueadas() {
+      try {
+        const response = await fetch('/api/disponibilidad');
+        const data = await response.json();
+        if (data.success) {
+          fechasBloqueadas = data.fechasBloqueadas || [];
+          renderizarFechasBloqueadas();
+        }
+      } catch (error) {
+        console.error('Error cargando fechas bloqueadas:', error);
+      }
+    }
+
+    // Funciones de navegaciÃ⏳n
+    function cambiarTab(tab: string) {
+      // Ocultar todos los contenidos
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // Mostrar el contenido seleccionado
+      const content = document.getElementById(`content-${tab}`);
+      if (content) content.classList.remove('hidden');
+      
+      // Actualizar estilos de pestaÃ±as
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-pink-500', 'text-pink-600');
+        btn.classList.add('border-transparent', 'text-gray-500');
+      });
+      
+      const activeTab = document.getElementById(`tab-${tab}`);
+      if (activeTab) {
+        activeTab.classList.remove('border-transparent', 'text-gray-500');
+        activeTab.classList.add('border-pink-500', 'text-pink-600');
+      }
+      
+      // Renderizar contenido específico
+      if (tab === 'disponibilidad') {
+        renderizarHorarios();
+        renderizarFechasBloqueadas();
+      } else if (tab === 'calendario') {
+        renderizarCalendario();
+      }
+    }
+
+    // Funciones de filtrado y bÃºsqueda
+    function filtrarCitas(filtro: string) {
+      filtroActual = filtro;
+      renderizarContenido();
+      
+      // Actualizar botones de filtro - Resetear todos a estilo inactivo
+      document.querySelectorAll('.filtro-btn').forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-pink-500', 'scale-105');
+        (btn as HTMLElement).style.transform = 'scale(1)';
+      });
+      
+      // Activar el filtro seleccionado
+      const activeFilter = document.getElementById(`filtro-${filtro}`);
+      if (activeFilter) {
+        activeFilter.classList.add('ring-2', 'ring-pink-500', 'scale-105');
+        (activeFilter as HTMLElement).style.transform = 'scale(1.05)';
+      }
+    }
+
+    function buscarCitas() {
+      const searchInput = document.getElementById('search-citas');
+      if (searchInput) {
+        const termino = (searchInput as HTMLInputElement)?.value.toLowerCase() || '';
+        renderizarContenido(termino);
+      }
+    }
+
+    async function refrescarCitas() {
+      console.log('🔄 Refrescando citas manualmente...');
+      mostrarNotificacion('🔄 Actualizando citas...', 'info');
+      await cargarCitas();
+      mostrarNotificacion('✅ Citas actualizadas', 'success');
+    }
+
+    // Funciones de renderizado
+    function renderizarContenido(busqueda = '') {
+      renderizarCitas(busqueda);
+    }
+
+    function renderizarCitas(busqueda = '') {
+      console.log('🎨 Renderizando citas... Total:', citas.length, 'Filtro:', filtroActual);
+      const container = document.getElementById('citas-lista');
+      const loading = document.getElementById('citas-loading');
+      const empty = document.getElementById('citas-empty');
+      
+      if (!container) return;
+      
+      loading?.classList.add('hidden');
+      
+      let citasFiltradas = citas;
+      
+      // Aplicar filtro de estado
+      if (filtroActual !== 'todas') {
+        citasFiltradas = citasFiltradas.filter(cita => cita.estado === filtroActual);
+      }
+      
+      // Aplicar bÃºsqueda
+      if (busqueda) {
+        citasFiltradas = citasFiltradas.filter(cita => 
+          cita.nombre.toLowerCase().includes(busqueda) ||
+          cita.email.toLowerCase().includes(busqueda) ||
+          getServicioNombre(cita.servicio).toLowerCase().includes(busqueda)
+        );
+      }
+      
+      if (citasFiltradas.length === 0) {
+        container.classList.add('hidden');
+        empty?.classList.remove('hidden');
+        return;
+      }
+      
+      empty?.classList.add('hidden');
+      container.classList.remove('hidden');
+      
+      container.innerHTML = citasFiltradas.map(cita => `
+        <div class="bg-white border border-gray-200 rounded-lg p-3 sm:p-4 hover:shadow-md transition-all duration-200 hover:border-pink-300">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-800 font-poppins text-base sm:text-lg">${cita.nombre}</h3>
+              <div class="text-xs sm:text-sm text-gray-500 font-poppins mt-1">
+                 ${formatearFecha(cita.fecha)} €¢ ° ${cita.hora}
+              </div>
+            </div>
+            <div class="text-xs ${getEstadoClases(cita.estado)} px-2 sm:px-3 py-1 rounded-full font-medium self-start">
+              ${getEstadoTexto(cita.estado)}
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3">
+            <div class="text-gray-600 font-poppins text-xs sm:text-sm truncate">
+               ${cita.email}
+            </div>
+            <div class="text-gray-600 font-poppins text-xs sm:text-sm">
+               ${cita.telefono}
+            </div>
+          </div>
+          
+          <div class="text-gray-700 font-poppins mb-3">
+             ${getServicioNombre(cita.servicio)}
+          </div>
+          
+          ${cita.mensaje ? `
+            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+              <p class="text-gray-700 font-poppins text-sm italic">"${cita.mensaje}"</p>
+            </div>
+          ` : ''}
+          
+          ${cita.recordatorioEnviado ? `
+            <div class="mb-3">
+              <span class="text-green-600 text-xs font-poppins"> Recordatorio enviado</span>
+            </div>
+          ` : ''}
+          
+          <div class="flex flex-col sm:flex-row flex-wrap gap-2 justify-between items-start sm:items-center pt-3 border-t border-gray-100">
+            <div class="flex gap-1 sm:gap-2 flex-wrap">
+              ${cita.estado === 'pendiente' ? `
+                <button onclick="cambiarEstadoCita('${cita.id}', 'confirmada')" 
+                  title="Confirmar cita"
+                  class="px-2 py-1 sm:px-3 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap">
+                  ✅ Confirmar
+                </button>
+              ` : ''}
+              
+              ${cita.estado === 'confirmada' ? `
+                <button onclick="cambiarEstadoCita('${cita.id}', 'completada')" 
+                  title="Marcar como completada"
+                  class="px-2 py-1 sm:px-3 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap">
+                   Completar
+                </button>
+              ` : ''}
+              
+              ${(cita.estado === 'pendiente' || cita.estado === 'confirmada') ? `
+                <button onclick="cambiarEstadoCita('${cita.id}', 'cancelada')" 
+                  title="Cancelar cita"
+                  class="px-2 py-1 sm:px-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors text-xs sm:text-sm font-poppins whitespace-nowrap">
+                  ⚠️ Cancelar
+                </button>
+              ` : ''}
+            </div>
+            
+            <div class="flex flex-col gap-2">
+              ${cita.estado === 'confirmada' ? `
+                <button onclick="abrirWhatsApp('${cita.id}')" 
+                  title="Enviar recordatorio por WhatsApp"
+                  class="px-3 py-1 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-poppins">
+                  ï¿½ WhatsApp
+                </button>
+                <button onclick="descargarImagen('${cita.id}')" 
+                  title="Descargar imagen de la cita"
+                  class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors text-sm font-poppins">
+                   Imagen
+                </button>
+              ` : ''}
+              
+              <button onclick="eliminarCita('${cita.id}')" 
+                title="Eliminar cita"
+                class="px-3 py-1 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-poppins">
+                 Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderizarHorarios() {
+      const container = document.getElementById('horarios-container');
+      if (!container) return;
+      
+      const dias = [
+        { key: 'lunes', nombre: 'Lunes' },
+        { key: 'martes', nombre: 'Martes' },
+        { key: 'miercoles', nombre: 'Miércoles' },
+        { key: 'jueves', nombre: 'Jueves' },
+        { key: 'viernes', nombre: 'Viernes' },
+        { key: 'sabado', nombre: 'Sábado' },
+        { key: 'domingo', nombre: 'Domingo' }
+      ];
+      
+      container.innerHTML = dias.map(dia => `
+        <div class="mb-4 p-4 border border-gray-200 rounded-lg">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-semibold text-gray-800 font-poppins">${dia.nombre}</h4>
+            <label class="flex items-center">
+              <input 
+                type="checkbox" 
+                id="activo-${dia.key}"
+                onchange="toggleDiaActivo('${dia.key}')"
+                class="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+              >
+              <span class="ml-2 text-sm text-gray-600 font-poppins">Activo</span>
+            </label>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4" id="horario-${dia.key}" style="opacity: 0.5; pointer-events: none;">
+            <div>
+              <label class="block text-sm text-gray-600 font-poppins mb-1">Inicio</label>
+              <input 
+                type="time" 
+                id="inicio-${dia.key}"
+                value="09:00"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+              >
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 font-poppins mb-1">Fin</label>
+              <input 
+                type="time" 
+                id="fin-${dia.key}"
+                value="18:00"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+              >
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderizarFechasBloqueadas() {
+      const container = document.getElementById('fechas-bloqueadas-container');
+      if (!container) return;
+      
+      if (!fechasBloqueadas || fechasBloqueadas.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-sm font-poppins">No hay fechas bloqueadas</p>';
+        return;
+      }
+      
+      const fechasOrdenadas = [...fechasBloqueadas].sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime());
+      
+      container.innerHTML = fechasOrdenadas.map(fecha => `
+        <div class="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg mb-2">
+          <div>
+            <p class="font-medium text-red-800 font-poppins">${formatearFecha(fecha.fecha)}</p>
+            <p class="text-sm text-red-600 font-poppins">${fecha.motivo}</p>
+          </div>
+          <button 
+            onclick="desbloquearFecha('${fecha.fecha}')"
+            class="text-red-600 hover:text-red-800 transition-colors"
+            title="Desbloquear fecha"
+          >
+            Œ
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Funciones de estadÃ­sticas
+    function actualizarEstadisticas() {
+      const total = citas.length;
+      const confirmadas = citas.filter(c => c.estado === 'confirmada').length;
+      const pendientes = citas.filter(c => c.estado === 'pendiente').length;
+      const completadas = citas.filter(c => c.estado === 'completada').length;
+      const canceladas = citas.filter(c => c.estado === 'cancelada').length;
+      
+      const hoy = new Date();
+      const inicioSemana = new Date(hoy.setDate(hoy.getDate() - hoy.getDay()));
+      const finSemana = new Date(inicioSemana);
+      finSemana.setDate(inicioSemana.getDate() + 6);
+      const semana = citas.filter(c => {
+        const fechaCita = new Date(c.fecha);
+        return fechaCita >= inicioSemana && fechaCita <= finSemana;
+      }).length;
+      
+      // Actualizar estadÃ­sticas principales
+      const totalElement = document.getElementById('total-citas');
+      const confirmadasElement = document.getElementById('confirmadas-citas');
+      const pendientesElement = document.getElementById('pendientes-citas');
+      const semanaElement = document.getElementById('semana-citas');
+      
+      if (totalElement) totalElement.textContent = total.toString();
+      if (confirmadasElement) confirmadasElement.textContent = confirmadas.toString();
+      if (pendientesElement) pendientesElement.textContent = pendientes.toString();
+      if (semanaElement) semanaElement.textContent = semana.toString();
+      
+      // Actualizar contadores de filtros
+      const countTodas = document.getElementById('count-todas');
+      const countPendientes = document.getElementById('count-pendientes');
+      const countConfirmadas = document.getElementById('count-confirmadas');
+      const countCompletadas = document.getElementById('count-completadas');
+      const countCanceladas = document.getElementById('count-canceladas');
+      
+      if (countTodas) countTodas.textContent = total.toString();
+      if (countPendientes) countPendientes.textContent = pendientes.toString();
+      if (countConfirmadas) countConfirmadas.textContent = confirmadas.toString();
+      if (countCompletadas) countCompletadas.textContent = completadas.toString();
+      if (countCanceladas) countCanceladas.textContent = canceladas.toString();
+    }
+
+    // Funciones de modales
+    function abrirModalNuevaCita() {
+      const modal = document.getElementById('modal-nueva-cita');
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+
+    function cerrarModalNuevaCita() {
+      const modal = document.getElementById('modal-nueva-cita');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      
+      const form = document.getElementById('form-nueva-cita') as HTMLFormElement;
+      if (form) form.reset();
+    }
+
+    function abrirModalBloquearFecha() {
+      const modal = document.getElementById('modal-bloquear-fecha');
+      if (modal) {
+        modal.style.display = 'flex';
+      }
+    }
+
+    function cerrarModalBloquearFecha() {
+      const modal = document.getElementById('modal-bloquear-fecha');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      
+      const form = document.getElementById('form-bloquear-fecha') as HTMLFormElement;
+      if (form) form.reset();
+    }
+
+    // Funciones de disponibilidad
+    function toggleDiaActivo(dia: string) {
+      const checkbox = document.getElementById(`activo-${dia}`) as HTMLInputElement;
+      const horarioDiv = document.getElementById(`horario-${dia}`);
+      
+      if (checkbox && horarioDiv) {
+        if (checkbox.checked) {
+          horarioDiv.style.opacity = '1';
+          horarioDiv.style.pointerEvents = 'auto';
+        } else {
+          horarioDiv.style.opacity = '0.5';
+          horarioDiv.style.pointerEvents = 'none';
+        }
+      }
+    }
+
+    async function guardarHorarios() {
+      const dias = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+      const nuevosHorarios = {};
+      
+      dias.forEach(dia => {
+        const activoElement = document.getElementById(`activo-${dia}`) as HTMLInputElement;
+        const inicioElement = document.getElementById(`inicio-${dia}`) as HTMLInputElement;
+        const finElement = document.getElementById(`fin-${dia}`) as HTMLInputElement;
+        
+        if (activoElement && inicioElement && finElement) {
+          (nuevosHorarios as any)[dia] = {
+            activo: activoElement.checked,
+            inicio: inicioElement.value,
+            fin: finElement.value
+          };
+        }
+      });
+      
+      try {
+        const response = await fetch('/api/disponibilidad', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'actualizar-horarios',
+            horarios: nuevosHorarios
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          mostrarNotificacion('✅ Horarios actualizados exitosamente', 'success');
+        } else {
+          mostrarNotificacion('⚠️ Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        mostrarNotificacion('⚠️ Error de conexiÃ⏳n', 'error');
+      }
+    }
+
+    function desbloquearFecha(fecha: string) {
+      if (confirm('¿Estás seguro de que quieres desbloquear esta fecha?')) {
+        console.log('Desbloqueando fecha:', fecha);
+        // Implementar lÃ⏳gica de desbloqueo
+      }
+    }
+
+    // Funciones de citas
+    async function cambiarEstadoCita(id: string, nuevoEstado: string) {
+      if (!confirm(`¿Estás seguro de cambiar el estado de la cita a "${getEstadoTexto(nuevoEstado)}"?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/citas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'cambiar-estado',
+            id: id,
+            nuevoEstado: nuevoEstado
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          mostrarNotificacion(`✅ Estado cambiado a ${getEstadoTexto(nuevoEstado)}`, 'success');
+          await cargarCitas();
+        } else {
+          mostrarNotificacion('⚠️ Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error cambiando estado:', error);
+        mostrarNotificacion('⚠️ Error de conexiÃ⏳n', 'error');
+      }
+    }
+
+    function abrirWhatsApp(id: string) {
+      const cita = citas.find((c: any) => c.id == id);
+      if (!cita) {
+        mostrarNotificacion('⚠️ Cita no encontrada', 'error');
+        return;
+      }
+
+      const fechaFormateada = new Date(cita.fecha).toLocaleDateString('es-ES', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      const mensaje = `¡Hola ${cita.nombre}!
+
+Te recordamos tu cita en *GlamBook Studio*
+
+*Fecha:* ${fechaFormateada}
+*Hora:* ${cita.hora}
+*Servicio:* ${cita.servicio}
+*ID:* #${cita.id}
+
+Recordatorios importantes:
+• No olvides llegar 10 minutos antes
+• Mantente hidratada
+• Ven con el rostro limpio
+
+¡Te esperamos!`;
+
+      // Limpiar número de teléfono (solo números)
+      const numeroLimpio = cita.telefono.replace(/[^\d]/g, '');
+      
+      // Crear enlace de WhatsApp
+      const enlaceWhatsApp = `https://wa.me/${numeroLimpio}?text=${encodeURIComponent(mensaje)}`;
+      
+      console.log(`Abriendo WhatsApp para ${cita.nombre}: ${numeroLimpio}`);
+      window.open(enlaceWhatsApp, '_blank');
+      
+      mostrarNotificacion('WhatsApp abierto - EnvÃ­a el mensaje al cliente', 'success');
+    }
+
+
+
+    async function descargarImagen(id: string) {
+      const cita = citas.find((c: any) => c.id == id);
+      if (!cita) {
+        mostrarNotificacion('⚠️ Cita no encontrada', 'error');
+        return;
+      }
+
+      try {
+        // Mostrar indicador de carga
+        mostrarNotificacion(' Generando comprobante...', 'warning');
+        
+        // Importar funciÃ⏳n del servicio y generar imagen
+        const { generarImagenCita } = await import('../../utils/emailService.js');
+        const svgContent = generarImagenCita(cita);
+        
+        // Crear enlace de descarga mejorado
+        const nombreArchivo = cita.nombre.toLowerCase()
+          .replace(/[^a-z0-9]/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+        
+        const svgBlob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+        
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `cita-${nombreArchivo}-${cita.fecha}-${cita.hora.replace(':', '')}.svg`;
+        link.style.display = 'none';
+        
+        document.body.appendChild(link);
+        link.click();
+        
+        setTimeout(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, 100);
+        
+        mostrarNotificacion(' ¡Comprobante descargado exitosamente!', 'success');
+        
+        // Mensaje adicional después de 2 segundos
+        setTimeout(() => {
+          mostrarNotificacion('✅ Listo para enviar por WhatsApp al cliente', 'success');
+        }, 2000);
+        
+      } catch (error) {
+        console.error('Error al descargar imagen:', error);
+        mostrarNotificacion('⚠️ Error al generar el comprobante. Intenta de nuevo.', 'error');
+      }
+    }
+
+    async function eliminarCita(id: string) {
+      if (!confirm('¿Estás seguro de eliminar esta cita? Esta acciÃ⏳n no se puede deshacer.')) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/citas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'eliminar',
+            id: id
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          mostrarNotificacion(' Cita eliminada exitosamente', 'success');
+          await cargarCitas();
+        } else {
+          mostrarNotificacion('⚠️ Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error eliminando cita:', error);
+        mostrarNotificacion('⚠️ Error de conexiÃ⏳n', 'error');
+      }
+    }
+
+    async function enviarRecordatoriosMasivos() {
+      if (!confirm('¿Enviar recordatorios a todas las citas confirmadas de maÃ±ana?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/citas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'recordatorios-pendientes'
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          mostrarNotificacion(` ${result.data.enviados} recordatorios enviados exitosamente`, 'success');
+          await cargarCitas();
+        } else {
+          mostrarNotificacion('⚠️ Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error enviando recordatorios masivos:', error);
+        mostrarNotificacion('⚠️ Error de conexiÃ⏳n', 'error');
+      }
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', async function() {
+      await cargarCitas();
+      await cargarFechasBloqueadas();
+      
+      // Recargar citas cuando la página recibe el foco
+      document.addEventListener('visibilitychange', async function() {
+        if (!document.hidden) {
+          console.log('🔄 Página visible - recargando citas...');
+          await cargarCitas();
+        }
+      });
+      
+      // Recargar citas cuando la ventana recibe el foco
+      window.addEventListener('focus', async function() {
+        console.log('🔄 Ventana enfocada - recargando citas...');
+        await cargarCitas();
+      });
+      
+      // Configurar actualizaciones automáticas cada 3 segundos
+      setInterval(async () => {
+        try {
+          await cargarCitas();
+          const now = new Date();
+          console.log(`🔄 Citas actualizadas: ${now.toLocaleTimeString()}`);
+        } catch (error) {
+          console.error('❌ Error en actualización automática de citas:', error);
+        }
+      }, 3000);
+      
+      // Form handlers
+      const formNuevaCita = document.getElementById('form-nueva-cita');
+      if (formNuevaCita) {
+        formNuevaCita.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const formData = {
+            action: 'crear-cita',
+            nombre: (document.getElementById('nueva-nombre') as HTMLInputElement)?.value || '',
+            email: (document.getElementById('nueva-email') as HTMLInputElement)?.value || '',
+            telefono: (document.getElementById('nueva-telefono') as HTMLInputElement)?.value || '',
+            servicio: (document.getElementById('nueva-servicio') as HTMLSelectElement)?.value || '',
+            fecha: (document.getElementById('nueva-fecha') as HTMLInputElement)?.value || '',
+            hora: (document.getElementById('nueva-hora') as HTMLSelectElement)?.value || '',
+            mensaje: (document.getElementById('nueva-notas') as HTMLTextAreaElement)?.value || ''
+          };
+          
+          try {
+            const response = await fetch('/api/citas', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+              mostrarNotificacion('✅ Cita creada exitosamente', 'success');
+              cerrarModalNuevaCita();
+              await cargarCitas();
+            } else {
+              mostrarNotificacion('⚠️ Error: ' + result.message, 'error');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            mostrarNotificacion('⚠️ Error de conexiÃ⏳n', 'error');
+          }
+        });
+      }
+      const formBloquearFecha = document.getElementById('form-bloquear-fecha');
+      if (formBloquearFecha) {
+        formBloquearFecha.addEventListener('submit', async function(e) {
+          e.preventDefault();
+          
+          const formData = {
+            action: 'crear-bloqueo',
+            tipo: 'dia_completo',
+            fecha: (document.getElementById('bloquear-fecha') as HTMLInputElement)?.value || '',
+            motivo: (document.getElementById('bloquear-motivo') as HTMLInputElement)?.value || ''
+          };
+          
+          try {
+            const response = await fetch('/api/disponibilidad', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+              mostrarNotificacion('✅ Fecha bloqueada exitosamente', 'success');
+              cerrarModalBloquearFecha();
+              await cargarFechasBloqueadas();
+            } else {
+              mostrarNotificacion('⚠️ Error: ' + result.message, 'error');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            mostrarNotificacion('⚠️ Error de conexiÃ⏳n', 'error');
+          }
+        });
+      }
+    });
+    
+    // Hacer funciones disponibles globalmente
+    (window as any).cambiarEstadoCita = cambiarEstadoCita;
+    (window as any).abrirWhatsApp = abrirWhatsApp;
+    (window as any).descargarImagen = descargarImagen;
+    (window as any).eliminarCita = eliminarCita;
+    (window as any).enviarRecordatoriosMasivos = enviarRecordatoriosMasivos;
+    (window as any).filtrarCitas = filtrarCitas;
+    (window as any).buscarCitas = buscarCitas;
+    (window as any).refrescarCitas = refrescarCitas;
+    (window as any).cambiarTab = cambiarTab;
+    (window as any).cambiarMes = cambiarMes;
+    (window as any).irAHoy = irAHoy;
+    (window as any).cerrarDetallesDia = cerrarDetallesDia;
+    (window as any).abrirModalNuevaCitaEnFecha = abrirModalNuevaCitaEnFecha;
+    
+    // Debug functions
+    (window as any).debugRender = function() {
+      console.log('🔍 Debug Info:');
+      console.log('📋 Total citas:', citas.length);
+      console.log('🔍 Filtro actual:', filtroActual);
+      console.log('📦 Elementos DOM:', {
+        container: !!document.getElementById('citas-lista'),
+        empty: !!document.getElementById('citas-empty'),
+        loading: !!document.getElementById('citas-loading')
+      });
+      
+      // Force render with simple data
+      const container = document.getElementById('citas-lista');
+      const empty = document.getElementById('citas-empty');
+      const loading = document.getElementById('citas-loading');
+      
+      if (container && empty && loading) {
+        loading.classList.add('hidden');
+        
+        if (citas.length > 0) {
+          empty.classList.add('hidden');
+          container.classList.remove('hidden');
+          container.innerHTML = citas.map(cita => 
+            `<div class="p-4 bg-blue-50 rounded mb-2">
+              <h3 class="font-bold">${cita.nombre}</h3>
+              <p>📧 ${cita.email}</p>
+              <p>📅 ${cita.fecha} - ${cita.hora}</p>
+              <p>🔧 ${cita.servicio}</p>
+              <span class="px-2 py-1 rounded text-sm bg-${cita.estado === 'pendiente' ? 'yellow' : cita.estado === 'confirmada' ? 'green' : 'gray'}-200">${cita.estado}</span>
+            </div>`
+          ).join('');
+          console.log('✅ Renderizado forzado completado');
+        } else {
+          container.classList.add('hidden');
+          empty.classList.remove('hidden');
+          console.log('📭 Mostrando estado vacío');
+        }
+      }
+    };
+    (window as any).toggleDiaActivo = toggleDiaActivo;
+    (window as any).guardarHorarios = guardarHorarios;
+    (window as any).abrirModalNuevaCita = abrirModalNuevaCita;
+    (window as any).cerrarModalNuevaCita = cerrarModalNuevaCita;
+    (window as any).abrirModalBloquearFecha = abrirModalBloquearFecha;
+    (window as any).cerrarModalBloquearFecha = cerrarModalBloquearFecha;
+    (window as any).desbloquearFecha = desbloquearFecha;
+</script>
+
+  <style>
+    .tab-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .filtro-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .filtro-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</AdminLayout>
+

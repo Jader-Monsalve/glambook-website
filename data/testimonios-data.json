@@ -1,0 +1,99 @@
+{
+  "aprobados": [
+    {
+      "id": 1,
+      "nombre": "María González",
+      "calificacion": 5,
+      "comentario": "El mejor salón de la ciudad. Las uñas me quedaron perfectas y el trato fue excepcional.",
+      "servicio": "unas",
+      "fecha": "2024-10-15",
+      "aprobado": true,
+      "avatar": "👩🏻"
+    },
+    {
+      "id": 2,
+      "nombre": "Ana Rodríguez",
+      "calificacion": 5,
+      "comentario": "Increíble trabajo con el maquillaje para mi boda. Me sentí como una princesa.",
+      "servicio": "maquillaje",
+      "fecha": "2024-10-10",
+      "aprobado": true,
+      "avatar": "👰🏽"
+    },
+    {
+      "id": 3,
+      "nombre": "Carmen López",
+      "calificacion": 5,
+      "comentario": "Profesionales en todo momento. Siempre salgo feliz de mis citas aquí.",
+      "servicio": "facial",
+      "fecha": "2024-10-08",
+      "aprobado": true,
+      "avatar": "👩🏾"
+    },
+    {
+      "id": 4,
+      "nombre": "Sofia Martínez",
+      "calificacion": 5,
+      "comentario": "Las extensiones de pestañas quedaron perfectas. Duran muchísimo y se ven naturales.",
+      "servicio": "pestanas",
+      "fecha": "2024-10-12",
+      "aprobado": true,
+      "avatar": "👩🏼"
+    },
+    {
+      "id": 5,
+      "nombre": "Valentina Torres",
+      "calificacion": 4,
+      "comentario": "Excelente servicio de cejas. El diseño quedó perfecto para mi rostro.",
+      "servicio": "cejas",
+      "fecha": "2024-10-14",
+      "aprobado": true,
+      "avatar": "👧🏻"
+    },
+    {
+      "id": 6,
+      "nombre": "Isabella Herrera",
+      "calificacion": 5,
+      "comentario": "El nail art que me hicieron fue espectacular. Recibí muchos cumplidos.",
+      "servicio": "unas",
+      "fecha": "2024-10-13",
+      "aprobado": true,
+      "avatar": "👩🏽"
+    },
+    {
+      "id": 9,
+      "nombre": "Ana García",
+      "calificacion": 5,
+      "comentario": "Excelente servicio, me encantó el diseño de uñas que me hicieron. El personal es muy profesional y atento.",
+      "servicio": "unas",
+      "fecha": "2025-10-20",
+      "aprobado": true,
+      "avatar": "👩🏽"
+    }
+  ],
+  "pendientes": [
+    {
+      "id": 10,
+      "nombre": "Juan Pérez",
+      "email": "juan@test.com",
+      "calificacion": 5,
+      "comentario": "Excelente servicio, muy recomendado! Me encantó el resultado.",
+      "servicio": "maquillaje",
+      "fecha": "2025-10-21",
+      "aprobado": false,
+      "avatar": "👨🏽"
+    },
+    {
+      "id": 11,
+      "nombre": "Lucía Martín",
+      "email": "lucia@test.com",
+      "calificacion": 4,
+      "comentario": "Muy buen trabajo en las uñas, aunque esperé un poco más de lo esperado.",
+      "servicio": "unas",
+      "fecha": "2025-10-21",
+      "aprobado": false,
+      "avatar": "👩🏻"
+    }
+  ],
+  "lastId": 13
+}

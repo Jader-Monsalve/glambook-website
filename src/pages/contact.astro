@@ -4,108 +4,200 @@ const title = "Contacto - GlamBook";
 ---
 
 <Layout title={title}>
-  <section class="py-12 xs:py-14 sm:py-16 bg-gradient-to-br from-pink-50 to-purple-50">
-    <div class="container mx-auto px-4 xs:px-6">
-      <!-- Título -->
-      <div class="text-center mb-8 xs:mb-10 sm:mb-12">
-        <h1 class="text-3xl xs:text-4xl sm:text-4xl lg:text-5xl font-bold text-gray-800 mb-3 xs:mb-4 font-poppins">
+  <!-- Spacer para el navbar fixed -->
+  <div class="h-16 sm:h-20 lg:h-24"></div>
+  
+  <section class="py-8 xs:py-10 sm:py-12 lg:py-16 bg-gradient-to-br from-pink-50 to-purple-50 min-h-screen">
+    <div class="container mx-auto px-4 xs:px-6 lg:px-8 xl:px-12">
+      
+      <!-- Título Principal -->
+      <div class="text-center mb-12 xs:mb-14 sm:mb-16 lg:mb-20">
+        <div class="inline-block p-2 bg-pink-100 rounded-full mb-4 lg:mb-6">
+          <span class="text-2xl lg:text-3xl">💌</span>
+        </div>
+        <h1 class="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-800 mb-4 lg:mb-6 font-poppins leading-tight">
           Contáctanos
         </h1>
-        <p class="text-gray-600 text-base xs:text-lg sm:text-lg font-poppins leading-relaxed max-w-2xl mx-auto">
+        <p class="text-gray-600 text-base xs:text-lg sm:text-xl lg:text-2xl font-poppins leading-relaxed max-w-3xl mx-auto">
           Estamos aquí para ayudarte. Reserva tu cita o pregúntanos lo que necesites
         </p>
+        
+        <!-- Decoración -->
+        <div class="flex items-center justify-center mt-6 lg:mt-8 space-x-2">
+          <div class="w-16 h-0.5 bg-pink-300"></div>
+          <div class="w-2 h-2 bg-pink-400 rounded-full"></div>
+          <div class="w-8 h-0.5 bg-pink-300"></div>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 xs:gap-10 sm:gap-12 max-w-6xl mx-auto">
+      <!-- Contenido Principal -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 xs:gap-14 sm:gap-16 lg:gap-20 max-w-7xl mx-auto">
         
         <!-- Información de contacto -->
-        <div class="space-y-6 xs:space-y-8">
-          <h2 class="text-xl xs:text-2xl font-bold text-gray-800 font-poppins">Información de Contacto</h2>
+        <div class="space-y-8 xs:space-y-10 lg:space-y-12">
+          <div class="text-center lg:text-left">
+            <h2 class="text-2xl xs:text-3xl lg:text-4xl font-bold text-gray-800 font-poppins mb-3">
+              Información de Contacto
+            </h2>
+            <p class="text-gray-600 font-poppins text-lg">
+              Múltiples formas de comunicarte con nosotros
+            </p>
+          </div>
           
-          <!-- Dirección -->
-          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
-            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
-              <span class="text-sm xs:text-base">📍</span>
+          <!-- Cards de Información -->
+          <div class="space-y-6">
+            
+            <!-- Dirección -->
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-pink-100 hover:border-pink-200 group">
+              <div class="flex items-start space-x-4 lg:space-x-6">
+                <div class="bg-gradient-to-br from-pink-500 to-pink-600 text-white p-4 rounded-xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-xl">📍</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-800 font-poppins text-lg lg:text-xl mb-2">Dirección</h3>
+                  <p class="text-gray-600 font-poppins text-base lg:text-lg leading-relaxed">
+                    Calle Principal #123<br>
+                    Barrio Centro, Ciudad<br>
+                    <span class="text-pink-600 font-medium">🗺️ Ver en mapa</span>
+                  </p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Dirección</h3>
-              <p class="text-gray-600 font-poppins text-sm xs:text-base">Calle Principal #123<br>Ciudad, País</p>
-            </div>
-          </div>
 
-          <!-- Teléfono -->
-          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
-            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
-              <span class="text-sm xs:text-base">📞</span>
+            <!-- Teléfono -->
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-pink-100 hover:border-pink-200 group">
+              <div class="flex items-start space-x-4 lg:space-x-6">
+                <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-4 rounded-xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-xl">📞</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-800 font-poppins text-lg lg:text-xl mb-2">Teléfono</h3>
+                  <p class="text-gray-600 font-poppins text-base lg:text-lg">
+                    <a href="tel:+573006997396" class="text-green-600 font-medium hover:text-green-700 transition-colors">
+                      +57 300 699 7396
+                    </a>
+                  </p>
+                  <p class="text-sm text-gray-500 mt-1">WhatsApp disponible</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Teléfono</h3>
-              <p class="text-gray-600 font-poppins text-sm xs:text-base">+1 (555) 123-4567</p>
-            </div>
-          </div>
 
-          <!-- Email -->
-          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
-            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
-              <span class="text-sm xs:text-base">✉️</span>
+            <!-- Email -->
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-pink-100 hover:border-pink-200 group">
+              <div class="flex items-start space-x-4 lg:space-x-6">
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-xl">✉️</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-800 font-poppins text-lg lg:text-xl mb-2">Email</h3>
+                  <p class="text-gray-600 font-poppins text-base lg:text-lg">
+                    <a href="mailto:info@glambook.com" class="text-purple-600 font-medium hover:text-purple-700 transition-colors">
+                      info@glambook.com
+                    </a>
+                  </p>
+                  <p class="text-sm text-gray-500 mt-1">Respuesta en 24 horas</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Email</h3>
-              <p class="text-gray-600 font-poppins text-sm xs:text-base">info@glambook.com</p>
-            </div>
-          </div>
 
-          <!-- Horarios -->
-          <div class="flex items-start space-x-3 xs:space-x-4 p-4 rounded-lg hover:bg-white/50 transition-colors duration-200">
-            <div class="bg-pink-500 text-white p-2 xs:p-3 rounded-lg flex-shrink-0">
-              <span class="text-sm xs:text-base">🕒</span>
-            </div>
-            <div>
-              <h3 class="font-semibold text-gray-800 font-poppins text-sm xs:text-base mb-1">Horarios</h3>
-              <p class="text-gray-600 font-poppins text-sm xs:text-base leading-relaxed">
-                Lunes - Viernes: 9:00 AM - 7:00 PM<br>
-                Sábados: 9:00 AM - 5:00 PM<br>
-                Domingos: Cerrado
-              </p>
+            <!-- Horarios -->
+            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-pink-100 hover:border-pink-200 group">
+              <div class="flex items-start space-x-4 lg:space-x-6">
+                <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-4 rounded-xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <span class="text-xl">🕒</span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-800 font-poppins text-lg lg:text-xl mb-2">Horarios de Atención</h3>
+                  <div class="space-y-2 text-gray-600 font-poppins text-base lg:text-lg">
+                    <div class="flex justify-between">
+                      <span>Lunes - Viernes:</span>
+                      <span class="font-medium">9:00 AM - 7:00 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>Sábados:</span>
+                      <span class="font-medium">9:00 AM - 5:00 PM</span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span>Domingos:</span>
+                      <span class="font-medium text-red-500">Cerrado</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Formulario de contacto -->
-        <div class="bg-white rounded-lg shadow-lg p-6 xs:p-8">
-          <h2 class="text-xl xs:text-2xl font-bold text-gray-800 mb-4 xs:mb-6 font-poppins">Reserva tu Cita</h2>
+        <div class="bg-white rounded-2xl shadow-2xl p-8 xs:p-10 lg:p-12 border border-pink-100">
+          <div class="text-center lg:text-left mb-8">
+            <div class="inline-block p-3 bg-pink-100 rounded-full mb-4">
+              <span class="text-2xl">✨</span>
+            </div>
+            <h2 class="text-2xl xs:text-3xl lg:text-4xl font-bold text-gray-800 mb-3 font-poppins">
+              Reserva tu Cita
+            </h2>
+            <p class="text-gray-600 font-poppins text-lg">
+              Elige entre enviar un mensaje o reservar directamente
+            </p>
+          </div>
           
-          <!-- Pestañas -->
-          <div class="flex border-b border-gray-200 mb-4 xs:mb-6">
+          <!-- Pestañas Mejoradas -->
+          <div class="flex bg-gray-50 rounded-2xl p-2 mb-8 xs:mb-10">
             <button 
               id="tab-mensaje"
               onclick="cambiarTab('mensaje')"
-              class="tab-btn flex-1 py-2 px-2 xs:px-4 text-center font-poppins border-b-2 border-pink-500 text-pink-600 text-sm xs:text-base"
+              class="tab-btn flex-1 py-3 px-4 text-center font-poppins rounded-xl font-medium transition-all duration-300 bg-white shadow-md text-pink-600 border-2 border-pink-200"
             >
-              <span class="xs:hidden">💬</span>
-              <span class="hidden xs:inline">💬 Mensaje</span>
+              <span class="flex items-center justify-center space-x-2">
+                <span class="text-lg">💬</span>
+                <span class="hidden sm:inline">Enviar Mensaje</span>
+                <span class="sm:hidden">Mensaje</span>
+              </span>
             </button>
             <button 
               id="tab-cita"
               onclick="cambiarTab('cita')"
-              class="tab-btn flex-1 py-2 px-2 xs:px-4 text-center font-poppins border-b-2 border-transparent text-gray-500 hover:text-gray-700 text-sm xs:text-base"
+              class="tab-btn flex-1 py-3 px-4 text-center font-poppins rounded-xl font-medium transition-all duration-300 text-gray-600 hover:text-gray-800 hover:bg-white/50"
             >
-              <span class="xs:hidden">📅</span>
-              <span class="hidden xs:inline">📅 Reservar Cita</span>
+              <span class="flex items-center justify-center space-x-2">
+                <span class="text-lg">📅</span>
+                <span class="hidden sm:inline">Reservar Cita</span>
+                <span class="sm:hidden">Cita</span>
+              </span>
             </button>
           </div>
 
           <!-- Formulario de mensaje -->
           <div id="form-mensaje" class="tab-content">
-            <form class="space-y-6" data-netlify="true">
-              <input type="hidden" name="form-name" value="contact" />
-              
+            <!-- Tipo de mensaje -->
+            <div class="flex flex-wrap gap-2 mb-6 justify-center">
+              <button 
+                type="button"
+                onclick="cambiarTipoMensaje('consulta')"
+                id="tipo-consulta"
+                class="tipo-mensaje-btn bg-pink-500 text-white px-4 py-2 rounded-lg font-poppins text-sm"
+              >
+                💬 Consulta General
+              </button>
+              <button 
+                type="button"
+                onclick="cambiarTipoMensaje('testimonio')"
+                id="tipo-testimonio"
+                class="tipo-mensaje-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-poppins text-sm"
+              >
+                ⭐ Enviar Testimonio
+              </button>
+            </div>
+
+            <!-- Formulario Consulta -->
+            <form id="form-consulta" class="space-y-6">
               <!-- Nombre -->
               <div>
-                <label for="nombre" class="block text-gray-700 font-medium mb-2 font-poppins">Nombre</label>
+                <label for="consulta-nombre" class="block text-gray-700 font-medium mb-2 font-poppins">Nombre</label>
                 <input 
                   type="text" 
-                  id="nombre" 
+                  id="consulta-nombre" 
                   name="nombre" 
                   required
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
@@ -115,10 +207,10 @@ const title = "Contacto - GlamBook";
 
               <!-- Email -->
               <div>
-                <label for="email" class="block text-gray-700 font-medium mb-2 font-poppins">Email</label>
+                <label for="consulta-email" class="block text-gray-700 font-medium mb-2 font-poppins">Email</label>
                 <input 
                   type="email" 
-                  id="email" 
+                  id="consulta-email" 
                   name="email" 
                   required
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
@@ -128,9 +220,9 @@ const title = "Contacto - GlamBook";
 
               <!-- Servicio -->
               <div>
-                <label for="servicio" class="block text-gray-700 font-medium mb-2 font-poppins">Servicio de Interés</label>
+                <label for="consulta-servicio" class="block text-gray-700 font-medium mb-2 font-poppins">Servicio de Interés</label>
                 <select 
-                  id="servicio" 
+                  id="consulta-servicio" 
                   name="servicio" 
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
                 >
@@ -147,15 +239,20 @@ const title = "Contacto - GlamBook";
 
               <!-- Mensaje -->
               <div>
-                <label for="mensaje" class="block text-gray-700 font-medium mb-2 font-poppins">Mensaje</label>
+                <label for="consulta-mensaje" class="block text-gray-700 font-medium mb-2 font-poppins">Mensaje</label>
                 <textarea 
-                  id="mensaje" 
+                  id="consulta-mensaje" 
                   name="mensaje" 
                   rows="4"
                   required
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
-                  placeholder="Cuéntanos sobre tu cita ideal..."
+                  placeholder="Cuéntanos cómo podemos ayudarte..."
                 ></textarea>
+              </div>
+
+              <!-- Estado -->
+              <div id="estado-consulta" class="text-center hidden">
+                <!-- Mensajes de estado -->
               </div>
 
               <!-- Botón -->
@@ -163,7 +260,97 @@ const title = "Contacto - GlamBook";
                 type="submit"
                 class="w-full bg-pink-500 text-white py-3 px-6 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-poppins font-medium"
               >
-                Enviar Mensaje
+                💬 Enviar Consulta
+              </button>
+            </form>
+
+            <!-- Formulario Testimonio -->
+            <form id="form-testimonio" class="space-y-6 hidden">
+              <!-- Nombre -->
+              <div>
+                <label for="testimonio-nombre" class="block text-gray-700 font-medium mb-2 font-poppins">Nombre</label>
+                <input 
+                  type="text" 
+                  id="testimonio-nombre" 
+                  name="nombre" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="Tu nombre completo"
+                >
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label for="testimonio-email" class="block text-gray-700 font-medium mb-2 font-poppins">Email</label>
+                <input 
+                  type="email" 
+                  id="testimonio-email" 
+                  name="email" 
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="tu@email.com"
+                >
+              </div>
+
+              <!-- Calificación -->
+              <div>
+                <label class="block text-gray-700 font-medium mb-2 font-poppins">Calificación</label>
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="rating-stars flex gap-1" id="rating-stars">
+                    <button type="button" onclick="setRating(1)" class="star text-2xl text-gray-300 hover:text-yellow-400 transition-colors">⭐</button>
+                    <button type="button" onclick="setRating(2)" class="star text-2xl text-gray-300 hover:text-yellow-400 transition-colors">⭐</button>
+                    <button type="button" onclick="setRating(3)" class="star text-2xl text-gray-300 hover:text-yellow-400 transition-colors">⭐</button>
+                    <button type="button" onclick="setRating(4)" class="star text-2xl text-gray-300 hover:text-yellow-400 transition-colors">⭐</button>
+                    <button type="button" onclick="setRating(5)" class="star text-2xl text-gray-300 hover:text-yellow-400 transition-colors">⭐</button>
+                  </div>
+                  <span id="rating-text" class="text-gray-600 font-poppins ml-2">Selecciona una calificación</span>
+                </div>
+                <input type="hidden" id="rating-value" name="rating" required>
+              </div>
+
+              <!-- Servicio usado -->
+              <div>
+                <label for="testimonio-servicio" class="block text-gray-700 font-medium mb-2 font-poppins">Servicio Utilizado</label>
+                <select 
+                  id="testimonio-servicio" 
+                  name="servicio" 
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                >
+                  <option value="">¿Cuál servicio probaste?</option>
+                  <option value="unas-naturales">Uñas Naturales</option>
+                  <option value="unas-acrilicas">Uñas Acrílicas</option>
+                  <option value="maquillaje">Maquillaje</option>
+                  <option value="peinados">Peinados</option>
+                  <option value="cejas">Cejas</option>
+                  <option value="pestanas">Pestañas</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+
+              <!-- Testimonio -->
+              <div>
+                <label for="testimonio-texto" class="block text-gray-700 font-medium mb-2 font-poppins">Tu Testimonio</label>
+                <textarea 
+                  id="testimonio-texto" 
+                  name="testimonio" 
+                  rows="4"
+                  required
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent font-poppins"
+                  placeholder="Cuéntanos sobre tu experiencia con nosotros..."
+                ></textarea>
+              </div>
+
+              <!-- Estado -->
+              <div id="estado-testimonio" class="text-center hidden">
+                <!-- Mensajes de estado -->
+              </div>
+
+              <!-- Botón -->
+              <button 
+                type="submit"
+                class="w-full bg-pink-500 text-white py-3 px-6 rounded-lg hover:bg-pink-600 transition-colors duration-300 font-poppins font-medium"
+              >
+                ⭐ Enviar Testimonio
               </button>
             </form>
           </div>
@@ -291,20 +478,201 @@ const title = "Contacto - GlamBook";
   // Variables globales
   let horariosDisponibles: string[] = [];
   let horaSeleccionada: string = '';
+  let tipoMensajeActual: string = 'consulta';
+  let ratingSeleccionado: number = 0;
+
+  // Función para cambiar tipo de mensaje
+  function cambiarTipoMensaje(tipo: string) {
+    tipoMensajeActual = tipo;
+    
+    // Actualizar botones
+    document.querySelectorAll('.tipo-mensaje-btn').forEach(btn => {
+      btn.classList.remove('bg-pink-500', 'text-white');
+      btn.classList.add('bg-gray-200', 'text-gray-700');
+    });
+    
+    const activeBtn = document.getElementById(`tipo-${tipo}`);
+    if (activeBtn) {
+      activeBtn.classList.remove('bg-gray-200', 'text-gray-700');
+      activeBtn.classList.add('bg-pink-500', 'text-white');
+    }
+    
+    // Mostrar/ocultar formularios
+    const formConsulta = document.getElementById('form-consulta');
+    const formTestimonio = document.getElementById('form-testimonio');
+    
+    if (tipo === 'consulta') {
+      formConsulta?.classList.remove('hidden');
+      formTestimonio?.classList.add('hidden');
+    } else {
+      formConsulta?.classList.add('hidden');
+      formTestimonio?.classList.remove('hidden');
+    }
+  }
+
+  // Función para establecer rating
+  function setRating(rating: number) {
+    ratingSeleccionado = rating;
+    const stars = document.querySelectorAll('.star');
+    const ratingValue = document.getElementById('rating-value') as HTMLInputElement;
+    const ratingText = document.getElementById('rating-text');
+    
+    stars.forEach((star, index) => {
+      if (index < rating) {
+        star.classList.remove('text-gray-300');
+        star.classList.add('text-yellow-400');
+      } else {
+        star.classList.remove('text-yellow-400');
+        star.classList.add('text-gray-300');
+      }
+    });
+    
+    if (ratingValue) ratingValue.value = rating.toString();
+    
+    const textos = {
+      1: 'Muy malo',
+      2: 'Malo',
+      3: 'Regular',
+      4: 'Bueno',
+      5: 'Excelente'
+    };
+    
+    if (ratingText) {
+      ratingText.textContent = textos[rating as keyof typeof textos];
+    }
+  }
+
+  // Función para enviar testimonio
+  async function enviarTestimonio(formData: FormData) {
+    try {
+      const response = await fetch('/api/testimonios', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'crear',
+          nombre: formData.get('nombre'),
+          email: formData.get('email'),
+          testimonio: formData.get('testimonio'),
+          rating: parseInt(formData.get('rating') as string),
+          servicio: formData.get('servicio')
+        })
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        mostrarEstadoTestimonio('✅ ¡Gracias por tu testimonio! Será revisado antes de publicarse.', 'success');
+        
+        // Enviar notificación al admin
+        try {
+          await fetch('/api/emails', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tipo: 'nuevoTestimonio',
+              datos: {
+                nombre: formData.get('nombre'),
+                email: formData.get('email'),
+                testimonio: formData.get('testimonio'),
+                rating: parseInt(formData.get('rating') as string)
+              }
+            })
+          });
+        } catch (emailError) {
+          console.error('Error enviando notificación:', emailError);
+        }
+        
+        // Limpiar formulario
+        const form = document.getElementById('form-testimonio') as HTMLFormElement;
+        if (form) form.reset();
+        
+        // Reset rating
+        ratingSeleccionado = 0;
+        setRating(0);
+        document.getElementById('rating-text')!.textContent = 'Selecciona una calificación';
+        
+      } else {
+        mostrarEstadoTestimonio(`❌ ${result.message}`, 'error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      mostrarEstadoTestimonio('❌ Error de conexión', 'error');
+    }
+  }
+
+  // Función para enviar consulta
+  async function enviarConsulta(formData: FormData) {
+    try {
+      // Simular envío (en producción se conectaría con un servicio de email)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      mostrarEstadoConsulta('✅ ¡Consulta enviada! Te contactaremos pronto.', 'success');
+      
+      // Limpiar formulario
+      const form = document.getElementById('form-consulta') as HTMLFormElement;
+      if (form) form.reset();
+      
+    } catch (error) {
+      console.error('Error:', error);
+      mostrarEstadoConsulta('❌ Error al enviar consulta', 'error');
+    }
+  }
+
+  // Funciones para mostrar estados
+  function mostrarEstadoConsulta(mensaje: string, tipo: 'success' | 'error' | 'warning' = 'success') {
+    mostrarEstadoGenerico('estado-consulta', mensaje, tipo);
+  }
+
+  function mostrarEstadoTestimonio(mensaje: string, tipo: 'success' | 'error' | 'warning' = 'success') {
+    mostrarEstadoGenerico('estado-testimonio', mensaje, tipo);
+  }
+
+  function mostrarEstadoGenerico(elementId: string, mensaje: string, tipo: 'success' | 'error' | 'warning' = 'success') {
+    const estadoDiv = document.getElementById(elementId);
+    if (!estadoDiv) return;
+    
+    const colors = {
+      success: 'bg-green-100 text-green-700 border-green-200',
+      error: 'bg-red-100 text-red-700 border-red-200',
+      warning: 'bg-yellow-100 text-yellow-700 border-yellow-200'
+    };
+    
+    const icons = {
+      success: '✅',
+      error: '❌',
+      warning: '⚠️'
+    };
+    
+    estadoDiv.className = `text-center border rounded-lg p-4 ${colors[tipo]}`;
+    estadoDiv.innerHTML = `
+      <div class="flex items-center justify-center gap-2">
+        <span class="text-lg">${icons[tipo]}</span>
+        <span class="font-poppins">${mensaje}</span>
+      </div>
+    `;
+    estadoDiv.classList.remove('hidden');
+    
+    // Auto-hide después de 5 segundos para mensajes de éxito
+    if (tipo === 'success') {
+      setTimeout(() => {
+        estadoDiv.classList.add('hidden');
+      }, 5000);
+    }
+  }
 
   // Función para cambiar pestañas
   function cambiarTab(tab: string) {
-    // Actualizar botones
+    // Actualizar botones con nuevo estilo
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(t => {
-      t.classList.remove('border-pink-500', 'text-pink-600');
-      t.classList.add('border-transparent', 'text-gray-500');
+      t.classList.remove('bg-white', 'shadow-md', 'text-pink-600', 'border-2', 'border-pink-200');
+      t.classList.add('text-gray-600', 'hover:text-gray-800', 'hover:bg-white/50');
     });
     
     const activeTab = document.getElementById(`tab-${tab}`);
     if (activeTab) {
-      activeTab.classList.remove('border-transparent', 'text-gray-500');
-      activeTab.classList.add('border-pink-500', 'text-pink-600');
+      activeTab.classList.remove('text-gray-600', 'hover:text-gray-800', 'hover:bg-white/50');
+      activeTab.classList.add('bg-white', 'shadow-md', 'text-pink-600', 'border-2', 'border-pink-200');
     }
     
     // Mostrar/ocultar contenido
@@ -437,6 +805,67 @@ const title = "Contacto - GlamBook";
     }
   }
 
+  // Función para mostrar botón de descarga de imagen
+  function mostrarBotonDescargaImagen(datoCita: any) {
+    const estadoDiv = document.getElementById('estado-reserva');
+    if (!estadoDiv) return;
+
+    // Crear botón programáticamente para evitar problemas de sintaxis
+    const botonDescarga = document.createElement('div');
+    botonDescarga.className = 'mt-4';
+    
+    const button = document.createElement('button');
+    button.className = 'bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-poppins font-medium shadow-lg hover:shadow-xl transform hover:scale-105';
+    button.innerHTML = '📷 Descargar Comprobante de Cita';
+    
+    // Agregar evento de click directamente
+    button.addEventListener('click', () => {
+      descargarImagenCita(JSON.stringify(datoCita));
+    });
+    
+    botonDescarga.appendChild(button);
+    estadoDiv.appendChild(botonDescarga);
+  }
+
+  // Función para descargar imagen de cita
+  async function descargarImagenCita(dataCitaString: string) {
+    try {
+      const dataCita = JSON.parse(dataCitaString);
+      
+      // Mostrar indicador de carga
+      mostrarEstado('🔄 Generando tu comprobante...', 'warning');
+      
+      // Importar las funciones de generación de imagen
+      const { crearEnlaceDescarga, descargarImagenPNG } = await import('../utils/emailService.js');
+      
+      // Intentar descarga SVG primero
+      try {
+        await crearEnlaceDescarga(dataCita);
+        mostrarEstado('🎉 ¡Comprobante SVG descargado! Perfecto para WhatsApp.', 'success');
+      } catch (svgError) {
+        console.log('SVG falló, intentando PNG...', svgError);
+        
+        // Si SVG falla, intentar PNG
+        try {
+          await descargarImagenPNG(dataCita);
+          mostrarEstado('🎉 ¡Comprobante PNG descargado! Listo para compartir.', 'success');
+        } catch (pngError) {
+          console.error('PNG también falló:', pngError);
+          throw new Error('No se pudo descargar en ningún formato');
+        }
+      }
+      
+      // Mostrar mensaje adicional después de 3 segundos
+      setTimeout(() => {
+        mostrarEstado('💡 Tip: Puedes compartir esta imagen por WhatsApp, Instagram o cualquier red social.', 'success');
+      }, 3000);
+      
+    } catch (error) {
+      console.error('Error al descargar imagen:', error);
+      mostrarEstado('❌ Error al generar el comprobante. Intenta de nuevo.', 'error');
+    }
+  }
+
   // Función para enviar reserva
   async function enviarReserva(formData: FormData) {
     const data = {
@@ -462,7 +891,47 @@ const title = "Contacto - GlamBook";
       const result = await response.json();
       
       if (response.ok && result.success) {
-        mostrarEstado(result.message || '¡Cita reservada exitosamente! Te enviaremos un email de confirmación.', 'success');
+        mostrarEstado('¡Cita reservada exitosamente! 🎉', 'success');
+        
+        // Enviar email de confirmación
+        try {
+          await fetch('/api/emails', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tipo: 'confirmacionCita',
+              datos: {
+                nombre: data.nombre,
+                email: data.email,
+                fecha: data.fecha,
+                hora: data.hora,
+                servicio: getServicioNombre(data.servicio as string),
+                mensaje: data.mensaje
+              }
+            })
+          });
+          
+          // Notificar al admin
+          await fetch('/api/emails', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tipo: 'nuevaCita',
+              datos: {
+                nombre: data.nombre,
+                email: data.email,
+                telefono: data.telefono,
+                servicio: getServicioNombre(data.servicio as string),
+                fecha: data.fecha,
+                hora: data.hora,
+                mensaje: data.mensaje
+              }
+            })
+          });
+          
+        } catch (emailError) {
+          console.error('Error enviando emails:', emailError);
+        }
         
         // Limpiar formulario
         const form = document.getElementById('reserva-form') as HTMLFormElement;
@@ -485,6 +954,12 @@ const title = "Contacto - GlamBook";
           reservarBtn.disabled = true;
         }
         
+        // Mostrar botón para descargar imagen de cita después de 2 segundos
+        setTimeout(() => {
+          mostrarEstado('¡Cita reservada! Descarga tu comprobante aquí: 👇', 'success');
+          mostrarBotonDescargaImagen(data);
+        }, 2000);
+        
       } else {
         mostrarEstado(result.message || result.error || 'Error al reservar la cita', 'error');
       }
@@ -492,6 +967,20 @@ const title = "Contacto - GlamBook";
       console.error('Error:', error);
       mostrarEstado('Error de conexión al reservar la cita', 'error');
     }
+  }
+
+  // Función para obtener nombre completo del servicio
+  function getServicioNombre(servicio: string): string {
+    const servicios: { [key: string]: string } = {
+      'unas-naturales': 'Uñas Naturales',
+      'unas-acrilicas': 'Uñas Acrílicas',
+      'maquillaje': 'Maquillaje Profesional',
+      'peinados': 'Peinados y Styling',
+      'cejas': 'Diseño de Cejas',
+      'pestanas': 'Extensiones de Pestañas',
+      'otro': 'Consulta Personalizada'
+    };
+    return servicios[servicio] || servicio;
   }
 
   // Configurar fecha mínima (hoy)
@@ -542,23 +1031,114 @@ const title = "Contacto - GlamBook";
         enviarReserva(formData);
       });
     }
+    
+    // Event listener para formulario de consulta
+    const consultaForm = document.getElementById('form-consulta');
+    if (consultaForm) {
+      consultaForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target as HTMLFormElement);
+        enviarConsulta(formData);
+      });
+    }
+    
+    // Event listener para formulario de testimonio
+    const testimonioForm = document.getElementById('form-testimonio');
+    if (testimonioForm) {
+      testimonioForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        if (!ratingSeleccionado) {
+          mostrarEstadoTestimonio('Por favor selecciona una calificación', 'warning');
+          return;
+        }
+        
+        const formData = new FormData(e.target as HTMLFormElement);
+        enviarTestimonio(formData);
+      });
+    }
+    
+    // Configurar tipo de mensaje por defecto
+    cambiarTipoMensaje('consulta');
   });
 
   // Hacer funciones disponibles globalmente
   (window as any).cambiarTab = cambiarTab;
   (window as any).seleccionarHora = seleccionarHora;
+  (window as any).cambiarTipoMensaje = cambiarTipoMensaje;
+  (window as any).setRating = setRating;
+  (window as any).descargarImagenCita = descargarImagenCita;
 </script>
 
 <style>
-  .tab-btn {
-    transition: all 0.3s ease;
+  /* Espaciado adicional para el navbar fixed */
+  body {
+    scroll-padding-top: 100px;
   }
   
+  /* Animaciones para pestañas */
+  .tab-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .tab-btn:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Botones de horarios */
   .hora-btn {
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .hora-btn:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Cards de información con hover */
+  .contact-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .contact-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Animaciones suaves para elementos del formulario */
+  input, select, textarea {
+    transition: all 0.2s ease;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    transform: scale(1.02);
+  }
+  
+  /* Gradientes y sombras mejoradas */
+  .gradient-bg {
+    background: linear-gradient(135deg, #fdf2f8 0%, #f3e8ff 100%);
+  }
+  
+  /* Animación de entrada para las cards */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+  
+  /* Responsive improvements */
+  @media (max-width: 640px) {
+    .tab-btn {
+      padding: 12px 8px;
+      font-size: 14px;
+    }
   }
 </style>

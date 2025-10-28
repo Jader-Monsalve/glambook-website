@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import fs from 'fs';
 import path from 'path';
-import { enviarRecordatorioCita, enviarConfirmacionCita } from '../../utils/emailService';
+import { enviarRecordatorioCita, enviarConfirmacionCita, enviarNotificacionAdmin } from '../../utils/emailService';
 
 export const prerender = false;
 
@@ -47,33 +47,39 @@ export const POST: APIRoute = async ({ request }) => {
       
       switch (tipo) {
         case 'recordatorio':
-          console.log('📧 Enviando recordatorio para cita:', citaId);
+          console.log('📱 Preparando recordatorio WhatsApp para cita:', citaId);
           result = await enviarRecordatorioCita(cita);
           break;
           
         case 'confirmacion':
-          console.log('📧 Reenviando confirmación para cita:', citaId);
+        case 'confirmacionCita':
+          console.log('✅ Procesando confirmación para cita:', citaId);
           result = await enviarConfirmacionCita(cita);
+          break;
+          
+        case 'nuevaCita':
+          console.log('🔔 Procesando notificación de nueva cita:', citaId);
+          result = await enviarNotificacionAdmin(cita);
           break;
           
         default:
           return new Response(JSON.stringify({ 
             success: false, 
-            error: 'Tipo de email no válido. Use: recordatorio, confirmacion' 
+            error: 'Tipo no válido. Use: recordatorio, confirmacion, nuevaCita' 
           }), {
             status: 400,
             headers: { 'Content-Type': 'application/json' },
           });
       }
       
-      if (result.success) {
-        console.log(`✅ Email de ${tipo} enviado exitosamente`);
+      // El nuevo sistema siempre retorna boolean
+      if (result === true) {
+        console.log(`✅ ${tipo} procesado exitosamente`);
         
         const response = {
           success: true,
-          message: `Email de ${tipo} enviado exitosamente`,
-          messageId: result.messageId,
-          ...(result.previewUrl && { previewUrl: result.previewUrl })
+          message: `${tipo} procesado exitosamente - Listo para WhatsApp`,
+          whatsappReady: true
         };
         
         return new Response(JSON.stringify(response), {
@@ -81,11 +87,11 @@ export const POST: APIRoute = async ({ request }) => {
           headers: { 'Content-Type': 'application/json' },
         });
       } else {
-        console.error(`❌ Error al enviar email de ${tipo}:`, result.error);
+        console.error(`❌ Error al procesar ${tipo}`);
         
         return new Response(JSON.stringify({ 
           success: false, 
-          error: `Error al enviar email de ${tipo}: ${result.error}` 
+          error: `Error al procesar ${tipo}` 
         }), {
           status: 500,
           headers: { 'Content-Type': 'application/json' },
@@ -120,7 +126,7 @@ export const POST: APIRoute = async ({ request }) => {
         });
       }
       
-      // Enviar recordatorios en paralelo
+      // Preparar recordatorios (ahora son para WhatsApp)
       const resultados = await Promise.allSettled(
         citasParaRecordar.map((cita: any) => enviarRecordatorioCita(cita))
       );
@@ -130,25 +136,41 @@ export const POST: APIRoute = async ({ request }) => {
       const errores: string[] = [];
       
       resultados.forEach((resultado, index) => {
-        if (resultado.status === 'fulfilled' && resultado.value.success) {
+        if (resultado.status === 'fulfilled' && resultado.value === true) {
           exitosos++;
-          console.log(`✅ Recordatorio enviado a: ${citasParaRecordar[index].email}`);
+          console.log(`✅ Recordatorio preparado para: ${citasParaRecordar[index].nombre}`);
         } else {
           fallidos++;
           const error = resultado.status === 'rejected' 
             ? resultado.reason 
-            : resultado.value.error;
-          errores.push(`${citasParaRecordar[index].email}: ${error}`);
-          console.error(`❌ Error al enviar a ${citasParaRecordar[index].email}:`, error);
+            : 'Error al procesar recordatorio';
+          errores.push(`${citasParaRecordar[index].nombre}: ${error}`);
+          console.error(`❌ Error al preparar recordatorio para ${citasParaRecordar[index].nombre}:`, error);
         }
       });
       
       return new Response(JSON.stringify({ 
         success: true, 
-        message: `Recordatorios procesados: ${exitosos} exitosos, ${fallidos} fallidos`,
-        citasEnviadas: exitosos,
+        message: `Recordatorios preparados: ${exitosos} listos para WhatsApp, ${fallidos} fallidos`,
+        citasPreparadas: exitosos,
         citasFallidas: fallidos,
-        errores: errores
+        errores: errores,
+        nota: 'Los recordatorios están listos para enviarse por WhatsApp desde el panel admin'
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    
+    // Manejar solicitudes simples que solo necesitan respuesta positiva
+    if (data.tipo) {
+      console.log('📧 Solicitud de procesamiento:', data.tipo);
+      
+      // Para compatibilidad con formularios que llaman a emails
+      return new Response(JSON.stringify({ 
+        success: true, 
+        message: 'Procesado exitosamente - Sistema actualizado a WhatsApp',
+        whatsappReady: true
       }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -157,7 +179,7 @@ export const POST: APIRoute = async ({ request }) => {
     
     return new Response(JSON.stringify({ 
       success: false, 
-      error: 'Acción no válida' 
+      error: 'Acción no válida. Parámetros requeridos: action o tipo' 
     }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },

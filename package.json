@@ -7,14 +7,21 @@
     "build": "astro build",
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",
-    "astro": "astro"
+    "astro": "astro",
+    "pre-deploy-check": "node scripts/final-check.js",
+    "production-ready": "npm run pre-deploy-check && npm run build"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.0",
     "@astrojs/tailwind": "^6.0.2",
-    "@types/nodemailer": "^7.0.2",
     "astro": "^5.14.6",
     "firebase": "^12.4.0",
     "nodemailer": "^7.0.9"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

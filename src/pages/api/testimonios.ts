@@ -143,7 +143,11 @@ export const POST: APIRoute = async ({ request }) => {
         });
 
       case 'eliminar':
-        const eliminado = await eliminarAprobado(parseInt(id));
+        // Intentar eliminar de ambas listas (aprobados y pendientes)
+        const eliminadoAprobado = await eliminarAprobado(parseInt(id));
+        const eliminadoPendiente = await rechazarTestimonio(parseInt(id));
+        const eliminado = eliminadoAprobado || eliminadoPendiente;
+        
         return new Response(JSON.stringify({
           success: eliminado,
           message: eliminado ? 'Testimonio eliminado' : 'Error al eliminar'

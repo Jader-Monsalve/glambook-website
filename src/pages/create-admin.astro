@@ -93,12 +93,16 @@ const form = document.getElementById('create-admin-form');
 const message = document.getElementById('message');
 const createBtn = document.getElementById('create-btn');
 
+function getCreateBtn() {
+  return createBtn as HTMLButtonElement;
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const confirmPassword = document.getElementById('confirm-password').value;
+  const email = (document.getElementById('email') as HTMLInputElement).value;
+  const password = (document.getElementById('password') as HTMLInputElement).value;
+  const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement).value;
   
   // Validate passwords match
   if (password !== confirmPassword) {
@@ -107,15 +111,15 @@ form.addEventListener('submit', async (e) => {
   }
   
   try {
-    createBtn.disabled = true;
-    createBtn.textContent = 'Creando...';
+  getCreateBtn().disabled = true;
+  getCreateBtn().textContent = 'Creando...';
     
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     
     showMessage('¡Administrador creado exitosamente! Puedes iniciar sesión ahora.', 'success');
     
     // Clear form
-    form.reset();
+  (form as HTMLFormElement).reset();
     
     // Redirect after 2 seconds
     setTimeout(() => {
@@ -124,20 +128,35 @@ form.addEventListener('submit', async (e) => {
     
   } catch (error) {
     console.error('Error creando administrador:', error);
-    
     let errorMessage = 'Error creando administrador';
-    if (error.code === 'auth/email-already-in-use') {
-      errorMessage = 'Este email ya está registrado';
-    } else if (error.code === 'auth/weak-password') {
-      errorMessage = 'La contraseña debe tener al menos 6 caracteres';
-    } else if (error.code === 'auth/invalid-email') {
-      errorMessage = 'Email inválido';
+    // Firebase error codes
+    if (error && typeof error === 'object') {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          errorMessage = 'Este email ya está registrado.';
+          break;
+        case 'auth/weak-password':
+          errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+          break;
+        case 'auth/invalid-email':
+          errorMessage = 'El email ingresado no es válido.';
+          break;
+        case 'auth/network-request-failed':
+          errorMessage = 'Error de red. Verifica tu conexión a internet.';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Demasiados intentos. Intenta de nuevo más tarde.';
+          break;
+        default:
+          if (error.message) {
+            errorMessage = error.message;
+          }
+      }
     }
-    
     showMessage(errorMessage, 'error');
   } finally {
-    createBtn.disabled = false;
-    createBtn.textContent = 'Crear Administrador';
+  getCreateBtn().disabled = false;
+  getCreateBtn().textContent = 'Crear Administrador';
   }
 });
 
