@@ -1438,9 +1438,9 @@ function renderFechasBloqueadas() {
         <p class="text-red-600">${fecha.motivo}</p>
       </div>
       <button 
-        onclick="desbloquearFecha('${fecha.fecha}')"
+        onclick="eliminarBloqueo('${fecha.id}')"
         class="text-red-600 hover:text-red-800"
-        title="Desbloquear fecha"
+        title="Eliminar bloqueo"
       >
         ✖️
       </button>
@@ -1491,26 +1491,24 @@ async function bloquearFecha() {
   }
 }
 
-async function desbloquearFecha(fecha: string) {
-  if (confirm('¿Desbloquear esta fecha?')) {
+async function eliminarBloqueo(id) {
+  if (confirm('¿Eliminar este bloqueo?')) {
     try {
-      const response = await fetch('/api/citas', {
+      const response = await fetch('/api/disponibilidad', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          action: 'desbloquear-fecha',
-          fecha: fecha
+          action: 'eliminar-bloqueo',
+          id: id
         })
       });
-      
       const result = await response.json();
-      
       if (result.success) {
-        mostrarNotificacion('✅ Fecha desbloqueada exitosamente', 'success');
+        mostrarNotificacion('✅ Bloqueo eliminado exitosamente', 'success');
         await cargarCitas();
         renderCalendario();
       } else {
-        mostrarNotificacion('❌ Error al desbloquear fecha', 'error');
+        mostrarNotificacion('❌ Error al eliminar bloqueo', 'error');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -1699,7 +1697,7 @@ function logout() {
 (window as any).cambiarRolUsuario = cambiarRolUsuario;
 (window as any).eliminarUsuario = eliminarUsuario;
 (window as any).bloquearFecha = bloquearFecha;
-(window as any).desbloquearFecha = desbloquearFecha;
+(window as any).eliminarBloqueo = eliminarBloqueo;
 (window as any).enviarRecordatorios = enviarRecordatorios;
 (window as any).seleccionarFecha = seleccionarFecha;
 </script>

@@ -71,7 +71,7 @@ async function initializeFirebaseAndUsers() {
     
     // Verificar si hay errores críticos
     // @ts-ignore - Filtro de diagnóstico interno
-    const criticalErrors = (diagnostic.tests || []).filter((test) => {
+    const criticalErrors = (diagnostic.tests || []).filter((test: any) => {
       return test?.status === 'error' && 
         test?.name && 
         ['Firebase Initialization', 'Firestore Connection'].includes(test.name);
@@ -808,8 +808,10 @@ function mostrarError(mensaje) {
       <button id="btn-reintentar" class="mt-4 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins">🔄 Reintentar</button>
     `;
     container.appendChild(div);
-    document.getElementById('mensaje-error').textContent = mensaje;
-    document.getElementById('btn-reintentar').addEventListener('click', () => {
+    const mensajeErrorElem = document.getElementById('mensaje-error');
+    if (mensajeErrorElem) mensajeErrorElem.textContent = mensaje;
+    const btnReintentarElem = document.getElementById('btn-reintentar');
+    if (btnReintentarElem) btnReintentarElem.addEventListener('click', () => {
       location.reload();
     });
   }

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "1761681376959",
+    "tipo": "dia_completo",
+    "fecha": "2025-10-29",
+    "fechaInicio": null,
+    "fechaFin": null,
+    "horaInicio": null,
+    "horaFin": null,
+    "motivo": "Cita medica 1",
+    "activo": true,
+    "createdAt": "2025-10-28T19:56:16.959Z"
+  },
+  {
+    "id": "1761681390589",
+    "tipo": "dia_completo",
+    "fecha": "2025-10-29",
+    "fechaInicio": null,
+    "fechaFin": null,
+    "horaInicio": null,
+    "horaFin": null,
+    "motivo": "Cita medica 3",
+    "activo": true,
+    "createdAt": "2025-10-28T19:56:30.589Z"
+  },
+  {
+    "id": "1761681406852",
+    "tipo": "dia_completo",
+    "fecha": "2025-10-30",
+    "fechaInicio": null,
+    "fechaFin": null,
+    "horaInicio": null,
+    "horaFin": null,
+    "motivo": "Cita medica 9",
+    "activo": true,
+    "createdAt": "2025-10-28T19:56:46.852Z"
+  }
+]

@@ -2,7 +2,7 @@
 import AdminLayout from '../../layouts/AdminLayout.astro';
 export const prerender = false;
 
-const title = "GestiÃ⏳n de Citas - Admin GlamBook";
+const title = "Gestión de Citas - Admin GlamBook";
 ---
 
 <AdminLayout title={title}>
@@ -25,22 +25,23 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
     }
   </script>
 
-    <!-- Header -->
-    <div class="mb-8">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins mb-1">Gestión de Citas</h1>
-          <p class="text-gray-600 font-poppins text-sm">Administra las citas y el calendario de disponibilidad</p>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <button onclick="window.location.href='/admin'" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins text-sm min-w-[120px]">← Dashboard</button>
-          <button onclick="window.location.href='/admin/usuarios'" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm min-w-[120px]">Usuarios</button>
-          <button onclick="window.location.href='/admin/testimonios'" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors font-poppins text-sm min-w-[120px]">Testimonios</button>
-          <button onclick="enviarRecordatoriosMasivos()" class="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors font-poppins text-sm min-w-[120px]">Recordatorios</button>
-          <button onclick="abrirModalNuevaCita()" class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins text-sm min-w-[120px]">Nueva Cita</button>
+    <div id="main-content" style="display:none;">
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins mb-1">Gestión de Citas</h1>
+            <p class="text-gray-600 font-poppins text-sm">Administra las citas y el calendario de disponibilidad</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="window.location.href='/admin'" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins text-sm min-w-[120px]">← Dashboard</button>
+            <button onclick="window.location.href='/admin/usuarios'" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm min-w-[120px]">Usuarios</button>
+            <button onclick="window.location.href='/admin/testimonios'" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors font-poppins text-sm min-w-[120px]">Testimonios</button>
+            <button onclick="enviarRecordatoriosMasivos()" class="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors font-poppins text-sm min-w-[120px]">Recordatorios</button>
+            <button onclick="abrirModalNuevaCita()" class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins text-sm min-w-[120px]">Nueva Cita</button>
+          </div>
         </div>
       </div>
-    </div>
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -70,7 +71,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
       <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="flex items-center">
           <div class="p-3 bg-yellow-50 rounded-lg">
-            <span class="text-2xl">⏳</span>
+            <span class="text-2xl">⏳</span>
           </div>
           <div class="ml-4">
             <p class="text-sm text-gray-600 font-poppins">Pendientes</p>
@@ -116,7 +117,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
             id="tab-disponibilidad"
             class="tab-btn py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm font-poppins"
           >
-            ° Disponibilidad
+            <span class="text-lg align-middle">📅</span> Disponibilidad
           </button>
         </nav>
       </div>
@@ -135,7 +136,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
                   <span id="count-todas" class="bg-white bg-opacity-20 px-1.5 py-0.5 rounded-full text-xs">0</span>
                 </button>
                 <button onclick="filtrarCitas('pendiente')" id="filtro-pendientes" class="filtro-btn bg-yellow-100 text-yellow-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-yellow-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
-                  ⏳ Pendientes
+                  <span class="text-lg align-middle">⏳</span> Pendientes
                   <span id="count-pendientes" class="bg-yellow-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
                 </button>
                 <button onclick="filtrarCitas('confirmada')" id="filtro-confirmadas" class="filtro-btn bg-green-100 text-green-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-green-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
@@ -147,7 +148,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
                   <span id="count-completadas" class="bg-blue-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
                 </button>
                 <button onclick="filtrarCitas('cancelada')" id="filtro-canceladas" class="filtro-btn bg-red-100 text-red-800 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-poppins text-xs sm:text-sm hover:bg-red-200 flex items-center gap-1 sm:gap-2 whitespace-nowrap">
-                  ⚠️ Canceladas
+                  <span class="text-lg align-middle">❌</span> Canceladas
                   <span id="count-canceladas" class="bg-red-200 px-1.5 py-0.5 rounded-full text-xs">0</span>
                 </button>
               </div>
@@ -315,7 +316,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Horarios de Trabajo -->
             <div>
-              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4">° Horarios de Trabajo</h3>
+              <h3 class="text-lg font-semibold text-gray-800 font-poppins mb-4"><span class="text-lg align-middle">🕒</span> Horarios de Trabajo</h3>
               <div id="horarios-container">
                 <!-- Se llenará dinámicamente -->
               </div>
@@ -335,7 +336,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
                   onclick="abrirModalBloquearFecha()"
                   class="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-poppins text-sm"
                 >
-                  ž• Bloquear Fecha
+                  <span class="text-lg align-middle">🔒</span> Bloquear Fecha
                 </button>
               </div>
               <div id="fechas-bloqueadas-container">
@@ -354,7 +355,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
     <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
       <div class="p-6">
         <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold text-gray-800 font-poppins">ž• Nueva Cita</h2>
+          <h2 class="text-xl font-bold text-gray-800 font-poppins"><span class="text-lg align-middle">📝</span> Nueva Cita</h2>
           <button onclick="cerrarModalNuevaCita()" class="text-gray-500 hover:text-gray-700 text-2xl">Ã—</button>
         </div>
 
@@ -421,7 +422,7 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
               Cancelar
             </button>
             <button type="submit" class="flex-1 px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins">
-              ž• Crear Cita
+              <span class="text-lg align-middle">➕</span> Crear Cita
             </button>
           </div>
         </form>

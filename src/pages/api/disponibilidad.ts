@@ -1,9 +1,9 @@
 import type { APIRoute } from 'astro';
+import { promises as fs } from 'fs';
+import path from 'path';
 
-// Configurar como server-rendered para que funcionen las APIs
 export const prerender = false;
 
-// Interfaces para los tipos de bloqueo
 interface BloqueoBase {
   id: string;
   tipo: 'dia_completo' | 'horario_especifico' | 'rango_fechas';
@@ -11,7 +11,6 @@ interface BloqueoBase {
   activo: boolean;
   createdAt: string;
 }
-
 interface BloqueoDiaCompleto extends BloqueoBase {
   tipo: 'dia_completo';
   fecha: string;
@@ -20,7 +19,6 @@ interface BloqueoDiaCompleto extends BloqueoBase {
   horaInicio?: undefined;
   horaFin?: undefined;
 }
-
 interface BloqueoHorarioEspecifico extends BloqueoBase {
   tipo: 'horario_especifico';
   fecha: string;
@@ -29,7 +27,6 @@ interface BloqueoHorarioEspecifico extends BloqueoBase {
   fechaInicio?: undefined;
   fechaFin?: undefined;
 }
-
 interface BloqueoRangoFechas extends BloqueoBase {
   tipo: 'rango_fechas';
   fechaInicio: string;
@@ -38,47 +35,21 @@ interface BloqueoRangoFechas extends BloqueoBase {
   horaInicio?: undefined;
   horaFin?: undefined;
 }
-
 type Bloqueo = BloqueoDiaCompleto | BloqueoHorarioEspecifico | BloqueoRangoFechas;
 
-// Datos de disponibilidad del salon (días/horarios bloqueados)
-let bloqueosData: Bloqueo[] = [
-  {
-    id: '1',
-    tipo: 'dia_completo', // 'dia_completo', 'horario_especifico', 'rango_fechas'
-    fecha: '2025-12-25', // Navidad
-    motivo: 'Día festivo - Navidad',
-    activo: true,
-    createdAt: '2025-10-20T10:00:00Z'
-  },
-  {
-    id: '2',
-    tipo: 'dia_completo',
-    fecha: '2025-01-01', // Año nuevo
-    motivo: 'Día festivo - Año Nuevo',
-    activo: true,
-    createdAt: '2025-10-20T10:00:00Z'
-  },
-  {
-    id: '3',
-    tipo: 'horario_especifico',
-    fecha: '2025-11-15',
-    horaInicio: '14:00',
-    horaFin: '16:00',
-    motivo: 'Cita médica personal',
-    activo: true,
-    createdAt: '2025-10-20T10:00:00Z'
-  },
-  {
-    id: '4',
-    tipo: 'rango_fechas',
-    fechaInicio: '2025-12-20',
-    fechaFin: '2025-12-22',
-    motivo: 'Vacaciones de fin de año',
-    activo: true,
-    createdAt: '2025-10-20T10:00:00Z'
+const bloqueosPath = path.resolve(process.cwd(), 'src/data/bloqueos.json');
+
+async function leerBloqueos(): Promise<Bloqueo[]> {
+  try {
+    const data = await fs.readFile(bloqueosPath, 'utf-8');
+    return JSON.parse(data);
+  } catch {
+    return [];
   }
-];
+}
+async function guardarBloqueos(bloqueos: Bloqueo[]) {
+  await fs.writeFile(bloqueosPath, JSON.stringify(bloqueos, null, 2), 'utf-8');
+}
 
 // Headers CORS para todas las respuestas
 const corsHeaders = {
@@ -100,11 +71,10 @@ export const GET: APIRoute = async ({ url }) => {
     const searchParams = new URL(url).searchParams;
     const action = searchParams.get('action');
     const fecha = searchParams.get('fecha');
-
-    console.log(`📥 GET /api/disponibilidad - Action: ${action}, Fecha: ${fecha}`);
+    const bloqueosData = await leerBloqueos();
 
     switch (action) {
-      case 'verificar-disponibilidad':
+      case 'verificar-disponibilidad': {
         if (!fecha) {
           return new Response(JSON.stringify({
             success: false,
@@ -114,29 +84,23 @@ export const GET: APIRoute = async ({ url }) => {
             headers: corsHeaders
           });
         }
-
-        // Verificar si la fecha está bloqueada
-        const fechaObj = new Date(fecha);
+        const fechaStr = fecha.split('T')[0];
         const bloqueosActivos = bloqueosData.filter(bloqueo => bloqueo.activo);
-        
         let disponible = true;
         let motivo = '';
         let bloqueosParciales = [];
-
         for (const bloqueo of bloqueosActivos) {
-          if (bloqueo.tipo === 'dia_completo' && bloqueo.fecha === fecha) {
+          if (bloqueo.tipo === 'dia_completo' && bloqueo.fecha === fechaStr) {
             disponible = false;
             motivo = bloqueo.motivo;
             break;
           } else if (bloqueo.tipo === 'rango_fechas' && bloqueo.fechaInicio && bloqueo.fechaFin) {
-            const fechaInicio = new Date(bloqueo.fechaInicio);
-            const fechaFin = new Date(bloqueo.fechaFin);
-            if (fechaObj >= fechaInicio && fechaObj <= fechaFin) {
+            if (fechaStr >= bloqueo.fechaInicio && fechaStr <= bloqueo.fechaFin) {
               disponible = false;
               motivo = bloqueo.motivo;
               break;
             }
-          } else if (bloqueo.tipo === 'horario_especifico' && bloqueo.fecha === fecha) {
+          } else if (bloqueo.tipo === 'horario_especifico' && bloqueo.fecha === fechaStr) {
             bloqueosParciales.push({
               horaInicio: bloqueo.horaInicio,
               horaFin: bloqueo.horaFin,
@@ -144,7 +108,6 @@ export const GET: APIRoute = async ({ url }) => {
             });
           }
         }
-
         return new Response(JSON.stringify({
           success: true,
           data: {
@@ -158,7 +121,7 @@ export const GET: APIRoute = async ({ url }) => {
           status: 200,
           headers: corsHeaders
         });
-
+      }
       case 'listar':
         return new Response(JSON.stringify({
           success: true,
@@ -168,7 +131,6 @@ export const GET: APIRoute = async ({ url }) => {
           status: 200,
           headers: corsHeaders
         });
-
       default:
         return new Response(JSON.stringify({
           success: true,
@@ -196,15 +158,34 @@ export const GET: APIRoute = async ({ url }) => {
 export const POST: APIRoute = async ({ request }) => {
   try {
     const data = await request.json();
-    console.log(`📥 POST /api/disponibilidad - Data:`, data);
-
     const { action, id, ...bloqueoData } = data;
+    let bloqueosData = await leerBloqueos();
 
     switch (action) {
-      case 'crear-bloqueo':
+      case 'actualizar-horarios': {
+        // Guardar los horarios enviados (en memoria, para demo)
+        if (!data.horarios || typeof data.horarios !== 'object') {
+          return new Response(JSON.stringify({
+            success: false,
+            message: 'Horarios no enviados o formato incorrecto'
+          }), {
+            status: 400,
+            headers: corsHeaders
+          });
+        }
+        // Aquí podrías guardar en base de datos, por ahora solo simula éxito
+        console.log('✅ Horarios actualizados:', data.horarios);
+        return new Response(JSON.stringify({
+          success: true,
+          data: data.horarios,
+          message: 'Horarios actualizados correctamente'
+        }), {
+          status: 200,
+          headers: corsHeaders
+        });
+      }
+      case 'crear-bloqueo': {
         const { tipo, fecha, fechaInicio, fechaFin, horaInicio, horaFin, motivo } = bloqueoData;
-
-        // Validaciones básicas
         if (!tipo || !motivo) {
           return new Response(JSON.stringify({
             success: false,
@@ -214,8 +195,6 @@ export const POST: APIRoute = async ({ request }) => {
             headers: corsHeaders
           });
         }
-
-        // Validaciones específicas por tipo
         if (tipo === 'dia_completo' && !fecha) {
           return new Response(JSON.stringify({
             success: false,
@@ -225,7 +204,6 @@ export const POST: APIRoute = async ({ request }) => {
             headers: corsHeaders
           });
         }
-
         if (tipo === 'rango_fechas' && (!fechaInicio || !fechaFin)) {
           return new Response(JSON.stringify({
             success: false,
@@ -235,7 +213,6 @@ export const POST: APIRoute = async ({ request }) => {
             headers: corsHeaders
           });
         }
-
         if (tipo === 'horario_especifico' && (!fecha || !horaInicio || !horaFin)) {
           return new Response(JSON.stringify({
             success: false,
@@ -245,12 +222,14 @@ export const POST: APIRoute = async ({ request }) => {
             headers: corsHeaders
           });
         }
-
-        // Crear nuevo bloqueo
+        let fechaBloqueo = fecha;
+        if (tipo === 'dia_completo' && fecha) {
+          fechaBloqueo = fecha.split('T')[0];
+        }
         const nuevoBloqueo = {
           id: Date.now().toString(),
           tipo,
-          fecha: fecha || null,
+          fecha: tipo === 'dia_completo' ? fechaBloqueo : (fecha || null),
           fechaInicio: fechaInicio || null,
           fechaFin: fechaFin || null,
           horaInicio: horaInicio || null,
@@ -259,11 +238,8 @@ export const POST: APIRoute = async ({ request }) => {
           activo: true,
           createdAt: new Date().toISOString()
         };
-
         bloqueosData.push(nuevoBloqueo);
-
-        console.log(`✅ Bloqueo creado: ${nuevoBloqueo.tipo} - ${nuevoBloqueo.motivo}`);
-
+        await guardarBloqueos(bloqueosData);
         return new Response(JSON.stringify({
           success: true,
           data: nuevoBloqueo,
@@ -272,8 +248,9 @@ export const POST: APIRoute = async ({ request }) => {
           status: 201,
           headers: corsHeaders
         });
+      }
 
-      case 'eliminar-bloqueo':
+      case 'eliminar-bloqueo': {
         if (!id) {
           return new Response(JSON.stringify({
             success: false,
@@ -283,9 +260,7 @@ export const POST: APIRoute = async ({ request }) => {
             headers: corsHeaders
           });
         }
-
         const bloqueoIndex = bloqueosData.findIndex(bloqueo => bloqueo.id === id);
-        
         if (bloqueoIndex === -1) {
           return new Response(JSON.stringify({
             success: false,
@@ -295,11 +270,8 @@ export const POST: APIRoute = async ({ request }) => {
             headers: corsHeaders
           });
         }
-
         const bloqueoEliminado = bloqueosData.splice(bloqueoIndex, 1)[0];
-
-        console.log(`🗑️ Bloqueo eliminado: ${bloqueoEliminado.tipo} - ${bloqueoEliminado.motivo}`);
-
+        await guardarBloqueos(bloqueosData);
         return new Response(JSON.stringify({
           success: true,
           data: bloqueoEliminado,
@@ -308,6 +280,7 @@ export const POST: APIRoute = async ({ request }) => {
           status: 200,
           headers: corsHeaders
         });
+      }
 
       case 'toggle-bloqueo':
         if (!id) {
