@@ -5,44 +5,12 @@ export interface Props {
 
 const { currentUser } = Astro.props;
 ---
-<script>
-// Mostrar/ocultar menú hamburguesa en móvil correctamente
-document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    if (btn && menu) {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            menu.classList.toggle('open');
-            if (menu.classList.contains('open')) {
-                menu.classList.remove('hidden');
-            } else {
-                menu.classList.add('hidden');
-            }
-        });
-        // Cerrar menú al hacer click fuera
-            document.addEventListener('click', function(e) {
-                const target = e.target as Node;
-                if (!menu.contains(target) && !btn.contains(target)) {
-                    menu.classList.remove('open');
-                    menu.classList.add('hidden');
-                }
-            });
-        // Cerrar menú al hacer click en un enlace
-        menu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function() {
-                menu.classList.remove('open');
-                menu.classList.add('hidden');
-            });
-        });
-    }
-});
-</script>
+<!-- Script duplicado eliminado para evitar conflicto de eventos -->
 
 <nav class="admin-navbar bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50">
     <div class="navbar-container max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 xl:px-8">
         <div class="flex justify-between items-center h-12 sm:h-14 lg:h-16">
-            <!-- Header principal: logo, botón y hamburguesa -->
+            <!-- Header principal: logo, nombre, refresh, notificaciones, hamburguesa (en móvil) -->
             <div class="flex items-center gap-2 flex-1 min-w-0">
                 <div class="flex items-center navbar-logo flex-shrink-0">
                     <div class="logo-icon w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
@@ -50,42 +18,37 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <span class="text-lg font-bold text-gray-800 font-poppins ml-2 truncate">GlamBook</span>
                 </div>
+              
             </div>
-            <button 
-              id="mobile-menu-btn"
-              class="flex lg:hidden p-2 text-gray-600 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-all duration-200 touch-manipulation min-w-[44px] min-h-[44px] items-center justify-center bg-white border border-gray-200 shadow-sm ml-2"
-              aria-label="Abrir menú de navegación"
-              aria-expanded="false"
-              type="button"
-            >
-              <span class="sr-only">Abrir menú de navegación</span>
-              <span id="mobile-menu-icon" class="text-xl block transition-transform duration-300 font-bold">☰</span>
-            </button>
-            <!-- Listado de enlaces para navegar en menú móvil (solo visible cuando el menú está abierto) -->
-            <div id="mobile-menu-links" class="absolute top-full left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-lg mt-2 z-50 hidden lg:hidden">
-              <a href="/admin" class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 font-poppins transition-colors duration-200">Dashboard</a>
-              <a href="/admin/testimonios" class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 font-poppins transition-colors duration-200">Testimonios</a>
-              <a href="/admin/citas" class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 font-poppins transition-colors duration-200">Citas</a>
-              <a href="/admin/usuarios" class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 font-poppins transition-colors duration-200">Usuarios</a>
-              <a href="/admin/configuracion" class="block px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 font-poppins transition-colors duration-200">Configuración</a>
+            <!-- Refresh y notificaciones SIEMPRE visibles en header (antes del hamburguesa en móvil) -->
+            <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                <!-- Notificaciones -->
+                <div class="relative mr-1">
+                    <button 
+                        id="notifications-btn"
+                        class="action-btn flex items-center justify-center p-2 text-gray-500 hover:text-pink-600 hover:bg-pink-50 rounded-full transition-all duration-200 min-w-[40px] min-h-[40px] relative"
+                        title="Notificaciones"
+                        aria-label="Ver notificaciones"
+                    >
+                        <span class="text-lg">🔔</span>
+                        <span id="notification-badge" class="notification-badge absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                            0
+                        </span>
+                    </button>
+                </div>
+                <!-- Hamburguesa solo en móvil -->
+                <button 
+                  id="mobile-menu-btn"
+                  class="flex lg:hidden p-2 text-gray-600 hover:text-pink-600 hover:bg-pink-50 rounded-lg transition-all duration-200 touch-manipulation min-w-[44px] min-h-[44px] items-center justify-center bg-white border border-gray-200 shadow-sm ml-1"
+                  aria-label="Abrir menú de navegación"
+                  aria-expanded="false"
+                  type="button"
+                >
+                  <span class="sr-only">Abrir menú de navegación</span>
+                  <span id="mobile-menu-icon" class="text-xl block transition-transform duration-300 font-bold">☰</span>
+                </button>
             </div>
-            <script type="module" is:inline>
-              // Mostrar/ocultar el listado de enlaces al abrir/cerrar el menú móvil
-              document.addEventListener('DOMContentLoaded', () => {
-              const btn = document.getElementById('mobile-menu-btn');
-              const links = document.getElementById('mobile-menu-links');
-              btn?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                links?.classList.toggle('hidden');
-              });
-              // Cerrar el menú de enlaces si se hace click fuera
-              document.addEventListener('click', (e) => {
-                if (links && !btn.contains(e.target) && !links.contains(e.target)) {
-                links.classList.add('hidden');
-                }
-              });
-              });
-            </script>
+                        <!-- ...existing code... -->
 
             <!-- Navegación central - visible en desktop (lg+) -->
                     <!-- Navegación central - solo visible en desktop (≥1024px) -->
@@ -136,91 +99,65 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
             </div>
 
-            <!-- Acciones del usuario -->
-            <div class="user-actions flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                
-
-                <!-- Botón de actualizar -->
+            <!-- Menú del usuario solo en desktop (dropdown) -->
+            <div class="user-menu-container relative hidden lg:block">
                 <button 
-                    id="admin-refresh-btn"
-                    class="action-btn flex items-center justify-center p-2 text-gray-500 hover:text-pink-600 hover:bg-pink-50 rounded-full transition-all duration-200 min-w-[40px] min-h-[40px] mr-2"
-                    title="Actualizar datos"
-                    aria-label="Actualizar datos"
+                    id="user-menu-btn"
+                    class="user-menu-trigger flex items-center gap-2 p-2 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-full transition-all duration-200 min-h-[40px] min-w-[40px]"
+                    aria-label="Menú del usuario"
                 >
-                    <span id="admin-refresh-icon" class="text-lg">🔄</span>
-                </button>
-
-                <!-- Notificaciones -->
-                <div class="relative mr-2">
-                    <button 
-                        id="notifications-btn"
-                        class="action-btn flex items-center justify-center p-2 text-gray-500 hover:text-pink-600 hover:bg-pink-50 rounded-full transition-all duration-200 min-w-[40px] min-h-[40px] relative"
-                        title="Notificaciones"
-                        aria-label="Ver notificaciones"
-                    >
-                        <span class="text-lg">🔔</span>
-                        <span id="notification-badge" class="notification-badge absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
-                            0
-                        </span>
-                    </button>
-                </div>
-
-                <!-- Menú del usuario -->
-                <div class="user-menu-container relative">
-                    <button 
-                        id="user-menu-btn"
-                        class="user-menu-trigger flex items-center gap-2 p-2 text-gray-700 hover:text-pink-600 hover:bg-pink-50 rounded-full transition-all duration-200 min-h-[40px] min-w-[40px]"
-                        aria-label="Menú del usuario"
-                    >
-                        <div class="user-avatar w-8 h-8 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center shadow-sm">
-                            <span class="text-base">👤</span>
-                        </div>
-                        <span class="user-name hidden md:block font-poppins text-sm lg:text-base font-medium" id="user-email">Admin</span>
-                        <span class="dropdown-arrow text-xs hidden md:block transform transition-transform duration-200"></span>
-                    </button>
-
-                    <!-- Dropdown del usuario -->
-                    <div 
-                        id="user-dropdown" 
-                        class="absolute right-0 mt-2 w-64 sm:w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden"
-                    >
-                        <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-sm font-medium text-gray-800 font-poppins">Administrador</p>
-                            <p class="text-xs text-gray-500 font-poppins truncate" id="dropdown-user-email">admin@glambook.com</p>
-                        </div>
-                        <a 
-                            href="/cambiar-password" 
-                            class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200 font-poppins touch-manipulation"
-                        >
-                            <span class="text-base">🔑</span>
-                            Cambiar Contraseña
-                        </a>
-                        <a 
-                            href="/" 
-                            target="_blank"
-                            class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200 font-poppins touch-manipulation"
-                        >
-                            <span class="text-base">🌐</span>
-                            Ver Sitio Web
-                        </a>
-                        <hr class="my-2 border-gray-100">
-                        <button 
-                            id="admin-logout-btn"
-                            class="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 font-poppins w-full text-left touch-manipulation"
-                        >
-                            <span class="text-base">🚪</span>
-                            Cerrar Sesión
-                        </button>
+                    <div class="user-avatar w-8 h-8 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center shadow-sm">
+                        <span class="text-base">👤</span>
                     </div>
+                    <span class="user-name hidden md:block font-poppins text-sm lg:text-base font-medium" id="user-email">Admin</span>
+                    <span class="dropdown-arrow text-xs hidden md:block transform transition-transform duration-200"></span>
+                </button>
+                <!-- Dropdown del usuario -->
+                <div 
+                    id="user-dropdown" 
+                    class="absolute right-0 mt-2 w-64 sm:w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 hidden"
+                >
+                    <div class="px-4 py-3 border-b border-gray-100">
+                        <p class="text-sm font-medium text-gray-800 font-poppins">Administrador</p>
+                        <p class="text-xs text-gray-500 font-poppins truncate" id="dropdown-user-email">admin@glambook.com</p>
+                    </div>
+                    <a 
+                        href="/cambiar-password" 
+                        class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200 font-poppins touch-manipulation"
+                    >
+                        <span class="text-base">🔑</span>
+                        Cambiar Contraseña
+                    </a>
+                    <a 
+                        href="/" 
+                        target="_blank"
+                        class="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200 font-poppins touch-manipulation"
+                    >
+                        <span class="text-base">🌐</span>
+                        Ver Sitio Web
+                    </a>
+                    <hr class="my-2 border-gray-100">
+                    <button 
+                        id="admin-logout-btn"
+                        class="flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200 font-poppins w-full text-left touch-manipulation"
+                    >
+                        <span class="text-base">🚪</span>
+                        Cerrar Sesión
+                    </button>
                 </div>
-
-                <!-- (El botón hamburguesa ya está en el header principal) -->
             </div>
         </div>
 
     <!-- Menú móvil - visible solo en móviles/tablets -->
-    <div id="mobile-menu" class="mobile-menu lg:hidden hidden border-t border-gray-200 bg-white overflow-hidden transition-all duration-300 ease-in-out shadow-lg">
-            <div class="mobile-menu-content py-3 sm:py-4">
+        <!-- Backdrop y menú móvil fuera del nav para evitar stacking context -->
+        <astro-portal>
+            <div id="mobile-menu-backdrop" class="lg:hidden hidden fixed inset-0 bg-black/40 z-[1100] transition-opacity duration-300"></div>
+            <div id="mobile-menu" class="mobile-menu lg:hidden hidden fixed top-0 right-0 bottom-0 min-h-screen w-80 max-w-xs border-l border-gray-200 bg-white overflow-y-auto transition-all duration-300 ease-in-out shadow-2xl z-[1200]">
+            <div class="mobile-menu-content py-3 sm:py-4 relative">
+                <!-- Botón cerrar (X) -->
+                <button id="mobile-menu-close" class="absolute top-2 right-2 p-2 rounded-full text-gray-500 hover:text-pink-600 hover:bg-pink-50 transition-colors z-10" aria-label="Cerrar menú">
+                    <span class="text-2xl">✕</span>
+                </button>
                 
                 <!-- Información del usuario en móvil -->
                 <div class="mobile-user-info px-4 py-3 border-b border-gray-100 mb-2">
@@ -273,49 +210,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 <!-- Separador -->
                 <hr class="my-3 border-gray-100">
 
-                <!-- Acciones rápidas -->
+                <!-- Acciones de perfil/usuario en móvil -->
                 <div class="px-4 py-2">
-                    <p class="text-xs font-medium text-gray-500 font-poppins uppercase tracking-wide mb-2">Acciones</p>
+                    <p class="text-xs font-medium text-gray-500 font-poppins uppercase tracking-wide mb-2">Perfil</p>
                 </div>
-
-                <button 
-                    id="mobile-refresh-btn"
-                    class="flex items-center gap-3 px-4 py-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-colors duration-200 font-poppins touch-manipulation w-full text-left"
-                >
-                    <span class="text-xl" id="mobile-refresh-icon">🔄</span>
-                    <span class="font-medium">Actualizar Datos</span>
-                </button>
-
-                <a 
-                    href="/cambiar-password" 
-                    class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins touch-manipulation"
-                >
-                    <span class="text-xl">🔑</span>
-                    <span class="font-medium">Cambiar Contraseña</span>
-                </a>
-                
-                <a 
-                    href="/" 
-                    target="_blank"
-                    class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins touch-manipulation"
-                >
-                    <span class="text-xl">🌐</span>
-                    <span class="font-medium">Ver Sitio Web</span>
-                </a>
-                
-                <!-- Separador -->
-                <hr class="my-3 border-gray-100">
-                
-                <button 
-                    id="mobile-logout-btn"
-                    class="flex items-center gap-3 px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors duration-200 font-poppins touch-manipulation w-full text-left"
-                >
-                    <span class="text-xl">🚪</span>
-                    <span class="font-medium">Cerrar Sesión</span>
-                </button>
+                <div class="mobile-user-profile-actions flex flex-col gap-1">
+                    <a 
+                        href="/admin/cambiar-password" 
+                        class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins touch-manipulation"
+                    >
+                        <span class="text-xl">🔑</span>
+                        <span class="font-medium">Cambiar Contraseña</span>
+                    </a>
+                    <a 
+                        href="/" 
+                        target="_blank"
+                        class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-pink-600 hover:bg-pink-50 transition-colors duration-200 font-poppins touch-manipulation"
+                    >
+                        <span class="text-xl">🌐</span>
+                        <span class="font-medium">Ver Sitio Web</span>
+                    </a>
+                    <button 
+                        id="mobile-logout-btn"
+                        class="flex items-center gap-3 px-4 py-3 text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors duration-200 font-poppins touch-manipulation w-full text-left"
+                    >
+                        <span class="text-xl">🚪</span>
+                        <span class="font-medium">Cerrar Sesión</span>
+                    </button>
+                </div>
+                        </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </astro-portal>
 </nav>
 
 </style>
@@ -350,7 +276,16 @@ document.addEventListener('DOMContentLoaded', function() {
             display: none;
         }
         .admin-navbar #mobile-menu.open {
-            display: block;
+            display: flex;
+            flex-direction: column;
+        }
+        #mobile-menu-backdrop.open {
+            display: block !important;
+            opacity: 1;
+        }
+        #mobile-menu-backdrop {
+            opacity: 0;
+            transition: opacity 0.3s;
         }
     }
     @media (min-width: 1024px) {
@@ -364,22 +299,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 </style>
 <script>
-// Mostrar/ocultar menú hamburguesa en móvil
+// Lógica para backdrop y cerrar menú móvil
 document.addEventListener('DOMContentLoaded', function() {
-    const btn = document.getElementById('mobile-menu-btn');
     const menu = document.getElementById('mobile-menu');
-    if (btn && menu) {
-        btn.addEventListener('click', function() {
-            menu.classList.toggle('open');
-        });
+    const btn = document.getElementById('mobile-menu-btn');
+    const closeBtn = document.getElementById('mobile-menu-close');
+    const backdrop = document.getElementById('mobile-menu-backdrop');
+    function openMenu() {
+        menu?.classList.remove('hidden');
+        menu?.classList.add('open');
+        backdrop?.classList.remove('hidden');
+        backdrop?.classList.add('open');
     }
+    function closeMenu() {
+        menu?.classList.remove('open');
+        menu?.classList.add('hidden');
+        backdrop?.classList.remove('open');
+        backdrop?.classList.add('hidden');
+    }
+    btn?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (menu?.classList.contains('hidden')) {
+            openMenu();
+        } else {
+            closeMenu();
+        }
+    });
+    closeBtn?.addEventListener('click', function() {
+        closeMenu();
+    });
+    backdrop?.addEventListener('click', function() {
+        closeMenu();
+    });
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+    });
 });
 </script>
 </style>
 
 <script>
     // Variables globales del navbar
-    let currentUser: any = null;
+    let currentUser = null;
     let pendingTestimoniosCount = 0;
 
     // Elementos del DOM
@@ -444,10 +406,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Actualizar información del usuario
-    function updateUserInfo(user: any) {
+    function updateUserInfo(user) {
         const username = user.email?.split('@')[0] || 'Admin';
         const email = user.email || 'admin@glambook.com';
-        
         if (userEmail) {
             userEmail.textContent = username;
         }
@@ -459,6 +420,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         if (mobileUserEmail) {
             mobileUserEmail.textContent = email;
+        }
+        // Actualiza el nombre en el header móvil
+        const mobileHeaderUserName = document.getElementById('mobile-header-user-name');
+        if (mobileHeaderUserName) {
+            mobileHeaderUserName.textContent = username;
         }
     }
 
@@ -689,7 +655,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Actualizar badge de notificaciones
-    function updateNotificationBadge(count: number) {
+    function updateNotificationBadge(count) {
         if (notificationBadge) {
             if (count > 0) {
                 notificationBadge.textContent = count.toString();

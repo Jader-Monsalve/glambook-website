@@ -25,8 +25,8 @@ const title = "Configuración del Sistema - Admin GlamBook";
     }
   </script>
 
-  <!-- Main Content -->
-  <div id="main-content" style="display: none;" class="min-h-screen">
+    <!-- Header -->
+     <div id="main-content" style="display: none;" class="min-h-screen">
     <div class="mb-8">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -65,23 +65,6 @@ const title = "Configuración del Sistema - Admin GlamBook";
           >
             💾 Guardar Todo
           </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Header -->
-    <div class="mb-8">
-      <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div>
-          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-poppins mb-1">Configuración del Sistema</h1>
-          <p class="text-gray-600 font-poppins text-sm">Ajustes generales, notificaciones y preferencias administrativas</p>
-        </div>
-        <div class="flex flex-wrap gap-2">
-          <button onclick="window.location.href='/admin'" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-poppins text-sm min-w-[120px]">Dashboard</button>
-          <button onclick="window.location.href='/admin/citas'" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-poppins text-sm min-w-[120px]">Citas</button>
-          <button onclick="window.location.href='/admin/usuarios'" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-poppins text-sm min-w-[120px]">Usuarios</button>
-          <button onclick="window.location.href='/admin/testimonios'" class="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors font-poppins text-sm min-w-[120px]">Testimonios</button>
-          <button onclick="guardarTodaConfiguracion()" class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors font-poppins text-sm min-w-[120px]">Guardar Todo</button>
         </div>
       </div>
     </div>
