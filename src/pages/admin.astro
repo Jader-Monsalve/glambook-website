@@ -911,7 +911,7 @@ async function cargarCitas() {
       citasData = result.data || [];
       // Cargar fechas bloqueadas por separado si es necesario
       try {
-        const disponibilidadResponse = await fetch('/api/disponibilidad');
+        const disponibilidadResponse = await fetch('/api/disponibilidad?action=listar');
         const disponibilidadResult = await disponibilidadResponse.json();
         if (disponibilidadResult.success) {
           fechasBloqueadasData = disponibilidadResult.data || [];

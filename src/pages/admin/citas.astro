@@ -853,10 +853,10 @@ const title = "GestiÃ⏳n de Citas - Admin GlamBook";
 
     async function cargarFechasBloqueadas() {
       try {
-        const response = await fetch('/api/disponibilidad');
+        const response = await fetch('/api/disponibilidad?action=listar');
         const data = await response.json();
         if (data.success) {
-          fechasBloqueadas = data.fechasBloqueadas || [];
+          fechasBloqueadas = data.data || [];
           renderizarFechasBloqueadas();
         }
       } catch (error) {
